@@ -158,11 +158,11 @@ export function EditableWrapper({
 
   // 編集内容がある場合はchildrenを置換
   // プレビュー状態の場合はプレビュー内容を優先表示
-  const displayContent = isPreviewing
-    ? pendingPreview?.previewContent ?? (editedContent ?? extractTextContent(children))
+  const displayContent = isPreviewing && pendingPreview?.previewContent
+    ? pendingPreview.previewContent
     : (editedContent ?? extractTextContent(children))
 
-  const displayChildren = !isEditing && ((isPreviewing && pendingPreview?.previewContent) || editedContent)
+  const displayChildren = !isEditing && (isPreviewing || editedContent)
     ? replaceTextContent(children, displayContent)
     : children
 

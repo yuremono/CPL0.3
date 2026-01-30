@@ -72,7 +72,7 @@ function HomeContent() {
                 level: 1,
                 editable: true,
               }}
-              isSelected={selectedElement?.id === 'header-title'}
+              isSelected={selectedElement?.id === generateId('header-title')}
               onSelect={handleSelectElement}
             >
               <h1 className="text-xl font-bold">Z.AI</h1>
@@ -98,7 +98,7 @@ function HomeContent() {
                   content: 'Portfolio',
                   editable: true,
                 }}
-                isSelected={selectedElement?.id === 'hero-label'}
+                isSelected={selectedElement?.id === generateId('hero-label')}
                 onSelect={handleSelectElement}
               >
                 <p className="text-lg font-mono mb-4 text-gray-600">Portfolio</p>
@@ -112,7 +112,7 @@ function HomeContent() {
                   level: 1,
                   editable: true,
                 }}
-                isSelected={selectedElement?.id === 'hero-title'}
+                isSelected={selectedElement?.id === generateId('hero-title')}
                 onSelect={handleSelectElement}
               >
                 <h2 id="hero-title" className="text-5xl md:text-7xl font-bold leading-tight">
@@ -132,7 +132,7 @@ function HomeContent() {
                   label: 'Hero Image',
                   editable: true,
                 }}
-                isSelected={selectedElement?.id === 'hero-image'}
+                isSelected={selectedElement?.id === generateId('hero-image')}
                 onSelect={handleSelectElement}
                 src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=800&h=1200&fit=crop"
                 alt="Creative developer workspace"
@@ -160,7 +160,7 @@ function HomeContent() {
                   level: 2,
                   editable: true,
                 }}
-                isSelected={selectedElement?.id === 'about-title'}
+                isSelected={selectedElement?.id === generateId('about-title')}
                 onSelect={handleSelectElement}
               >
                 <h2 id="about-title" className="text-3xl md:text-4xl font-bold">
@@ -179,7 +179,7 @@ function HomeContent() {
                     content: "I'm a creative developer passionate about building exceptional digital experiences. With expertise in modern web technologies, I create solutions that are both beautiful and functional.",
                     editable: true,
                   }}
-                  isSelected={selectedElement?.id === 'about-paragraph-1'}
+                  isSelected={selectedElement?.id === generateId('about-paragraph-1')}
                   onSelect={handleSelectElement}
                 >
                   <p className="text-lg leading-relaxed">
@@ -195,7 +195,7 @@ function HomeContent() {
                     content: "My approach combines clean code with thoughtful design, ensuring every project meets the highest standards of quality and performance.",
                     editable: true,
                   }}
-                  isSelected={selectedElement?.id === 'about-paragraph-2'}
+                  isSelected={selectedElement?.id === generateId('about-paragraph-2')}
                   onSelect={handleSelectElement}
                 >
                   <p className="text-lg leading-relaxed">
@@ -214,7 +214,7 @@ function HomeContent() {
                       level: 3,
                       editable: true,
                     }}
-                    isSelected={selectedElement?.id === 'about-skills-title'}
+                    isSelected={selectedElement?.id === generateId('about-skills-title')}
                     onSelect={handleSelectElement}
                   >
                     <h3 className="font-bold text-xl mb-4">Skills</h3>
@@ -285,7 +285,7 @@ function HomeContent() {
                 level: 2,
                 editable: true,
               }}
-              isSelected={selectedElement?.id === 'projects-title'}
+              isSelected={selectedElement?.id === generateId('projects-title')}
               onSelect={handleSelectElement}
             >
               <h2 id="projects-title" className="text-3xl md:text-4xl font-bold mb-8">
@@ -314,7 +314,7 @@ function HomeContent() {
                     level: 3,
                     editable: true,
                   }}
-                  isSelected={selectedElement?.id === 'projects-alpha-title'}
+                  isSelected={selectedElement?.id === generateId('projects-alpha-title')}
                   onSelect={handleSelectElement}
                 >
                   <h3 className="text-2xl font-bold mb-2">Project Alpha</h3>
@@ -327,7 +327,7 @@ function HomeContent() {
                     content: 'A modern web application built with Next.js and TypeScript.',
                     editable: true,
                   }}
-                  isSelected={selectedElement?.id === 'projects-alpha-desc'}
+                  isSelected={selectedElement?.id === generateId('projects-alpha-desc')}
                   onSelect={handleSelectElement}
                 >
                   <p className="text-gray-600 mb-4">
@@ -362,7 +362,7 @@ function HomeContent() {
                     level: 3,
                     editable: true,
                   }}
-                  isSelected={selectedElement?.id === 'projects-beta-title'}
+                  isSelected={selectedElement?.id === generateId('projects-beta-title')}
                   onSelect={handleSelectElement}
                 >
                   <h3 className="text-2xl font-bold mb-2">Project Beta</h3>
@@ -375,7 +375,7 @@ function HomeContent() {
                     content: 'An AI-powered tool for creative professionals.',
                     editable: true,
                   }}
-                  isSelected={selectedElement?.id === 'projects-beta-desc'}
+                  isSelected={selectedElement?.id === generateId('projects-beta-desc')}
                   onSelect={handleSelectElement}
                 >
                   <p className="text-gray-600 mb-4">
@@ -410,7 +410,7 @@ function HomeContent() {
                     level: 3,
                     editable: true,
                   }}
-                  isSelected={selectedElement?.id === 'projects-gamma-title'}
+                  isSelected={selectedElement?.id === generateId('projects-gamma-title')}
                   onSelect={handleSelectElement}
                 >
                   <h3 className="text-2xl font-bold mb-2">Project Gamma</h3>
@@ -423,7 +423,7 @@ function HomeContent() {
                     content: 'A real-time collaboration platform for teams.',
                     editable: true,
                   }}
-                  isSelected={selectedElement?.id === 'projects-gamma-desc'}
+                  isSelected={selectedElement?.id === generateId('projects-gamma-desc')}
                   onSelect={handleSelectElement}
                 >
                   <p className="text-gray-600 mb-4">
@@ -458,7 +458,7 @@ function HomeContent() {
                     level: 3,
                     editable: true,
                   }}
-                  isSelected={selectedElement?.id === 'projects-delta-title'}
+                  isSelected={selectedElement?.id === generateId('projects-delta-title')}
                   onSelect={handleSelectElement}
                 >
                   <h3 className="text-2xl font-bold mb-2">Project Delta</h3>
@@ -471,7 +471,7 @@ function HomeContent() {
                     content: 'A design system component library with Storybook.',
                     editable: true,
                   }}
-                  isSelected={selectedElement?.id === 'projects-delta-desc'}
+                  isSelected={selectedElement?.id === generateId('projects-delta-desc')}
                   onSelect={handleSelectElement}
                 >
                   <p className="text-gray-600 mb-4">
@@ -502,7 +502,7 @@ function HomeContent() {
                   level: 2,
                   editable: true,
                 }}
-                isSelected={selectedElement?.id === 'contact-title'}
+                isSelected={selectedElement?.id === generateId('contact-title')}
                 onSelect={handleSelectElement}
               >
                 <h2 id="contact-title" className="text-3xl md:text-4xl font-bold mb-4">

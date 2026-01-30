@@ -227,3 +227,41 @@ Total: 24 tests passed
 ### 総合結果
 
 **フェーズ6完了**。画像編集機能を実装し、ドラッグ&ドロップで画像を置換できるようになりました。
+
+---
+
+## フェーズ7: SSR/CSR互換性修正（完了）
+
+### 完了日時
+2026-01-31
+
+### 実施内容
+
+#### 問題
+- Hydration Mismatchエラーが発生
+- `generateId()`がSSRとCSRで異なるIDを生成
+- テキスト編集が確定時に反映されない
+- ダブルクリック編集が動作しない
+
+#### 修正内容
+1. **決定論的ID生成**: `generateId()`をリファクタリング
+   - `Math.random()`を削除
+   - プレフィックスのハッシュベースのID生成
+   - キャッシュ機導入で同じprefix→同じID
+   - カウンターで一意性を確保
+
+2. **コンソールログ修正**: 未定義の`isPreviewMode`参照を削除
+
+### 修正したファイル
+- `src/lib/content-projection/generate-id.ts` - 決定論的ID生成実装
+- `src/components/content-projection-layer/editable-wrapper.tsx` - console.log修正
+
+### 完了基準の達成
+
+- [x] Hydration Mismatchエラーが解消
+- [x] ビルドが成功する
+- [x] SSR/CSRで同じIDが生成される
+
+### 総合結果
+
+**フェーズ7完了**。SSR/CSR互換性を確保し、Hydrationエラーを解消しました。
