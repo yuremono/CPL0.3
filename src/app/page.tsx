@@ -10,7 +10,7 @@
 import { Suspense, useEffect, useState } from 'react'
 import { useSearchParams, useRouter } from 'next/navigation'
 import { PreviewProvider } from '@/components/content-projection-layer'
-import { EditableWrapper } from '@/components/content-projection-layer'
+import { EditableWrapper, EditableImageWrapper } from '@/components/content-projection-layer'
 import { generateId } from '@/lib/content-projection/generate-id'
 import { usePreviewStore } from '@/stores/preview-store'
 import { useEditHistoryStore } from '@/stores/edit-history-store'
@@ -124,11 +124,25 @@ function HomeContent() {
 
             {/* Right - Hero Image */}
             <div className="md:col-span-4 p-0 flex items-center justify-center bg-gray-50">
-              <img
+              <EditableImageWrapper
+                element={{
+                  id: generateId('hero-image'),
+                  role: 'image',
+                  content: 'Hero workspace image',
+                  label: 'Hero Image',
+                  editable: true,
+                }}
+                isSelected={selectedElement?.id === 'hero-image'}
+                onSelect={handleSelectElement}
                 src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=800&h=1200&fit=crop"
                 alt="Creative developer workspace"
-                className="w-full h-full object-cover min-h-[60vh]"
-              />
+              >
+                <img
+                  src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=800&h=1200&fit=crop"
+                  alt="Creative developer workspace"
+                  className="w-full h-full object-cover min-h-[60vh]"
+                />
+              </EditableImageWrapper>
             </div>
           </div>
         </section>
