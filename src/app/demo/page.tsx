@@ -106,6 +106,14 @@ function DemoContent() {
 
       const data = await response.json()
 
+      // デバッグ: APIレスポンス全体を確認
+      console.log('[AI API レスポンス]', {
+        status: response.status,
+        success: data.success,
+        data: data.data,
+        fullResponse: data,
+      })
+
       if (data.success) {
         const newContent = data.data.content || ''
 
@@ -144,12 +152,26 @@ function DemoContent() {
           })
         }
       } else {
+        // デバッグ: エラーレスポンスを確認
+        console.log('[AI API エラーレスポンス]', {
+          success: data.success,
+          error: data.error,
+          fullResponse: data,
+        })
+
         addMessage({
           role: 'assistant',
           content: `エラー: ${data.error}`,
         })
       }
     } catch (error) {
+      // デバッグ: 例外エラーを確認
+      console.log('[AI API 例外]', {
+        error,
+        message: error instanceof Error ? error.message : 'Unknown error',
+        stack: error instanceof Error ? error.stack : undefined,
+      })
+
       console.error('AI API error:', error)
       addMessage({
         role: 'assistant',
