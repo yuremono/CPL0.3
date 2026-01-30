@@ -1,26 +1,139 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --color-white: #FFFFFF;
+  --color-black: #0A0A0A;
+  --color-accent: #4A6FA5;
+  --color-accent-light: #6B8DB8;
+  --color-accent-dark: #3A5A8A;
+
+  --border-width: 2px;
+  --border-thick: 3px;
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-white: var(--color-white);
+  --color-black: var(--color-black);
+  --color-accent: var(--color-accent);
+  --color-accent-light: var(--color-accent-light);
+  --color-accent-dark: var(--color-accent-dark);
+
+  --font-sans: var(--font-geist-sans), "Noto Sans JP", system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono), monospace;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+* {
+  box-sizing: border-box;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--color-white);
+  color: var(--color-black);
+  font-family: var(--font-sans);
+  line-height: 1.6;
+}
+
+/* Neo-Brutalism Borders */
+.brutal-border {
+  border: var(--border-width) solid var(--color-black);
+}
+
+.brutal-border-thick {
+  border: var(--border-thick) solid var(--color-black);
+}
+
+/* Neo-Brutalism Shadow */
+.brutal-shadow {
+  box-shadow: 4px 4px 0 0 var(--color-black);
+}
+
+.brutal-shadow-lg {
+  box-shadow: 6px 6px 0 0 var(--color-black);
+}
+
+.brutal-shadow-sm {
+  box-shadow: 2px 2px 0 0 var(--color-black);
+}
+
+/* Button Hover Effect - Invert Colors */
+.brutal-btn {
+  border: var(--border-width) solid var(--color-black);
+  background: var(--color-white);
+  color: var(--color-black);
+  transition: all 0.15s ease;
+}
+
+.brutal-btn:hover {
+  background: var(--color-black);
+  color: var(--color-white);
+}
+
+.brutal-btn:active {
+  box-shadow: 0 0 0 0 var(--color-black);
+  transform: translate(2px, 2px);
+}
+
+.brutal-btn-primary {
+  background: var(--color-accent);
+  color: var(--color-white);
+}
+
+.brutal-btn-primary:hover {
+  background: var(--color-accent-dark);
+  color: var(--color-white);
+}
+
+/* Accessibility Utilities */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+.sr-only\:not-sr-only:focus {
+  position: static;
+  width: auto;
+  height: auto;
+  padding: inherit;
+  margin: inherit;
+  overflow: visible;
+  clip: auto;
+  white-space: normal;
+}
+
+/* Focus Visible Enhancement */
+.focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+/* Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Content Projection Layer - Highlight Styles */
+.hover-highlight {
+  background-color: rgba(250, 204, 21, 0.3);
+  outline: 2px dashed rgba(250, 204, 21, 0.6);
+  outline-offset: 2px;
+}
+
+.selected {
+  background-color: rgba(74, 111, 165, 0.2);
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
 }

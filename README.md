@@ -70,6 +70,25 @@ npm run dev
 http://localhost:3000?mode=preview
 ```
 
+### 6. デモページで試す
+
+Content Projection Layerの機能を試すには、デモページにアクセスしてください：
+
+```
+# 通常モード
+http://localhost:3000/demo
+
+# プレビューモード（編集可能）
+http://localhost:3000/demo?mode=preview
+```
+
+デモページでは以下の機能を体験できます：
+- ホバーで要素がハイライトされる
+- クリックで要素を選択する
+- a11y属性が付与されることを確認する
+
+詳細は [クイックスタートガイド](docs/QUICKSTART.md) を参照してください。
+
 ## プロジェクト構造
 
 ```
@@ -91,11 +110,53 @@ src/
 
 このプロジェクトは並列作業を前提として設計されています。詳細は以下のドキュメントを参照してください：
 
-- [並列作業計画](docs/parallel-work-plan.md)
+- **[マネージャーからの指示](docs/instructions.md)** - 各端末への具体的な指示（最新）
+- **[全体進捗レポート](docs/progress-report.md)** - 全体の進捗状況
+- [並列作業計画](docs/parallel-work-plan.md) - ブランチ戦略と作業手順
 - [作業A: プレビューUI](docs/plan-a-preview-ui.md)
 - [作業B: チャットUI](docs/plan-b-chat-ui.md)
 - [作業C: AI連携](docs/plan-c-ai-backend.md)
 - [作業D: 状態管理](docs/plan-d-state-management.md)
+
+### ブランチ戦略
+
+各作業単位は独立したフィーチャーブランチで作業します：
+
+| 作業 | ブランチ名 |
+|------|-----------|
+| 作業A: プレビューUI | `feature/preview-ui` |
+| 作業B: チャットUI | `feature/chat-ui` |
+| 作業C: AI連携 | `feature/ai-integration` |
+| 作業D: 状態管理 | `feature/state-management` |
+
+### 作業開始手順
+
+```bash
+# 1. mainを最新にする
+git checkout main
+git pull origin main
+
+# 2. 作業ブランチを作成
+git checkout -b feature/{作業名}
+
+# 3. 実装作業（各作業プランを参照）
+
+# 4. 定期的な同期（30分〜1時間ごと）
+git fetch origin
+git rebase origin/main
+
+# 5. 作業完了時
+git push -u origin feature/{作業名}
+# GitHubでPRを作成
+```
+
+### プルリクエストのフロー
+
+1. 各作業ブランチで実装
+2. テスト完了後、PRを作成
+3. コードレビューを受ける
+4. mainブランチへマージ（Squash and Merge推奨）
+5. マージ後はブランチを削除
 
 ## 開発
 
