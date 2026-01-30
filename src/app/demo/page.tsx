@@ -24,6 +24,7 @@ import {
   ElementInfoCard,
   ProviderSelector,
   LoadingIndicatorEnhanced,
+  EditHistoryPanel,
   useChatStore,
   useSelectedProvider,
   type AIProvider,
@@ -176,10 +177,10 @@ function DemoContent() {
     if (selectedElement) {
       addOperation({
         elementId: message.relatedElementId,
+        elementType: 'text',
         type: 'update',
         oldValue: selectedElement.content,
         newValue: message.content,
-        timestamp: Date.now(),
       })
 
       // 選択中の要素情報も更新
@@ -253,6 +254,9 @@ function DemoContent() {
 
           {/* 入力フォーム */}
           <MessageInput onSend={handleSendMessage} disabled={isSending} />
+
+          {/* 編集履歴パネル */}
+          <EditHistoryPanel />
         </ChatSidebar>
 
         {/* チャット開閉ボタン */}

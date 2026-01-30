@@ -248,3 +248,68 @@ AIが回答したテキストの出力結果の下にOKボタンとNGボタン�
 - 作業Dの `preview-store.ts` と連携して選択要素を取得可能
 - 作業CのAIプロバイダーと統合済み（ZAI、OpenAI、Anthropic、Google）
 - チャットトグルボタンにより、オーバーレイなしでチャットの開閉が可能
+
+---
+
+## フェーズ4: 編集履歴UI（完了）
+
+### 完了日時
+2026-01-31
+
+### 目的
+編集履歴を視覚的に表示し、各履歴エントリーからUndo/Redoを可能にするUIパネルを実装する。
+
+### 実装内容
+
+1. **編集履歴ストアの確認**
+   - `src/stores/edit-history-store.ts` は既に十分な構造を持っていた
+   - UI用のセレクターフック（`usePastOperations`, `useFutureOperations`, `useCanUndo`, `useCanRedo`）が既に実装済み
+
+2. **編集履歴パネルコンポーネントの実装**
+   - 新規ファイル: `src/components/chat/edit-history-panel.tsx`
+   - 履歴リストを時系列順に表示（最新が上）
+   - 各履歴エントリーにタイムスタンプ、変更内容の概要を表示
+   - Undo/Redoボタンを備えた固定フッター
+   - 履歴が空の場合は表示しない
+
+3. **ChatAppへの統合**
+   - 変更ファイル: `src/components/chat/chat-app.tsx`
+   - EditHistoryPanelを追加
+
+4. **デモページへの統合**
+   - 変更ファイル: `src/app/demo/page.tsx`
+   - EditHistoryPanelを追加
+
+5. **エクスポートの更新**
+   - 変更ファイル: `src/components/chat/index.ts`
+   - EditHistoryPanel, EditPreviewActionsを追加
+   - usePendingPreview, PendingPreview型を追加
+
+6. **addOperation呼び出しの修正**
+   - 変更ファイル: `src/components/chat/chat-app.tsx`
+   - 変更ファイル: `src/app/demo/page.tsx`
+   - `elementType`プロパティを追加
+   - `timestamp`プロパティを削除（自動生成）
+
+### 完了基準
+- [x] 編集履歴パネルが表示される
+- [x] 各履歴エントリーが表示される（タイムスタンプ、説明）
+- [x] Undoボタンで最後の編集を取り消せる
+- [x] Redoボタンで取り消しをやり直せる
+- [x] 履歴が空の場合はパネルが表示されない
+- [x] テストがパスする
+
+### 作成/更新したファイル
+- `src/components/chat/edit-history-panel.tsx` - 編集履歴パネルコンポーネント（新規）
+- `src/components/chat/chat-app.tsx` - EditHistoryPanelを統合、addOperation呼び出しを修正
+- `src/components/chat/index.ts` - エクスポートを更新
+- `src/app/demo/page.tsx` - EditHistoryPanelを統合、addOperation呼び出しを修正
+- `work-b/progress.md` - 進捗報告を更新
+
+### ビルドステータス
+✅ ビルド成功
+
+### テスト結果
+✅ すべてのテストがパス（194件）
+
+---

@@ -20,6 +20,7 @@ import { MessageList } from './message-list'
 import { MessageInput } from './message-input'
 import { LoadingIndicatorEnhanced } from './loading-indicator-enhanced'
 import { ProviderSelector } from './provider-selector'
+import { EditHistoryPanel } from './edit-history-panel'
 
 /**
  * 推定応答時間（秒）- プロバイダー別
@@ -148,10 +149,10 @@ export function ChatApp() {
     if (selectedElement) {
       addOperation({
         elementId: message.relatedElementId,
+        elementType: 'text',
         type: 'update',
         oldValue: selectedElement.content,
         newValue: message.content,
-        timestamp: Date.now(),
       })
 
       // 選択中の要素情報も更新
@@ -207,6 +208,9 @@ export function ChatApp() {
 
       {/* メッセージ入力 */}
       <MessageInput onSend={handleSendMessage} disabled={isSending} />
+
+      {/* 編集履歴パネル */}
+      <EditHistoryPanel />
     </div>
   )
 }
