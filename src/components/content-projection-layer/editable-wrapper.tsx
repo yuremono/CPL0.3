@@ -174,6 +174,7 @@ export function EditableWrapper({
     <div
       data-ref={ref}
       data-id={element.id}
+      data-cpl-editable={element.editable ? 'true' : 'false'}
       role={element.role}
       aria-label={element.label || element.content}
       aria-level={element.level}

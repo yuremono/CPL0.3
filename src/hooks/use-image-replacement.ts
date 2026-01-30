@@ -1,10 +1,10 @@
 /**
  * 画像置換フック
  *
- * ドラッグ&ドロップで画像を置換するためのフック
+ * ドラッグ&ドロップとファイル選択で画像を置換するためのフック
  */
 
-import { useCallback, useState } from 'react'
+import { useCallback, useState, useRef } from 'react'
 import type { A11yElementInfo } from '@/lib/content-projection/types'
 
 export interface ImageReplacementState {
@@ -12,6 +12,8 @@ export interface ImageReplacementState {
   dragOver: boolean
   previewUrl: string | null
   error: string | null
+  previewMode: boolean
+  selectedFile: File | null
 }
 
 const MAX_FILE_SIZE = 5 * 1024 * 1024 // 5MB
@@ -27,11 +29,14 @@ export function useImageReplacement(
   element: A11yElementInfo | null,
   onReplace?: (file: File, elementId: string) => Promise<void>
 ) {
+  const fileInputRef = useRef<HTMLInputElement | null>(null)
   const [state, setState] = useState<ImageReplacementState>({
     isDragging: false,
     dragOver: false,
     previewUrl: null,
     error: null,
+    previewMode: false,
+    selectedFile: null,
   })
 
   /**
@@ -80,7 +85,15 @@ export function useImageReplacement(
   const handleDragLeave = useCallback((e: React.DragEvent) => {
     e.preventDefault()
     e.stopPropagation()
-    setState((prev) => ({ ...prev, dragOver: false }))
+    // 子要素からのdragleaveを無視するため、relatedTargetをチェック
+    const rect = (e.currentTarget as HTMLElement).getBoundingClientRect()
+    const x = e.clientX
+    const y = e.clientY
+
+    // 要素外に移動した場合のみドラッグオーバーを解除
+    if (x < rect.left || x >= rect.right || y < rect.top || y >= rect.bottom) {
+      setState((prev) => ({ ...prev, dragOver: false }))
+    }
   }, [])
 
   /**
@@ -112,21 +125,11 @@ export function useImageReplacement(
         return
       }
 
-      // プレビュー表示
+      // プレビューモードに入る
       const previewUrl = URL.createObjectURL(file)
-      setState((prev) => ({ ...prev, previewUrl, error: null }))
-
-      // 置換実行
-      try {
-        if (onReplace) {
-          await onReplace(file, element.id)
-        }
-      } catch (error) {
-        setState((prev) => ({ ...prev, error: '画像の置換に失敗しました' }))
-        URL.revokeObjectURL(previewUrl)
-      }
+      setState((prev) => ({ ...prev, previewUrl, previewMode: true, selectedFile: file, error: null }))
     },
-    [element, onReplace, validateFile]
+    [element, validateFile]
   )
 
   /**
@@ -141,7 +144,13 @@ export function useImageReplacement(
       dragOver: false,
       previewUrl: null,
       error: null,
+      previewMode: false,
+      selectedFile: null,
     })
+    // inputをリセット
+    if (fileInputRef.current) {
+      fileInputRef.current.value = ''
+    }
   }, [state.previewUrl])
 
   /**
@@ -151,8 +160,88 @@ export function useImageReplacement(
     setState((prev) => ({ ...prev, error: null }))
   }, [])
 
+  /**
+   * ファイル選択ダイアログを開く
+   */
+  const openFileSelector = useCallback(() => {
+    fileInputRef.current?.click()
+  }, [])
+
+  /**
+   * ファイル選択ハンドラー
+   */
+  const handleFileSelect = useCallback(
+    async (e: React.ChangeEvent<HTMLInputElement>) => {
+      const files = e.target.files
+      if (!files || files.length === 0) {
+        return
+      }
+
+      if (!element) {
+        setState((prev) => ({ ...prev, error: '要素が選択されていません' }))
+        return
+      }
+
+      const file = files[0]
+
+      // バリデーション
+      const validation = validateFile(file)
+      if (!validation.valid) {
+        setState((prev) => ({ ...prev, error: validation.error || '不明なエラー' }))
+        // inputをリセット
+        e.target.value = ''
+        return
+      }
+
+      // プレビューモードに入る
+      const previewUrl = URL.createObjectURL(file)
+      setState((prev) => ({ ...prev, previewUrl, previewMode: true, selectedFile: file, error: null }))
+    },
+    [element, validateFile]
+  )
+
+  /**
+   * プレビューを確定して置換を実行
+   */
+  const confirmPreview = useCallback(async () => {
+    if (!state.selectedFile || !element) {
+      return
+    }
+
+    try {
+      if (onReplace) {
+        await onReplace(state.selectedFile, element.id)
+      }
+      // 置換成功後にプレビューをクリア
+      clearPreview()
+    } catch (error) {
+      setState((prev) => ({ ...prev, error: '画像の置換に失敗しました' }))
+    }
+  }, [state.selectedFile, element, onReplace, clearPreview])
+
+  /**
+   * プレビューをキャンセル
+   */
+  const cancelPreview = useCallback(() => {
+    if (state.previewUrl) {
+      URL.revokeObjectURL(state.previewUrl)
+    }
+    setState((prev) => ({
+      ...prev,
+      previewMode: false,
+      previewUrl: null,
+      selectedFile: null,
+      error: null,
+    }))
+    // inputをリセット
+    if (fileInputRef.current) {
+      fileInputRef.current.value = ''
+    }
+  }, [state.previewUrl])
+
   return {
     state,
+    fileInputRef,
     handleDragStart,
     handleDragEnd,
     handleDragOver,
@@ -160,6 +249,10 @@ export function useImageReplacement(
     handleDrop,
     clearPreview,
     clearError,
+    openFileSelector,
+    handleFileSelect,
+    confirmPreview,
+    cancelPreview,
   }
 }
 
