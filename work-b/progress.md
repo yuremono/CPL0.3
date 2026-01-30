@@ -251,6 +251,54 @@ AIが回答したテキストの出力結果の下にOKボタンとNGボタン�
 
 ---
 
+## フェーズ5: サイドバーリサイズ機能（完了）
+
+### 完了日時
+2026-01-31
+
+### 目的
+チャットサイドバーの幅をドラッグハンドルで変更できるようにする。現在のサイズ（320px）を最小として、画面幅の50%まで広げられるようにする。
+
+### 実装内容
+
+1. **chat-store.tsの拡張**
+   - 変更ファイル: `src/stores/chat-store.ts`
+   - `sidebarWidth` 状態を追加（デフォルト320px）
+   - `setSidebarWidth` アクションを追加
+   - `useSidebarWidth` セレクターフックを追加
+   - 永続化設定に `sidebarWidth` を追加
+
+2. **chat-sidebar.tsxのリサイズ機能実装**
+   - 変更ファイル: `src/components/chat/chat-sidebar.tsx`
+   - 左端にドラッグハンドルを追加（`w-1`の黒いバー）
+   - マウスドラッグで幅を変更するロジックを実装
+   - 最小幅320px、最大幅は画面幅の50%に制限
+   - ホバー時にハンドルの位置が視覚的にわかるように表示
+
+3. **編集履歴パネルの一時的コメントアウト**
+   - 変更ファイル: `src/components/chat/chat-app.tsx`
+   - `EditHistoryPanel` のインポートをコメントアウト
+   - `EditHistoryPanel` のレンダリングをコメントアウト
+   - `useEditHistoryStore` のインポートをコメントアウト
+   - `addOperation` の呼び出しをコメントアウト
+
+### 完了基準
+- [x] サイドバーの左端にドラッグハンドルが表示される
+- [x] ドラッグで幅を変更できる（320px〜画面幅の50%）
+- [x] 編集履歴パネルが一時的にコメントアウトされている
+- [x] テストがパスする
+
+### 作成/更新したファイル
+- `src/stores/chat-store.ts` - sidebarWidth状態とセレクターを追加
+- `src/components/chat/chat-sidebar.tsx` - ドラッグハンドルとリサイズロジックを実装
+- `src/components/chat/chat-app.tsx` - 編集履歴パネルをコメントアウト
+
+### ビルドステータス
+✅ ビルド成功
+✅ 型チェックパス
+
+---
+
 ## フェーズ4: 編集履歴UI（完了）
 
 ### 完了日時

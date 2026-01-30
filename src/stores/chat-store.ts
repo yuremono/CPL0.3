@@ -60,6 +60,9 @@ export interface ChatState {
   // サイドバーの開閉状態
   isOpen: boolean
 
+  // サイドバーの幅（px）- 320px（最小）〜画面幅の50%
+  sidebarWidth: number
+
   // 選択されたAIプロバイダー
   selectedProvider: AIProvider
 
@@ -70,6 +73,7 @@ export interface ChatState {
   addMessage: (message: Omit<ChatMessage, 'id' | 'timestamp'>) => ChatMessage
   setSending: (isSending: boolean) => void
   setOpen: (isOpen: boolean) => void
+  setSidebarWidth: (width: number) => void
   clearMessages: () => void
   setProvider: (provider: AIProvider) => void
   setPendingPreview: (preview: PendingPreview | null) => void
@@ -95,6 +99,7 @@ export const useChatStore = create<ChatState>()(
       messages: [],
       isSending: false,
       isOpen: true,
+      sidebarWidth: 320, // デフォルト幅 320px (w-80)
       selectedProvider: 'google', // デフォルトはGoogle
       pendingPreview: null,
 
@@ -130,6 +135,15 @@ export const useChatStore = create<ChatState>()(
       },
 
       /**
+       * サイドバーの幅を設定
+       */
+      setSidebarWidth: (width) => {
+        // 最小幅320px、最大幅は画面幅の50%
+        const clampedWidth = Math.max(320, Math.min(width, window.innerWidth / 2))
+        set({ sidebarWidth: clampedWidth })
+      },
+
+      /**
        * メッセージをクリア
        */
       clearMessages: () => {
@@ -162,6 +176,7 @@ export const useChatStore = create<ChatState>()(
       partialize: (state) => ({
         selectedProvider: state.selectedProvider,
         isOpen: state.isOpen,
+        sidebarWidth: state.sidebarWidth,
         // pendingPreviewは永続化しない（セッションごとにクリア）
       }),
     }
@@ -186,6 +201,11 @@ export const useIsSending = () => useChatStore((state) => state.isSending)
  * サイドバーの開閉状態を取得
  */
 export const useIsChatOpen = () => useChatStore((state) => state.isOpen)
+
+/**
+ * サイドバーの幅を取得
+ */
+export const useSidebarWidth = () => useChatStore((state) => state.sidebarWidth)
 
 /**
  * 選択されたプロバイダーを取得

@@ -7,7 +7,7 @@
  */
 
 import { useSelectedElement, usePreviewStore } from '@/stores/preview-store'
-import { useEditHistoryStore } from '@/stores/edit-history-store'
+// import { useEditHistoryStore } from '@/stores/edit-history-store'
 import {
   useChatStore,
   useIsSending,
@@ -20,7 +20,7 @@ import { MessageList } from './message-list'
 import { MessageInput } from './message-input'
 import { LoadingIndicatorEnhanced } from './loading-indicator-enhanced'
 import { ProviderSelector } from './provider-selector'
-import { EditHistoryPanel } from './edit-history-panel'
+// import { EditHistoryPanel } from './edit-history-panel'
 
 /**
  * 推定応答時間（秒）- プロバイダー別
@@ -41,7 +41,7 @@ export function ChatApp() {
   const selectElement = usePreviewStore((state) => state.selectElement)
   const updateContent = usePreviewStore((state) => state.updateContent)
 
-  const addOperation = useEditHistoryStore((state) => state.addOperation)
+  // const addOperation = useEditHistoryStore((state) => state.addOperation)
 
   const isSending = useIsSending()
   const selectedProvider = useSelectedProvider()
@@ -145,22 +145,24 @@ export function ChatApp() {
     // プレビュー内容を確定
     updateContent(message.relatedElementId, message.content)
 
-    // 編集履歴に記録
-    if (selectedElement) {
-      addOperation({
-        elementId: message.relatedElementId,
-        elementType: 'text',
-        type: 'update',
-        oldValue: selectedElement.content,
-        newValue: message.content,
-      })
+    // 編集履歴に記録（一時的にコメントアウト）
+    // if (selectedElement) {
+    //   addOperation({
+    //     elementId: message.relatedElementId,
+    //     elementType: 'text',
+    //     type: 'update',
+    //     oldValue: selectedElement.content,
+    //     newValue: message.content,
+    //   })
 
-      // 選択中の要素情報も更新
+    // 選択中の要素情報も更新
+    if (selectedElement) {
       selectElement({
         ...selectedElement,
         content: message.content,
       })
     }
+    // }
 
     // プレビュー状態をクリア
     clearPendingPreview()
@@ -209,8 +211,8 @@ export function ChatApp() {
       {/* メッセージ入力 */}
       <MessageInput onSend={handleSendMessage} disabled={isSending} />
 
-      {/* 編集履歴パネル */}
-      <EditHistoryPanel />
+      {/* 編集履歴パネル（一時的にコメントアウト） */}
+      {/* <EditHistoryPanel /> */}
     </div>
   )
 }
