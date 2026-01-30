@@ -89,8 +89,15 @@ function HomeContent() {
         {/* Hero Section - Asymmetric Grid */}
         <section aria-labelledby="hero-title" className="border-b-2 border-black">
           <div className="grid md:grid-cols-12 min-h-[60vh]">
-            {/* Left - Large Typography */}
-            <div className="md:col-span-8 border-b-2 md:border-b-0 md:border-r-2 border-black p-8 md:p-16 flex flex-col justify-center">
+            {/* Left - Image */}
+            <div className="md:col-span-4 border-b-2 md:border-b-0 md:border-r-2 border-black p-8 md:p-16 flex flex-col justify-center bg-gray-50">
+              <div className="aspect-square w-full border-2 border-black bg-gradient-to-br from-accent/20 to-accent/40 flex items-center justify-center">
+                <span className="text-6xl font-bold text-accent/50">Z.AI</span>
+              </div>
+            </div>
+
+            {/* Right - Large Typography */}
+            <div className="md:col-span-8 p-8 md:p-16 flex flex-col justify-center">
               <EditableWrapper
                 element={{
                   id: generateId('hero-label'),
@@ -120,33 +127,6 @@ function HomeContent() {
                   Developer
                 </h2>
               </EditableWrapper>
-            </div>
-
-            {/* Right - Description & CTA */}
-            <div className="md:col-span-4 p-8 md:p-16 flex flex-col justify-center gap-6 bg-gray-50">
-              <EditableWrapper
-                element={{
-                  id: generateId('hero-description'),
-                  role: 'paragraph',
-                  content: 'Building digital experiences with precision and purpose.',
-                  editable: true,
-                }}
-                isSelected={selectedElement?.id === 'hero-description'}
-                onSelect={handleSelectElement}
-              >
-                <p className="text-lg">
-                  Building digital experiences with precision and purpose.
-                </p>
-              </EditableWrapper>
-
-              <div className="flex flex-col gap-4">
-                <a href="#projects" className="inline-flex items-center justify-center px-6 py-3 font-semibold text-lg border-2 border-black bg-accent text-white hover:bg-accent-dark hover:text-white shadow-[2px_2px_0_0_#0A0A0A] hover:shadow-[0_0_0_0_#0A0A0A] hover:translate-x-0.5 hover:translate-y-0.5 active:shadow-none active:translate-x-[2px] active:translate-y-[2px] transition-all duration-150 focus:outline-none focus:ring-2 focus:ring-accent focus:ring-offset-2 disabled:pointer-events-none disabled:opacity-50">
-                  View Projects
-                </a>
-                <a href="#contact" className="inline-flex items-center justify-center px-6 py-3 font-semibold text-lg border-2 border-black bg-white text-black hover:bg-black hover:text-white shadow-[2px_2px_0_0_#0A0A0A] hover:shadow-[0_0_0_0_#0A0A0A] hover:translate-x-0.5 hover:translate-y-0.5 active:shadow-none active:translate-x-[2px] active:translate-y-[2px] transition-all duration-150 focus:outline-none focus:ring-2 focus:ring-accent focus:ring-offset-2 disabled:pointer-events-none disabled:opacity-50">
-                  Get in Touch
-                </a>
-              </div>
             </div>
           </div>
         </section>

@@ -4,6 +4,9 @@
  * プレビューモードと編集モードを切り替えるトグルボタン。
  */
 
+'use client'
+
+import { useRouter, useSearchParams } from 'next/navigation'
 import { usePreviewStore } from '@/stores/preview-store'
 import type { PreviewMode } from '@/lib/content-projection/types'
 import { EyeIcon, PencilIcon } from '@heroicons/react/24/outline'
@@ -32,8 +35,17 @@ const MODE_OPTIONS: Array<{
  * プレビューモードのトグルボタン
  */
 export function PreviewModeToggle() {
+  const router = useRouter()
+  const searchParams = useSearchParams()
   const mode = usePreviewStore((state) => state.mode)
   const setMode = usePreviewStore((state) => state.setMode)
+
+  // モード変更ハンドラー（URLとストアを更新）
+  const handleModeChange = (newMode: PreviewMode) => {
+    setMode(newMode)
+    const url = newMode === 'preview' ? '/?mode=preview' : '/'
+    router.push(url)
+  }
 
   return (
     <div className="fixed bottom-4 left-4 z-50">
@@ -49,7 +61,7 @@ export function PreviewModeToggle() {
             <button
               key={option.value}
               type="button"
-              onClick={() => setMode(option.value)}
+              onClick={() => handleModeChange(option.value)}
               className={`
                 flex items-center gap-2 px-4 py-2 rounded-md font-medium text-sm
                 transition-all duration-150
