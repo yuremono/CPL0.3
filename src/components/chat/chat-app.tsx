@@ -21,6 +21,7 @@ import { MessageInput } from './message-input'
 import { LoadingIndicatorEnhanced } from './loading-indicator-enhanced'
 import { ProviderSelector } from './provider-selector'
 // import { EditHistoryPanel } from './edit-history-panel'
+import { extractOrGenerateImageUrl } from '@/lib/ai/image-generation'
 
 /**
  * 推定応答時間（秒）- プロバイダー別
@@ -142,13 +143,23 @@ export function ChatApp() {
   const handleApproveEdit = (message: ChatMessage) => {
     if (!message.relatedElementId || !message.content) return
 
-    // AI応答から画像URLを抽出（画像要素の場合）
+    // AI応答から画像URLを抽出または生成（画像要素の場合）
     let contentToUse = message.content
     if (selectedElement?.role === 'image') {
-      // URLを抽出: https:// または http:// で始まるURL
-      const urlMatch = message.content.match(/https?:\/\/[^\s<>"{}|\\^`\[\]]+/)
-      if (urlMatch) {
-        contentToUse = urlMatch[0]
+      // 画像URLを抽出または生成
+      const imageUrl = extractOrGenerateImageUrl(message.content)
+      if (imageUrl) {
+        contentToUse = imageUrl
+        addMessage({
+          role: 'system',
+          content: `画像を生成しました: ${imageUrl.substring(0, 50)}...`,
+        })
+      } else {
+        // URLが見つからない場合のフォールバック
+        const urlMatch = message.content.match(/https?:\/\/[^\s<>"{}|\\^`\[\]]+/)
+        if (urlMatch) {
+          contentToUse = urlMatch[0]
+        }
       }
     }
 

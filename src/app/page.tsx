@@ -101,9 +101,31 @@ function HomeContent() {
 
         {/* Hero Section - Asymmetric Grid */}
         <section data-ref={heroSectionRef} data-id={heroSectionId} aria-labelledby="hero-title" className="border-b-2 border-black">
-          <div className="grid md:grid-cols-12 min-h-[60vh]">
+                                  <div className="grid md:grid-cols-12 min-h-[60vh]">
+                                                      {/* Right - Hero Image */}
+            <div className="md:col-span-4 p-0 flex items-center justify-center bg-gray-50">
+              <EditableImageWrapper
+                element={{
+                  id: generateId('hero-image'),
+                  role: 'image',
+                  content: 'Hero workspace image',
+                  label: 'Hero Image',
+                  editable: true,
+                }}
+                isSelected={selectedElement?.id === generateId('hero-image')}
+                onSelect={handleSelectElement}
+                src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=800&h=1200&fit=crop"
+                alt="Creative developer workspace"
+              >
+                <img
+                  src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=800&h=1200&fit=crop"
+                  alt="Creative developer workspace"
+                  className="w-full h-full object-cover min-h-[60vh]"
+                />
+              </EditableImageWrapper>
+            </div>
             {/* Left - Large Typography */}
-            <div className="md:col-span-8 border-b-2 md:border-b-0 md:border-r-2 border-black p-8 md:p-16 flex flex-col justify-center">
+            <div className="md:col-span-6 border-b-2 md:border-b-0 md:border-r-2 border-black p-8 md:p-16 flex flex-col justify-center">
               <EditableWrapper
                 element={{
                   id: generateId('hero-label'),
@@ -135,28 +157,7 @@ function HomeContent() {
               </EditableWrapper>
             </div>
 
-            {/* Right - Hero Image */}
-            <div className="md:col-span-4 p-0 flex items-center justify-center bg-gray-50">
-              <EditableImageWrapper
-                element={{
-                  id: generateId('hero-image'),
-                  role: 'image',
-                  content: 'Hero workspace image',
-                  label: 'Hero Image',
-                  editable: true,
-                }}
-                isSelected={selectedElement?.id === generateId('hero-image')}
-                onSelect={handleSelectElement}
-                src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=800&h=1200&fit=crop"
-                alt="Creative developer workspace"
-              >
-                <img
-                  src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=800&h=1200&fit=crop"
-                  alt="Creative developer workspace"
-                  className="w-full h-full object-cover min-h-[60vh]"
-                />
-              </EditableImageWrapper>
-            </div>
+
           </div>
         </section>
 

@@ -112,11 +112,46 @@ export class GoogleProvider implements AIProvider {
   private buildPrompt(request: AIEditRequest): string {
     const { selectedElement, userIntent, pageContext } = request
 
-    let prompt = `# 編集対象
+    // 画像要素の場合、画像URLを生成
+    const isImageRequest = selectedElement.role === 'image' ||
+      userIntent.includes('イラスト') ||
+      userIntent.includes('画像') ||
+      userIntent.includes('絵') ||
+      userIntent.includes('illustration') ||
+      userIntent.includes('image')
 
-要素ID: ${selectedElement.id}
-役割: ${selectedElement.role}
-現在のコンテンツ: ${selectedElement.content}`
+    if (isImageRequest) {
+      // 画像生成用プロンプト（文字列結合を使用）
+      const seed = Math.random().toString(36).substring(2, 9)
+
+      let prompt = '画像生成リクエスト\n\n'
+      prompt += `要素ID: ${selectedElement.id}\n`
+      prompt += `役割: ${selectedElement.role}\n`
+      prompt += `説明: ${selectedElement.label || selectedElement.content}\n\n`
+      prompt += `ユーザーの意図: ${userIntent}\n\n`
+      prompt += `指示:\n`
+      prompt += `あなたは画像URL生成アシスタントです。以下の手順で回答してください：\n\n`
+      prompt += `1. ユーザーの意図を解析して、適切な画像生成プロンプト（英語）を作成\n`
+      prompt += `2. Pollinations.aiの画像URL形式で回答\n\n`
+      prompt += `画像URL形式:\n`
+      prompt += `https://image.pollinations.ai/prompt/{プロンプト}?width=1024&height=1024&seed=${seed}&model=flux&nologo=true\n\n`
+      prompt += `例:\n`
+      prompt += `ユーザー: "犬のイラスト" → https://image.pollinations.ai/prompt/cute%20dog%20illustration\n`
+      prompt += `ユーザー: "海の写真" → https://image.pollinations.ai/prompt/ocean%20landscape%20photography\n\n`
+      prompt += `重要:\n`
+      prompt += `- プロンプトは英語に変換してください\n`
+      prompt += `- URLのみを回答してください\n`
+      prompt += `- 必ずJSON形式で回答してください\n\n`
+      prompt += `回答形式: {"elementId": "...", "newContent": "https://image.pollinations.ai/prompt/..."}`
+
+      return prompt
+    }
+
+    // テキスト要素の編集（既存のロジック）
+    let prompt = '# 編集対象\n\n'
+    prompt += `要素ID: ${selectedElement.id}\n`
+    prompt += `役割: ${selectedElement.role}\n`
+    prompt += `現在のコンテンツ: ${selectedElement.content}`
 
     if (selectedElement.label) {
       prompt += `\nラベル: ${selectedElement.label}`
@@ -127,7 +162,7 @@ export class GoogleProvider implements AIProvider {
     }
 
     if (selectedElement.context) {
-      prompt += `\n\n# コンテキスト`
+      prompt += '\n\n# コンテキスト\n'
       if (selectedElement.context.section) {
         prompt += `\nセクション: ${selectedElement.context.section}`
       }
@@ -139,7 +174,7 @@ export class GoogleProvider implements AIProvider {
     prompt += `\n\n# ユーザーの意図\n${userIntent}`
 
     if (pageContext) {
-      prompt += `\n\n# ページコンテキスト`
+      prompt += '\n\n# ページコンテキスト\n'
       if (pageContext.pageType) {
         prompt += `\nページタイプ: ${pageContext.pageType}`
       }
