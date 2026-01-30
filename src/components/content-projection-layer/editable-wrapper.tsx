@@ -9,6 +9,7 @@ import { cn } from '@/lib/utils'
 import type { A11yElementInfo } from '@/lib/content-projection/types'
 import { useEditContent, useIsEditing, usePreviewStore } from '@/stores/preview-store'
 import { useChatStore, usePendingPreview } from '@/stores/chat-store'
+import { useElementRef } from '@/hooks/use-element-ref'
 
 /**
  * EditableWrapperのプロパティ
@@ -79,6 +80,9 @@ export function EditableWrapper({
   // プレビュー状態を取得
   const pendingPreview = usePendingPreview()
   const isPreviewing = pendingPreview?.elementId === element.id
+
+  // 短い参照IDを生成
+  const ref = useElementRef(element.id)
 
   // 編集モード開始時にテキストを抽出
   useEffect(() => {
@@ -168,9 +172,8 @@ export function EditableWrapper({
 
   return (
     <div
-      data-cpl-id={element.id}
-      data-cpl-type={element.role}
-      data-cpl-editable={String(element.editable)}
+      data-ref={ref}
+      data-id={element.id}
       role={element.role}
       aria-label={element.label || element.content}
       aria-level={element.level}

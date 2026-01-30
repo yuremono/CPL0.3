@@ -15,6 +15,7 @@ import { generateId } from '@/lib/content-projection/generate-id'
 import { usePreviewStore } from '@/stores/preview-store'
 import { useEditHistoryStore } from '@/stores/edit-history-store'
 import { useAutoSave } from '@/hooks/use-auto-save'
+import { useSectionRef } from '@/hooks/use-element-ref'
 import {
   ChatSidebar,
   ChatApp,
@@ -58,6 +59,18 @@ function HomeContent() {
     selectElement(element)
   }
 
+  // セクションIDと参照IDを生成
+  const heroSectionId = generateId('hero-section')
+  const heroSectionRef = useSectionRef(heroSectionId)
+  const aboutSectionId = generateId('about-section')
+  const aboutSectionRef = useSectionRef(aboutSectionId)
+  const featuresSectionId = generateId('features-section')
+  const featuresSectionRef = useSectionRef(featuresSectionId)
+  const projectsSectionId = generateId('projects-section')
+  const projectsSectionRef = useSectionRef(projectsSectionId)
+  const contactSectionId = generateId('contact-section')
+  const contactSectionRef = useSectionRef(contactSectionId)
+
   return (
     <PreviewProvider isPreviewMode={isPreviewMode}>
       <div className="min-h-screen bg-white">
@@ -87,7 +100,7 @@ function HomeContent() {
         </header>
 
         {/* Hero Section - Asymmetric Grid */}
-        <section aria-labelledby="hero-title" className="border-b-2 border-black">
+        <section data-ref={heroSectionRef} data-id={heroSectionId} aria-labelledby="hero-title" className="border-b-2 border-black">
           <div className="grid md:grid-cols-12 min-h-[60vh]">
             {/* Left - Large Typography */}
             <div className="md:col-span-8 border-b-2 md:border-b-0 md:border-r-2 border-black p-8 md:p-16 flex flex-col justify-center">
@@ -148,7 +161,7 @@ function HomeContent() {
         </section>
 
         {/* About Section */}
-        <section id="about" aria-labelledby="about-title" className="border-b-2 border-black">
+        <section data-ref={aboutSectionRef} data-id={aboutSectionId} aria-labelledby="about-title" className="border-b-2 border-black">
           <div className="grid md:grid-cols-12">
             {/* Left - Title */}
             <div className="md:col-span-4 border-b-2 md:border-b-0 md:border-r-2 border-black p-8 md:p-12 bg-gray-50">
@@ -237,7 +250,7 @@ function HomeContent() {
         </section>
 
         {/* Features Section - Grid Layout */}
-        <section aria-label="Features" className="border-b-2 border-black">
+        <section data-ref={featuresSectionRef} data-id={featuresSectionId} aria-label="Features" className="border-b-2 border-black">
           <div className="grid md:grid-cols-3 divide-y-2 md:divide-y-0 md:divide-x-2 divide-black">
             {/* Feature 1 */}
             <div className="p-8 md:p-12 hover:bg-gray-50 transition-colors group">
@@ -275,7 +288,7 @@ function HomeContent() {
         </section>
 
         {/* Projects Section */}
-        <section id="projects" aria-labelledby="projects-title" className="border-b-2 border-black">
+        <section data-ref={projectsSectionRef} data-id={projectsSectionId} aria-labelledby="projects-title" className="border-b-2 border-black">
           <div className="p-8 md:p-12">
             <EditableWrapper
               element={{
@@ -490,7 +503,7 @@ function HomeContent() {
         </section>
 
         {/* Contact Section */}
-        <section id="contact" aria-labelledby="contact-title">
+        <section data-ref={contactSectionRef} data-id={contactSectionId} aria-labelledby="contact-title">
           <div className="grid md:grid-cols-12">
             {/* Left - Title */}
             <div className="md:col-span-4 md:border-r-2 border-black p-8 md:p-12 bg-gray-50">

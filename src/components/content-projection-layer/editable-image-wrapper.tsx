@@ -11,6 +11,7 @@ import { useImageReplacement, fileToDataURL } from '@/hooks/use-image-replacemen
 import { usePreviewStore } from '@/stores/preview-store'
 import { cn } from '@/lib/utils'
 import type { A11yElementInfo } from '@/lib/content-projection/types'
+import { useElementRef } from '@/hooks/use-element-ref'
 
 export interface EditableImageWrapperProps {
   element: A11yElementInfo
@@ -44,6 +45,9 @@ export function EditableImageWrapper({
 
   // 元のclassNameを取得（型アサーション）
   const originalClassName = (children as any)?.props?.className || ''
+
+  // 短い参照IDを生成
+  const ref = useElementRef(element.id)
 
   // 画像置換フック
   const { state, handleDragStart, handleDragEnd, handleDragOver, handleDragLeave, handleDrop, clearPreview, clearError } =
@@ -82,9 +86,8 @@ export function EditableImageWrapper({
 
   return (
     <div
-      data-cpl-id={element.id}
-      data-cpl-type="image"
-      data-cpl-editable={element.editable ? 'true' : 'false'}
+      data-ref={ref}
+      data-id={element.id}
       role={element.role}
       aria-label={element.label || alt}
       className={cn(
