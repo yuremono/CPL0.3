@@ -196,3 +196,58 @@ OpenAI/Anthropic SDKはブラウザ環境での実行を制限しているため
 - ✅ API健全性テストがパスする（15テスト）
 - ✅ すべてのAPI関数にエラーハンドリングがある
 - ✅ リトライロジックが正しく動作する（12テスト）
+
+---
+
+## フェーズ2: 編集プレビュー機能（完了）
+
+### 完了したタスク
+
+- [x] プレビュー状態の型定義追加（`EditPreview`）- `src/lib/content-projection/types.ts`
+- [x] プレビュー状態管理フックの実装（`use-edit-preview.ts`）
+- [x] OK/NGボタンコンポーネントの実装（`edit-preview-actions.tsx`）
+- [x] chat-store.tsの拡張（`PendingPreview`型と`pendingPreview`状態）
+- [x] ChatAppへのプレビューボタン統合（OK/NGハンドラー）
+- [x] EditableWrapperのプレビュー対応（プレビュー内容の表示）
+
+### 更新したファイル
+
+- `src/lib/content-projection/types.ts` - `EditPreview`型を追加
+- `src/hooks/use-edit-preview.ts` - プレビュー状態管理フック（既に実装済み）
+- `src/components/chat/edit-preview-actions.tsx` - OK/NGボタンコンポーネント（既に実装済み）
+- `src/stores/chat-store.ts` - `PendingPreview`型と`pendingPreview`状態を追加（既に実装済み）
+- `src/components/chat/chat-app.tsx` - プレビューハンドラーを追加（既に実装済み）
+- `src/components/chat/message-list.tsx` - OK/NGボタン表示ロジック（既に実装済み）
+- `src/components/content-projection-layer/editable-wrapper.tsx` - プレビュー状態の表示ロジックを追加
+- `src/components/content-projection-layer/__tests__/editable-wrapper.test.tsx` - `usePendingPreview`のモックを追加
+
+### テスト結果
+
+```
+✓ 163 tests passed (14 test files)
+✓ Build successful
+```
+
+### 実装の詳細
+
+#### プレビュー機能のフロー
+1. ユーザーがメッセージを送信
+2. AI APIを呼び出し
+3. AI応答をメッセージに追加
+4. **プレビュー状態として保存**（`setPendingPreview`）
+5. **メッセージにOK/NGボタンを表示**
+6. **OKが押されたら**コンテンツを更新（`updateContent`）
+7. **NGが押されたら**プレビューをキャンセル
+
+#### プレビュー状態の表示
+- `EditableWrapper`でプレビュー状態を検出（`isPreviewing`）
+- プレビュー中はプレビュー内容を優先表示
+- 確定後に正式にコンテンツを更新
+
+### 完了基準の達成
+
+- ✅ AI応答メッセージにOK/NGボタンが表示される
+- ✅ OKボタン押下でコンテンツが更新される
+- ✅ NGボタン押下でキャンセルされる（何も変わらない）
+- ✅ 編集履歴が正しく記録される
+- ✅ テストがパスする（163/163）

@@ -21,6 +21,7 @@ vi.mock('@/stores/chat-store', () => ({
   useChatStore: vi.fn(() => ({
     setOpen: vi.fn(),
   })),
+  usePendingPreview: vi.fn(() => null),
 }))
 
 describe('EditableWrapper', () => {

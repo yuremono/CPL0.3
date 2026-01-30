@@ -8,7 +8,7 @@ import { useState, isValidElement, cloneElement, type ReactNode, type MouseEvent
 import { cn } from '@/lib/utils'
 import type { A11yElementInfo } from '@/lib/content-projection/types'
 import { useEditContent, useIsEditing, usePreviewStore } from '@/stores/preview-store'
-import { useChatStore } from '@/stores/chat-store'
+import { useChatStore, usePendingPreview } from '@/stores/chat-store'
 
 /**
  * EditableWrapperのプロパティ
@@ -75,6 +75,10 @@ export function EditableWrapper({
 
   // 編集内容を取得（AI編集後に更新される）
   const editedContent = useEditContent(element.id)
+
+  // プレビュー状態を取得
+  const pendingPreview = usePendingPreview()
+  const isPreviewing = pendingPreview?.elementId === element.id
 
   // 編集モード開始時にテキストを抽出
   useEffect(() => {
@@ -151,8 +155,13 @@ export function EditableWrapper({
   )
 
   // 編集内容がある場合はchildrenを置換
-  const displayChildren = editedContent
-    ? replaceTextContent(children, editedContent)
+  // プレビュー状態の場合はプレビュー内容を優先表示
+  const displayContent = isPreviewing
+    ? pendingPreview?.previewContent ?? (editedContent ?? extractTextContent(children))
+    : (editedContent ?? extractTextContent(children))
+
+  const displayChildren = (isPreviewing && pendingPreview?.previewContent) || editedContent
+    ? replaceTextContent(children, displayContent)
     : children
 
   return (

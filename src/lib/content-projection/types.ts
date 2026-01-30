@@ -57,3 +57,12 @@ export interface AIEditResponse {
   reason?: string
   confidence?: number
 }
+
+// 編集プレビュー
+export interface EditPreview {
+  elementId: string
+  originalContent: string
+  previewContent: string
+  timestamp: number
+  status: 'pending' | 'approved' | 'rejected'
+}
