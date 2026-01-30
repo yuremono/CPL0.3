@@ -229,16 +229,20 @@ export function EditableWrapper({
 
 /**
  * 子要素のテキストコンテンツを置換する
- * 改行（<br/>）を保持しつつ、テキストを置換
+ * 元の要素のprops（classNameなど）を保持しつつ、テキストのみを置換
  */
 function replaceTextContent(node: ReactNode, newContent: string): ReactNode {
   // 文字列・数値の場合は置換（改行を保持）
   if (typeof node === 'string') {
     // 改行コードを<br/>に変換して返す
-    return newContent.split('\n').map((line, index) => (
+    const lines = newContent.split('\n')
+    if (lines.length === 1) {
+      return lines[0]
+    }
+    return lines.map((line, index) => (
       <Fragment key={index}>
         {line}
-        {index < newContent.split('\n').length - 1 && <br />}
+        {index < lines.length - 1 && <br />}
       </Fragment>
     ))
   }
@@ -255,13 +259,17 @@ function replaceTextContent(node: ReactNode, newContent: string): ReactNode {
   // React要素の場合は再帰的に処理
   if (isValidElement(node)) {
     const element = node as React.ReactElement<any>
+    const type = element.type
+
+    // <br/>要素は保持
+    if (type === 'br') {
+      return element
+    }
+
     // childrenがある場合は再帰的に置換
     if (element.props.children !== undefined) {
-      return cloneElement(
-        element,
-        {},
-        replaceTextContent(element.props.children, newContent)
-      )
+      const newChildren = replaceTextContent(element.props.children, newContent)
+      return cloneElement(element, { children: newChildren })
     }
     return element
   }
