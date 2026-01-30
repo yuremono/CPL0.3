@@ -32,6 +32,7 @@ function DemoContent() {
   const selectElement = usePreviewStore((state) => state.selectElement)
   const selectedElement = usePreviewStore((state) => state.selectedElement)
   const updateContent = usePreviewStore((state) => state.updateContent)
+  const setMode = usePreviewStore((state) => state.setMode)
 
   // 編集履歴統合
   const addOperation = useEditHistoryStore((state) => state.addOperation)
@@ -46,10 +47,14 @@ function DemoContent() {
   const isSending = useChatStore((state) => state.isSending)
 
   useEffect(() => {
+    // preview-storeのモードを設定
+    setMode(isPreviewMode ? 'preview' : 'edit')
+
+    // チャットUIの開閉を設定
     if (isPreviewMode) {
       setIsChatOpen(true)
     }
-  }, [isPreviewMode, setIsChatOpen])
+  }, [isPreviewMode, setIsChatOpen, setMode])
 
   // AI連携統合: メッセージ送信でAI APIを呼び出し
   const handleSendMessage = async (message: string) => {

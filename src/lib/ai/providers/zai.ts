@@ -25,10 +25,6 @@ export class ZAIProvider implements AIProvider {
           apiKey,
           baseURL: 'https://api.z.ai/api/coding/paas/v4',
           dangerouslyAllowBrowser: isTestEnvironment,
-          defaultHeaders: {
-            'HTTP-Referer': window.location.href,
-            'X-Title': 'Content Projection Layer',
-          },
         })
       : null
   }
