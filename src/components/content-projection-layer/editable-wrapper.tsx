@@ -235,6 +235,8 @@ export function EditableWrapper({
 /**
  * 子要素のテキストコンテンツを置換する
  * 元の要素のprops（classNameなど）を保持しつつ、テキストのみを置換
+ *
+ * 重要: 配列内のテキスト要素に対して、newContentの対応する行を適用する
  */
 function replaceTextContent(node: ReactNode, newContent: string): ReactNode {
   // 文字列・数値の場合は置換（改行を保持）
@@ -279,15 +281,53 @@ function replaceTextContent(node: ReactNode, newContent: string): ReactNode {
     return element
   }
 
-  // 配列の場合は各要素を再帰的に処理
+  // 配列の場合: テキストノードを抽出し、newContentの行を対応させる
   if (Array.isArray(node)) {
-    return node.map((child, index) => {
-      const replaced = replaceTextContent(child, newContent)
-      // React要素の場合はkeyを付与
-      if (isValidElement(replaced)) {
-        return cloneElement(replaced, { key: index })
+    // テキストノードのインデックスを収集
+    const textIndices: number[] = []
+    node.forEach((child, index) => {
+      if (typeof child === 'string' || typeof child === 'number') {
+        textIndices.push(index)
       }
-      return replaced
+    })
+
+    // テキストノードがない場合、全体をnewContentで置換
+    if (textIndices.length === 0) {
+      const lines = newContent.split('\n')
+      if (lines.length === 1) {
+        return lines[0]
+      }
+      return lines.flatMap((line, index) => [
+        line,
+        index < lines.length - 1 ? <br key={index} /> : null,
+      ]).filter(Boolean)
+    }
+
+    // テキストノードが1つだけの場合、そのノードをnewContentで置換
+    if (textIndices.length === 1) {
+      return node.map((child, index) => {
+        if (index === textIndices[0]) {
+          const lines = newContent.split('\n')
+          if (lines.length === 1) {
+            return lines[0]
+          }
+          return lines.flatMap((line, lineIndex) => [
+            line,
+            lineIndex < lines.length - 1 ? <br key={lineIndex} /> : null,
+          ]).filter(Boolean)
+        }
+        return child
+      })
+    }
+
+    // 複数のテキストノードがある場合、newContentの行を対応させる
+    const lines = newContent.split('\n')
+    return node.map((child, index) => {
+      const textIndex = textIndices.indexOf(index)
+      if (textIndex !== -1 && textIndex < lines.length) {
+        return lines[textIndex]
+      }
+      return child
     })
   }
 

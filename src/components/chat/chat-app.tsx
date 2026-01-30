@@ -142,8 +142,18 @@ export function ChatApp() {
   const handleApproveEdit = (message: ChatMessage) => {
     if (!message.relatedElementId || !message.content) return
 
+    // AI応答から画像URLを抽出（画像要素の場合）
+    let contentToUse = message.content
+    if (selectedElement?.role === 'image') {
+      // URLを抽出: https:// または http:// で始まるURL
+      const urlMatch = message.content.match(/https?:\/\/[^\s<>"{}|\\^`\[\]]+/)
+      if (urlMatch) {
+        contentToUse = urlMatch[0]
+      }
+    }
+
     // プレビュー内容を確定
-    updateContent(message.relatedElementId, message.content)
+    updateContent(message.relatedElementId, contentToUse)
 
     // 編集履歴に記録（一時的にコメントアウト）
     // if (selectedElement) {
