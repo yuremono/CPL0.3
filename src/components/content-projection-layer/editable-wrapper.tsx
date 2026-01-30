@@ -42,13 +42,11 @@ export function EditableWrapper({
   // 編集内容を取得（AI編集後に更新される）
   const editedContent = useEditContent(element.id)
 
-  // デバッグ: 編集内容を監視
-  if (editedContent) {
-    console.log(`[EditableWrapper] 編集内容を検出: ${element.id}`, {
-      元の内容: element.content,
-      編集後: editedContent,
-    })
-  }
+  // デバッグ: 常に編集内容を監視
+  console.log(`[EditableWrapper] ${element.id} - 編集内容をチェック`, {
+    元の内容: element.content,
+    editedContent: editedContent ?? '(なし)',
+  })
 
   const handleClick = (e: MouseEvent<HTMLDivElement>) => {
     e.stopPropagation()

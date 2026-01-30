@@ -41,6 +41,7 @@ function DemoContent() {
   const selectedElement = usePreviewStore((state) => state.selectedElement)
   const updateContent = usePreviewStore((state) => state.updateContent)
   const setMode = usePreviewStore((state) => state.setMode)
+  const edits = usePreviewStore((state) => state.edits)
 
   // 編集履歴統合
   const addOperation = useEditHistoryStore((state) => state.addOperation)
@@ -128,6 +129,13 @@ function DemoContent() {
 
           // プレビューストアに保存
           updateContent(selectedElement.id, newContent)
+
+          // デバッグ: ストアに保存されたことを確認
+          console.log('[AI編集完了]', {
+            elementId: selectedElement.id,
+            元の内容: selectedElement.content,
+            新しい内容: newContent,
+          })
 
           // 選択中の要素情報も更新
           selectElement({
@@ -381,6 +389,8 @@ function DemoContent() {
                   プレビューモードが有効です。編集可能な要素にホバーするとハイライト表示されます。
                   要素をクリックすると、選択状態が保存されます。
                 </p>
+
+                {/* 選択中の要素 */}
                 {selectedElement && (
                   <div className="mt-3 p-3 bg-white border border-black rounded">
                     <p className="text-sm font-semibold">選択中の要素:</p>
@@ -389,6 +399,17 @@ function DemoContent() {
                     </pre>
                   </div>
                 )}
+
+                {/* 編集内容ストア */}
+                {Object.keys(edits).length > 0 && (
+                  <div className="mt-3 p-3 bg-white border border-black rounded">
+                    <p className="text-sm font-semibold">編集内容ストア (edits):</p>
+                    <pre className="text-xs mt-2 overflow-auto">
+                      {JSON.stringify(edits, null, 2)}
+                    </pre>
+                  </div>
+                )}
+
                 <p className="text-sm text-gray-600 mt-2">
                   コンソールを開く: <code className="bg-white px-1 border">F12</code> または <code className="bg-white px-1 border">Cmd+Option+I</code>
                 </p>
