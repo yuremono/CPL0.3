@@ -32,11 +32,14 @@ export interface A11yElementInfo {
 
 // 編集操作
 export interface EditOperation {
+  id: string // 一意のID
   elementId: string
+  elementType: EditableElementType // 要素の種類
   type: 'update' | 'insert' | 'delete'
   oldValue?: string
   newValue: string
   timestamp: number
+  description: string // UI用の説明文
 }
 
 // AIリクエスト

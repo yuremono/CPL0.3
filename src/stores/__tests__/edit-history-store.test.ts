@@ -10,6 +10,8 @@ import {
   useFutureOperations,
   useCanUndo,
   useCanRedo,
+  useCanUndoValue,
+  useCanRedoValue,
 } from '../edit-history-store'
 import type { EditOperation } from '@/lib/content-projection/types'
 
@@ -22,13 +24,30 @@ vi.mock('@/lib/storage/indexed-db', () => ({
   }),
 }))
 
-const createMockOperation = (id: string, content: string): EditOperation => ({
+const createMockOperation = (
+  id: string,
+  content: string,
+  elementType: 'text' | 'heading' | 'paragraph' | 'link' | 'image' | 'button' | 'list' | 'listitem' = 'text'
+): EditOperation => ({
+  id: `hist_${id}`,
   elementId: id,
+  elementType,
   type: 'update',
   oldValue: '古いコンテンツ',
   newValue: content,
   timestamp: Date.now(),
+  description: elementType === 'heading' ? '見出しを変更' : 'テキストを変更',
 })
+
+const addOperation = (elementId: string, content: string, elementType?: 'text' | 'heading') => {
+  useEditHistoryStore.getState().addOperation({
+    elementId,
+    elementType: elementType || 'text',
+    type: 'update',
+    oldValue: '古いコンテンツ',
+    newValue: content,
+  })
+}
 
 describe('EditHistoryStore', () => {
   beforeEach(() => {
@@ -56,6 +75,16 @@ describe('EditHistoryStore', () => {
       const { result } = renderHook(() => useCanRedo())
       expect(result.current).toBe(false)
     })
+
+    it('UI用: Undoができない（値）', () => {
+      const { result } = renderHook(() => useCanUndoValue())
+      expect(result.current).toBe(false)
+    })
+
+    it('UI用: Redoができない（値）', () => {
+      const { result } = renderHook(() => useCanRedoValue())
+      expect(result.current).toBe(false)
+    })
   })
 
   describe('addOperation', () => {
@@ -63,28 +92,45 @@ describe('EditHistoryStore', () => {
       const { result } = renderHook(() => usePastOperations())
 
       act(() => {
-        useEditHistoryStore.getState().addOperation(
-          createMockOperation('test-id', '新しいコンテンツ')
-        )
+        addOperation('test-id', '新しいコンテンツ')
       })
 
       expect(result.current).toHaveLength(1)
-      expect(result.current[0]).toMatchObject({
+      const operation = result.current[0]
+      expect(operation).toMatchObject({
         elementId: 'test-id',
+        elementType: 'text',
         type: 'update',
         newValue: '新しいコンテンツ',
       })
+      // 自動生成されるフィールドを確認
+      expect(operation.id).toMatch(/^hist[a-zA-Z0-9]+$/)
+      expect(operation.description).toBe('テキストを変更')
+      expect(operation.timestamp).toBeLessThanOrEqual(Date.now())
     })
 
     it('複数の操作を追加できる', () => {
       const { result } = renderHook(() => usePastOperations())
 
       act(() => {
-        useEditHistoryStore.getState().addOperation(createMockOperation('test-id-1', 'コンテンツ1'))
-        useEditHistoryStore.getState().addOperation(createMockOperation('test-id-2', 'コンテンツ2'))
+        addOperation('test-id-1', 'コンテンツ1')
+        addOperation('test-id-2', 'コンテンツ2')
       })
 
       expect(result.current).toHaveLength(2)
+    })
+
+    it('見出しの操作を追加できる', () => {
+      const { result } = renderHook(() => usePastOperations())
+
+      act(() => {
+        addOperation('heading-id', '新しい見出し', 'heading')
+      })
+
+      expect(result.current).toHaveLength(1)
+      const operation = result.current[0]
+      expect(operation.elementType).toBe('heading')
+      expect(operation.description).toBe('見出しを変更')
     })
 
     it('新しい操作を追加するとRedo用の履歴がクリアされる', () => {
@@ -92,7 +138,7 @@ describe('EditHistoryStore', () => {
       const futureHook = renderHook(() => useFutureOperations())
 
       act(() => {
-        useEditHistoryStore.getState().addOperation(createMockOperation('test-id-1', 'コンテンツ1'))
+        addOperation('test-id-1', 'コンテンツ1')
       })
 
       act(() => {
@@ -102,7 +148,7 @@ describe('EditHistoryStore', () => {
       expect(futureHook.result.current).toHaveLength(1)
 
       act(() => {
-        useEditHistoryStore.getState().addOperation(createMockOperation('test-id-2', 'コンテンツ2'))
+        addOperation('test-id-2', 'コンテンツ2')
       })
 
       expect(futureHook.result.current).toHaveLength(0)
@@ -113,10 +159,9 @@ describe('EditHistoryStore', () => {
     it('最後の操作を元に戻せる', () => {
       const pastHook = renderHook(() => usePastOperations())
       const futureHook = renderHook(() => useFutureOperations())
-      const operation = createMockOperation('test-id', '新しいコンテンツ')
 
       act(() => {
-        useEditHistoryStore.getState().addOperation(operation)
+        addOperation('test-id', '新しいコンテンツ')
       })
 
       expect(pastHook.result.current).toHaveLength(1)
@@ -128,7 +173,6 @@ describe('EditHistoryStore', () => {
 
       expect(pastHook.result.current).toHaveLength(0)
       expect(futureHook.result.current).toHaveLength(1)
-      expect(futureHook.result.current[0]).toEqual(operation)
     })
 
     it('操作がない場合はnullを返す', () => {
@@ -141,9 +185,9 @@ describe('EditHistoryStore', () => {
       const futureHook = renderHook(() => useFutureOperations())
 
       act(() => {
-        useEditHistoryStore.getState().addOperation(createMockOperation('test-id-1', 'コンテンツ1'))
-        useEditHistoryStore.getState().addOperation(createMockOperation('test-id-2', 'コンテンツ2'))
-        useEditHistoryStore.getState().addOperation(createMockOperation('test-id-3', 'コンテンツ3'))
+        addOperation('test-id-1', 'コンテンツ1')
+        addOperation('test-id-2', 'コンテンツ2')
+        addOperation('test-id-3', 'コンテンツ3')
       })
 
       expect(pastHook.result.current).toHaveLength(3)
@@ -162,16 +206,37 @@ describe('EditHistoryStore', () => {
       expect(pastHook.result.current).toHaveLength(1)
       expect(futureHook.result.current).toHaveLength(2)
     })
+
+    it('Undo後にUI用セレクターが更新される', () => {
+      const canUndoHook = renderHook(() => useCanUndoValue())
+      const canRedoHook = renderHook(() => useCanRedoValue())
+
+      expect(canUndoHook.result.current).toBe(false)
+      expect(canRedoHook.result.current).toBe(false)
+
+      act(() => {
+        addOperation('test-id', 'コンテンツ')
+      })
+
+      expect(canUndoHook.result.current).toBe(true)
+      expect(canRedoHook.result.current).toBe(false)
+
+      act(() => {
+        useEditHistoryStore.getState().undo()
+      })
+
+      expect(canUndoHook.result.current).toBe(false)
+      expect(canRedoHook.result.current).toBe(true)
+    })
   })
 
   describe('redo', () => {
     it('元に戻した操作をやり直せる', () => {
       const pastHook = renderHook(() => usePastOperations())
       const futureHook = renderHook(() => useFutureOperations())
-      const operation = createMockOperation('test-id', '新しいコンテンツ')
 
       act(() => {
-        useEditHistoryStore.getState().addOperation(operation)
+        addOperation('test-id', '新しいコンテンツ')
       })
 
       act(() => {
@@ -187,7 +252,6 @@ describe('EditHistoryStore', () => {
 
       expect(pastHook.result.current).toHaveLength(1)
       expect(futureHook.result.current).toHaveLength(0)
-      expect(pastHook.result.current[0]).toEqual(operation)
     })
 
     it('操作がない場合はnullを返す', () => {
@@ -200,9 +264,9 @@ describe('EditHistoryStore', () => {
       const futureHook = renderHook(() => useFutureOperations())
 
       act(() => {
-        useEditHistoryStore.getState().addOperation(createMockOperation('test-id-1', 'コンテンツ1'))
-        useEditHistoryStore.getState().addOperation(createMockOperation('test-id-2', 'コンテンツ2'))
-        useEditHistoryStore.getState().addOperation(createMockOperation('test-id-3', 'コンテンツ3'))
+        addOperation('test-id-1', 'コンテンツ1')
+        addOperation('test-id-2', 'コンテンツ2')
+        addOperation('test-id-3', 'コンテンツ3')
       })
 
       act(() => {
@@ -236,7 +300,7 @@ describe('EditHistoryStore', () => {
       expect(result.current).toBe(false)
 
       act(() => {
-        useEditHistoryStore.getState().addOperation(createMockOperation('test-id', 'コンテンツ'))
+        addOperation('test-id', 'コンテンツ')
       })
 
       expect(result.current).toBe(true)
@@ -250,7 +314,7 @@ describe('EditHistoryStore', () => {
       expect(canRedoHook.result.current).toBe(false)
 
       act(() => {
-        useEditHistoryStore.getState().addOperation(createMockOperation('test-id', 'コンテンツ'))
+        addOperation('test-id', 'コンテンツ')
       })
 
       expect(canUndoHook.result.current).toBe(true)
@@ -272,9 +336,7 @@ describe('EditHistoryStore', () => {
       act(() => {
         // 51件の操作を追加
         for (let i = 0; i < 51; i++) {
-          useEditHistoryStore.getState().addOperation(
-            createMockOperation(`test-id-${i}`, `コンテンツ${i}`)
-          )
+          addOperation(`test-id-${i}`, `コンテンツ${i}`)
         }
       })
 
@@ -294,8 +356,8 @@ describe('EditHistoryStore', () => {
       const canRedoHook = renderHook(() => useCanRedo())
 
       act(() => {
-        useEditHistoryStore.getState().addOperation(createMockOperation('test-id-1', 'コンテンツ1'))
-        useEditHistoryStore.getState().addOperation(createMockOperation('test-id-2', 'コンテンツ2'))
+        addOperation('test-id-1', 'コンテンツ1')
+        addOperation('test-id-2', 'コンテンツ2')
         useEditHistoryStore.getState().undo()
       })
 
@@ -310,6 +372,24 @@ describe('EditHistoryStore', () => {
 
       expect(pastHook.result.current).toHaveLength(0)
       expect(futureHook.result.current).toHaveLength(0)
+      expect(canUndoHook.result.current).toBe(false)
+      expect(canRedoHook.result.current).toBe(false)
+    })
+
+    it('クリア時にUI用セレクターも更新される', () => {
+      const canUndoHook = renderHook(() => useCanUndoValue())
+      const canRedoHook = renderHook(() => useCanRedoValue())
+
+      act(() => {
+        addOperation('test-id', 'コンテンツ')
+      })
+
+      expect(canUndoHook.result.current).toBe(true)
+
+      act(() => {
+        useEditHistoryStore.getState().clear()
+      })
+
       expect(canUndoHook.result.current).toBe(false)
       expect(canRedoHook.result.current).toBe(false)
     })

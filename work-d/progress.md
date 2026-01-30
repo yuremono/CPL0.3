@@ -15,6 +15,11 @@
   - `createIndexedDBStorage()` にSSRチェックを追加
   - JSDOMを使用したSSR対応テストを作成（24テスト全てパス）
 - [x] Issue 3「SSR時にIndexedDBが利用できない」を解決
+- [x] フェーズ4: 編集履歴ストアのUI対応拡張
+  - `EditOperation` 型を拡張（`id`, `elementType`, `description` を追加）
+  - `addOperation` メソッドを拡張（UI用情報を自動生成）
+  - UI用セレクター（`useCanUndoValue`, `useCanRedoValue`）を追加
+  - テストを更新（22テスト全てパス）
 
 ### 作成/更新したファイル
 - `src/lib/storage/indexed-db.ts` (更新: SSR対応を追加)
