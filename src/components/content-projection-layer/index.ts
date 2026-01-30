@@ -10,3 +10,6 @@ export type { EditableWrapperProps } from './editable-wrapper'
 
 export { HoverHighlight } from './hover-highlight'
 export type { HoverHighlightProps } from './hover-highlight'
+
+export { EditableImageWrapper } from './editable-image-wrapper'
+export type { EditableImageWrapperProps } from './editable-image-wrapper'

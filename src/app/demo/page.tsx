@@ -11,6 +11,7 @@ import { Suspense, useEffect, useState } from 'react'
 import { useSearchParams, useRouter } from 'next/navigation'
 import { PreviewProvider } from '@/components/content-projection-layer'
 import { EditableWrapper } from '@/components/content-projection-layer'
+import { EditableImageWrapper } from '@/components/content-projection-layer'
 import { generateId } from '@/lib/content-projection/generate-id'
 import { usePreviewStore } from '@/stores/preview-store'
 import { useEditHistoryStore } from '@/stores/edit-history-store'
@@ -451,6 +452,57 @@ function DemoContent() {
                 >
                   <p>対応する段落2</p>
                 </EditableWrapper>
+              </div>
+            </div>
+
+            {/* 画像編集機能のデモ */}
+            <div className="pt-8 border-t-2 border-black">
+              <h3 className="text-xl font-bold mb-4">画像編集機能</h3>
+              <p className="text-gray-600 mb-4">
+                ドラッグ&ドロップで画像を置換できます。
+              </p>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <EditableImageWrapper
+                  element={{
+                    id: generateId('demo-image-1'),
+                    role: 'image',
+                    content: 'プロフィール画像',
+                    label: 'デモ画像1',
+                    editable: true,
+                  }}
+                  isSelected={selectedElement?.id === 'demo-image-1'}
+                  onSelect={handleSelectElement}
+                  src="https://placehold.co/400x300/e2e8f0/0d47a1?text=Sample+Image+1"
+                  alt="サンプル画像1"
+                  className="w-full h-48 rounded"
+                >
+                  <img
+                    src="https://placehold.co/400x300/e2e8f0/0d47a1?text=Sample+Image+1"
+                    alt="サンプル画像1"
+                    className="w-full h-48 rounded"
+                  />
+                </EditableImageWrapper>
+
+                <EditableImageWrapper
+                  element={{
+                    id: generateId('demo-image-2'),
+                    role: 'image',
+                    content: 'サムネイル画像',
+                    label: 'デモ画像2',
+                    editable: true,
+                  }}
+                  isSelected={selectedElement?.id === 'demo-image-2'}
+                  onSelect={handleSelectElement}
+                  src="https://placehold.co/400x300/fef3c7/0d47a1?text=Sample+Image+2"
+                  alt="サンプル画像2"
+                  className="w-full h-48 rounded"
+                >
+                  <img
+                    src="https://placehold.co/400x300/fef3c7/0d47a1?text=Sample+Image+2"
+                    alt="サンプル画像2"
+                    className="w-full h-48 rounded"
+                  />
+                </EditableImageWrapper>
               </div>
             </div>
 
