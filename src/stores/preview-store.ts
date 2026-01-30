@@ -103,9 +103,10 @@ export const usePreviewStore = create<PreviewState>()(
     {
       name: 'preview-storage',
       storage: createJSONStorage(() => createIndexedDBStorage()),
-      // 選択中の要素は永続化しない（リロード時に選択状態はリセット）
+      // 選択中の要素も永続化（モード切り替え時に選択を保持）
       partialize: (state) => ({
         mode: state.mode,
+        selectedElement: state.selectedElement,
         edits: state.edits,
       }),
     }

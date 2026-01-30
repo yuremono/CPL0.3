@@ -8,7 +8,7 @@
  */
 
 import { Suspense, useEffect, useState } from 'react'
-import { useSearchParams } from 'next/navigation'
+import { useSearchParams, useRouter } from 'next/navigation'
 import { PreviewProvider } from '@/components/content-projection-layer'
 import { EditableWrapper } from '@/components/content-projection-layer'
 import { generateId } from '@/lib/content-projection/generate-id'
@@ -25,8 +25,16 @@ import {
 
 function DemoContent() {
   const searchParams = useSearchParams()
+  const router = useRouter()
   const mode = searchParams.get('mode')
   const isPreviewMode = mode === 'preview'
+
+  // モード切り替えハンドラー（クライアントサイドで実行）
+  const handleModeToggle = () => {
+    const newMode = isPreviewMode ? '' : 'preview'
+    const url = newMode ? `/demo?mode=${newMode}` : '/demo'
+    router.push(url)
+  }
 
   // 状態管理統合: 選択機能
   const selectElement = usePreviewStore((state) => state.selectElement)
@@ -178,18 +186,28 @@ function DemoContent() {
               </p>
             </div>
             <div className="flex gap-2">
-              <a
-                href="/demo?mode=preview"
-                className="px-4 py-2 text-sm font-semibold border-2 border-black bg-accent text-white hover:bg-accent-dark"
+              <button
+                type="button"
+                onClick={handleModeToggle}
+                className={`px-4 py-2 text-sm font-semibold border-2 border-black ${
+                  isPreviewMode
+                    ? 'bg-accent text-white'
+                    : 'bg-white text-black hover:bg-gray-50'
+                }`}
               >
-                プレビューモード
-              </a>
-              <a
-                href="/demo"
-                className="px-4 py-2 text-sm font-semibold border-2 border-black bg-white text-black hover:bg-gray-50"
+                {isPreviewMode ? 'プレビューモード' : 'プレビューに切り替え'}
+              </button>
+              <button
+                type="button"
+                onClick={handleModeToggle}
+                className={`px-4 py-2 text-sm font-semibold border-2 border-black ${
+                  !isPreviewMode
+                    ? 'bg-accent text-white'
+                    : 'bg-white text-black hover:bg-gray-50'
+                }`}
               >
-                通常モード
-              </a>
+                {!isPreviewMode ? '通常モード' : '通常に切り替え'}
+              </button>
             </div>
           </div>
         </div>
