@@ -39,6 +39,15 @@ export interface ChatMessage {
 }
 
 /**
+ * 保留中のプレビュー
+ */
+export interface PendingPreview {
+  messageId: string
+  elementId: string
+  previewContent: string
+}
+
+/**
  * ストアの状態
  */
 export interface ChatState {
@@ -54,12 +63,17 @@ export interface ChatState {
   // 選択されたAIプロバイダー
   selectedProvider: AIProvider
 
+  // 保留中のプレビュー
+  pendingPreview: PendingPreview | null
+
   // アクション
-  addMessage: (message: Omit<ChatMessage, 'id' | 'timestamp'>) => void
+  addMessage: (message: Omit<ChatMessage, 'id' | 'timestamp'>) => ChatMessage
   setSending: (isSending: boolean) => void
   setOpen: (isOpen: boolean) => void
   clearMessages: () => void
   setProvider: (provider: AIProvider) => void
+  setPendingPreview: (preview: PendingPreview | null) => void
+  clearPendingPreview: () => void
 }
 
 /**
@@ -82,6 +96,7 @@ export const useChatStore = create<ChatState>()(
       isSending: false,
       isOpen: true,
       selectedProvider: 'google', // デフォルトはGoogle
+      pendingPreview: null,
 
       /**
        * メッセージを追加
@@ -96,6 +111,8 @@ export const useChatStore = create<ChatState>()(
         set((state) => ({
           messages: [...state.messages, newMessage],
         }))
+
+        return newMessage
       },
 
       /**
@@ -125,12 +142,27 @@ export const useChatStore = create<ChatState>()(
       setProvider: (provider) => {
         set({ selectedProvider: provider })
       },
+
+      /**
+       * 保留中のプレビューを設定
+       */
+      setPendingPreview: (preview) => {
+        set({ pendingPreview: preview })
+      },
+
+      /**
+       * 保留中のプレビューをクリア
+       */
+      clearPendingPreview: () => {
+        set({ pendingPreview: null })
+      },
     }),
     {
       name: 'chat-storage',
       partialize: (state) => ({
         selectedProvider: state.selectedProvider,
         isOpen: state.isOpen,
+        // pendingPreviewは永続化しない（セッションごとにクリア）
       }),
     }
   )
@@ -168,3 +200,8 @@ export const useLastMessage = () =>
     const messages = state.messages
     return messages.length > 0 ? messages[messages.length - 1] : null
   })
+
+/**
+ * 保留中のプレビューを取得
+ */
+export const usePendingPreview = () => useChatStore((state) => state.pendingPreview)

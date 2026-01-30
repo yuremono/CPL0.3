@@ -26,6 +26,7 @@ import {
   useChatStore,
   useSelectedProvider,
   type AIProvider,
+  type ChatMessage,
 } from '@/components/chat'
 
 function DemoContent() {
@@ -59,6 +60,8 @@ function DemoContent() {
   const addMessage = useChatStore((state) => state.addMessage)
   const setSending = useChatStore((state) => state.setSending)
   const isSending = useChatStore((state) => state.isSending)
+  const setPendingPreview = useChatStore((state) => state.setPendingPreview)
+  const clearPendingPreview = useChatStore((state) => state.clearPendingPreview)
   const selectedProvider = useSelectedProvider()
 
   useEffect(() => {
@@ -116,31 +119,19 @@ function DemoContent() {
       if (data.success) {
         const newContent = data.data.newContent || ''
 
-        // AI応答を追加
-        addMessage({
+        // AI応答を追加（生成されたメッセージIDを取得）
+        const addedMessage = addMessage({
           role: 'assistant',
           content: newContent || '編集が完了しました。',
           relatedElementId: selectedElement.id,
         })
 
-        // 編集内容をストアに保存（作業D統合）
+        // プレビュー状態を設定（即座に更新しない）
         if (newContent) {
-          // 編集履歴に記録
-          addOperation({
+          setPendingPreview({
+            messageId: addedMessage.id,
             elementId: selectedElement.id,
-            type: 'update',
-            oldValue: selectedElement.content,
-            newValue: newContent,
-            timestamp: Date.now(),
-          })
-
-          // プレビューストアに保存
-          updateContent(selectedElement.id, newContent)
-
-          // 選択中の要素情報も更新
-          selectElement({
-            ...selectedElement,
-            content: newContent,
+            previewContent: newContent,
           })
         }
       } else {
@@ -171,6 +162,56 @@ function DemoContent() {
     selectElement(element)
   }
 
+  /**
+   * プレビューを承認（OKボタン）
+   */
+  const handleApproveEdit = (message: ChatMessage) => {
+    if (!message.relatedElementId || !message.content) return
+
+    // プレビュー内容を確定
+    updateContent(message.relatedElementId, message.content)
+
+    // 編集履歴に記録
+    if (selectedElement) {
+      addOperation({
+        elementId: message.relatedElementId,
+        type: 'update',
+        oldValue: selectedElement.content,
+        newValue: message.content,
+        timestamp: Date.now(),
+      })
+
+      // 選択中の要素情報も更新
+      selectElement({
+        ...selectedElement,
+        content: message.content,
+      })
+    }
+
+    // プレビュー状態をクリア
+    clearPendingPreview()
+
+    // システムメッセージを追加
+    addMessage({
+      role: 'system',
+      content: '編集を確定しました。',
+    })
+  }
+
+  /**
+   * プレビューを拒否（NGボタン）
+   */
+  const handleRejectEdit = () => {
+    // プレビューをキャンセル（何も変更しない）
+    clearPendingPreview()
+
+    // システムメッセージを追加
+    addMessage({
+      role: 'system',
+      content: 'プレビューをキャンセルしました。',
+    })
+  }
+
   return (
     <PreviewProvider isPreviewMode={isPreviewMode}>
       <div className="min-h-screen bg-white relative">
@@ -188,7 +229,11 @@ function DemoContent() {
           )}
 
           {/* メッセージ一覧 */}
-          <MessageList />
+          <MessageList
+            onApproveEdit={handleApproveEdit}
+            onRejectEdit={handleRejectEdit}
+            isSending={isSending}
+          />
 
           {/* ローディング表示（強化版） */}
           {isSending && (

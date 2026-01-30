@@ -171,6 +171,77 @@ All files      |     100 |      100 |     100 |     100 |
 2. **作業Cとの統合**: AIバックエンドと連携して、メッセージ送信時にAI編集を実行（すでに実装済み）
 3. **SSR対応**: 作業DにIndexedDBのSSR対応を依頼（`createIndexedDBStorage` の修正）
 
+---
+
+## フェーズ2: 編集プレビュー機能（完了）
+
+### 完了日時
+2026-01-31
+
+### 目的
+AIが回答したテキストの出力結果の下にOKボタンとNGボタンを設置し、ユーザーがプレビューを確認してから確定できるようにする。
+
+### 実装内容
+
+1. **型定義の追加**
+   - 変更ファイル: `src/lib/content-projection/types.ts`
+   - `EditPreview` インターフェースを追加
+
+2. **プレビュー状態管理フックの実装**
+   - 新規ファイル: `src/hooks/use-edit-preview.ts`
+   - プレビューの作成、承認、拒否、クリア機能
+
+3. **OK/NGボタンコンポーネントの実装**
+   - 新規ファイル: `src/components/chat/edit-preview-actions.tsx`
+   - OKボタン（緑）：プレビュー内容を確定
+   - NGボタン（グレー）：プレビューをキャンセル
+
+4. **chat-store.tsの拡張**
+   - 変更ファイル: `src/stores/chat-store.ts`
+   - `PendingPreview` インターフェースを追加
+   - `pendingPreview` 状態を追加
+   - `setPendingPreview`、`clearPendingPreview` アクションを追加
+   - `usePendingPreview` セレクターフックを追加
+   - `addMessage` が生成されたメッセージを返すように変更
+
+5. **ChatAppのプレビューボタン統合**
+   - 変更ファイル: `src/components/chat/chat-app.tsx`
+   - `handleApproveEdit`、`handleRejectEdit` ハンドラーを追加
+   - AI応答後に即座に更新せず、プレビュー状態を設定するように変更
+
+6. **MessageListのプレビューボタン表示**
+   - 変更ファイル: `src/components/chat/message-list.tsx`
+   - AI応答メッセージにOK/NGボタンを表示
+   - 保留中のプレビュー状態を監視
+
+7. **デモページの更新**
+   - 変更ファイル: `src/app/demo/page.tsx`
+   - chat-app.tsxと同様のプレビュー機能を実装
+
+### 完了基準
+- [x] AI応答メッセージにOK/NGボタンが表示される
+- [x] OKボタン押下でコンテンツが更新される
+- [x] NGボタン押下でキャンセルされる（何も変わらない）
+- [x] 編集履歴が正しく記録される
+- [x] テストがパスする
+
+### 作成/更新したファイル
+- `src/lib/content-projection/types.ts` - EditPreview型を追加
+- `src/hooks/use-edit-preview.ts` - プレビュー状態管理フック（新規）
+- `src/components/chat/edit-preview-actions.tsx` - OK/NGボタンコンポーネント（新規）
+- `src/stores/chat-store.ts` - プレビュー状態を追加
+- `src/components/chat/chat-app.tsx` - プレビューボタンを統合
+- `src/components/chat/message-list.tsx` - プレビューボタン表示を追加
+- `src/app/demo/page.tsx` - プレビュー機能を実装
+
+### ビルドステータス
+✅ ビルド成功
+
+### テスト結果
+✅ すべてのテストがパス（189件）
+
+---
+
 ## Notes
 
 - プレビューモード時のみサイドバーが表示される（`usePreviewMode()` フックを使用）

@@ -8,7 +8,13 @@
 
 import { useSelectedElement, usePreviewStore } from '@/stores/preview-store'
 import { useEditHistoryStore } from '@/stores/edit-history-store'
-import { useChatStore, useIsSending, useSelectedProvider, type AIProvider } from '@/stores/chat-store'
+import {
+  useChatStore,
+  useIsSending,
+  useSelectedProvider,
+  type AIProvider,
+  type ChatMessage,
+} from '@/stores/chat-store'
 import { ElementInfoCard } from './element-info-card'
 import { MessageList } from './message-list'
 import { MessageInput } from './message-input'
@@ -40,6 +46,8 @@ export function ChatApp() {
   const selectedProvider = useSelectedProvider()
   const addMessage = useChatStore((state) => state.addMessage)
   const setSending = useChatStore((state) => state.setSending)
+  const setPendingPreview = useChatStore((state) => state.setPendingPreview)
+  const clearPendingPreview = useChatStore((state) => state.clearPendingPreview)
 
   /**
    * メッセージを送信（AI統合版）
@@ -88,31 +96,19 @@ export function ChatApp() {
       if (data.success) {
         const newContent = data.data.newContent || ''
 
-        // AI応答を追加
-        addMessage({
+        // AI応答を追加（生成されたメッセージIDを取得）
+        const addedMessage = addMessage({
           role: 'assistant',
           content: newContent || '編集が完了しました。',
           relatedElementId: selectedElement.id,
         })
 
-        // 編集内容をストアに保存
+        // プレビュー状態を設定（即座に更新しない）
         if (newContent) {
-          // 編集履歴に記録
-          addOperation({
+          setPendingPreview({
+            messageId: addedMessage.id,
             elementId: selectedElement.id,
-            type: 'update',
-            oldValue: selectedElement.content,
-            newValue: newContent,
-            timestamp: Date.now(),
-          })
-
-          // プレビューストアに保存
-          updateContent(selectedElement.id, newContent)
-
-          // 選択中の要素情報も更新
-          selectElement({
-            ...selectedElement,
-            content: newContent,
+            previewContent: newContent,
           })
         }
       } else {
@@ -139,6 +135,56 @@ export function ChatApp() {
     selectElement(null)
   }
 
+  /**
+   * プレビューを承認（OKボタン）
+   */
+  const handleApproveEdit = (message: ChatMessage) => {
+    if (!message.relatedElementId || !message.content) return
+
+    // プレビュー内容を確定
+    updateContent(message.relatedElementId, message.content)
+
+    // 編集履歴に記録
+    if (selectedElement) {
+      addOperation({
+        elementId: message.relatedElementId,
+        type: 'update',
+        oldValue: selectedElement.content,
+        newValue: message.content,
+        timestamp: Date.now(),
+      })
+
+      // 選択中の要素情報も更新
+      selectElement({
+        ...selectedElement,
+        content: message.content,
+      })
+    }
+
+    // プレビュー状態をクリア
+    clearPendingPreview()
+
+    // システムメッセージを追加
+    addMessage({
+      role: 'system',
+      content: '編集を確定しました。',
+    })
+  }
+
+  /**
+   * プレビューを拒否（NGボタン）
+   */
+  const handleRejectEdit = () => {
+    // プレビューをキャンセル（何も変更しない）
+    clearPendingPreview()
+
+    // システムメッセージを追加
+    addMessage({
+      role: 'system',
+      content: 'プレビューをキャンセルしました。',
+    })
+  }
+
   return (
     <div className="flex flex-col h-full">
       {/* プロバイダー選択 */}
@@ -150,7 +196,11 @@ export function ChatApp() {
       )}
 
       {/* メッセージ一覧 */}
-      <MessageList />
+      <MessageList
+        onApproveEdit={handleApproveEdit}
+        onRejectEdit={handleRejectEdit}
+        isSending={isSending}
+      />
 
       {/* ローディング表示（強化版） */}
       {isSending && <LoadingIndicatorEnhanced estimatedTime={ESTIMATED_TIME[selectedProvider]} />}
