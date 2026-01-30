@@ -57,8 +57,8 @@ export function EditableImageWrapper({
       clearPreview()
     })
 
-  // ホバー時のハイライト
-  const showHighlight = isPreviewMode && element.editable && (state.isDragging || state.dragOver)
+  // ホバー時のハイライト（ドラッグ中またはホバー時）
+  const showHighlight = isPreviewMode && element.editable
 
   // クリックハンドラー
   const handleClick = () => {

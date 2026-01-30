@@ -4,7 +4,7 @@
  * 編集可能な要素をラップするコンポーネント
  */
 
-import { useState, isValidElement, cloneElement, type ReactNode, type MouseEvent, useRef, useEffect } from 'react'
+import React, { useState, isValidElement, cloneElement, Fragment, type ReactNode, type MouseEvent, useRef, useEffect } from 'react'
 import { cn } from '@/lib/utils'
 import type { A11yElementInfo } from '@/lib/content-projection/types'
 import { useEditContent, useIsEditing, usePreviewStore } from '@/stores/preview-store'
@@ -229,10 +229,21 @@ export function EditableWrapper({
 
 /**
  * 子要素のテキストコンテンツを置換する
+ * 改行（<br/>）を保持しつつ、テキストを置換
  */
 function replaceTextContent(node: ReactNode, newContent: string): ReactNode {
-  // 文字列・数値の場合は置換
-  if (typeof node === 'string' || typeof node === 'number') {
+  // 文字列・数値の場合は置換（改行を保持）
+  if (typeof node === 'string') {
+    // 改行コードを<br/>に変換して返す
+    return newContent.split('\n').map((line, index) => (
+      <Fragment key={index}>
+        {line}
+        {index < newContent.split('\n').length - 1 && <br />}
+      </Fragment>
+    ))
+  }
+
+  if (typeof node === 'number') {
     return newContent
   }
 
