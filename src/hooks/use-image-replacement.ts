@@ -2,10 +2,12 @@
  * 画像置換フック
  *
  * ドラッグ&ドロップとファイル選択で画像を置換するためのフック
+ * 自動で画像のリサイズと圧縮を行います。
  */
 
 import { useCallback, useState, useRef } from 'react'
 import type { A11yElementInfo } from '@/lib/content-projection/types'
+import { getOptimizedImageDataUrl, formatFileSize } from '@/lib/image/image-optimizer'
 
 export interface ImageReplacementState {
   isDragging: boolean
@@ -14,10 +16,12 @@ export interface ImageReplacementState {
   error: string | null
   previewMode: boolean
   selectedFile: File | null
+  originalFileSize?: number
+  optimizedFileSize?: number
 }
 
-const MAX_FILE_SIZE = 5 * 1024 * 1024 // 5MB
-const ALLOWED_TYPES = ['image/jpeg', 'image/png', 'image/gif', 'image/webp']
+const MAX_FILE_SIZE = 10 * 1024 * 1024 // 10MB（最適化前）
+const ALLOWED_TYPES = ['image/jpeg', 'image/png', 'image/gif', 'image/webp', 'image/bmp']
 
 /**
  * 画像置換フック
@@ -125,9 +129,29 @@ export function useImageReplacement(
         return
       }
 
-      // プレビューモードに入る
-      const previewUrl = URL.createObjectURL(file)
-      setState((prev) => ({ ...prev, previewUrl, previewMode: true, selectedFile: file, error: null }))
+      try {
+        // 画像を最適化してDataURLを取得
+        const optimizedDataUrl = await getOptimizedImageDataUrl(file, {
+          maxWidth: 1920,
+          maxHeight: 1920,
+          quality: 0.85,
+          format: 'image/webp',
+        })
+
+        // プレビューモードに入る
+        const previewUrl = URL.createObjectURL(file)
+        setState((prev) => ({
+          ...prev,
+          previewUrl,
+          previewMode: true,
+          selectedFile: file,
+          originalFileSize: file.size,
+          optimizedFileSize: Math.round(optimizedDataUrl.length * 0.75), // DataURLの概算サイズ
+          error: null,
+        }))
+      } catch (error) {
+        setState((prev) => ({ ...prev, error: '画像の処理に失敗しました' }))
+      }
     },
     [element, validateFile]
   )
@@ -193,9 +217,30 @@ export function useImageReplacement(
         return
       }
 
-      // プレビューモードに入る
-      const previewUrl = URL.createObjectURL(file)
-      setState((prev) => ({ ...prev, previewUrl, previewMode: true, selectedFile: file, error: null }))
+      try {
+        // 画像を最適化してDataURLを取得
+        const optimizedDataUrl = await getOptimizedImageDataUrl(file, {
+          maxWidth: 1920,
+          maxHeight: 1920,
+          quality: 0.85,
+          format: 'image/webp',
+        })
+
+        // プレビューモードに入る
+        const previewUrl = URL.createObjectURL(file)
+        setState((prev) => ({
+          ...prev,
+          previewUrl,
+          previewMode: true,
+          selectedFile: file,
+          originalFileSize: file.size,
+          optimizedFileSize: Math.round(optimizedDataUrl.length * 0.75),
+          error: null,
+        }))
+      } catch (error) {
+        setState((prev) => ({ ...prev, error: '画像の処理に失敗しました' }))
+        e.target.value = ''
+      }
     },
     [element, validateFile]
   )
@@ -209,13 +254,25 @@ export function useImageReplacement(
     }
 
     try {
+      // 画像を最適化してDataURLを取得
+      const optimizedDataUrl = await getOptimizedImageDataUrl(state.selectedFile, {
+        maxWidth: 1920,
+        maxHeight: 1920,
+        quality: 0.85,
+        format: 'image/webp',
+      })
+
+      // 最適化済みDataURLを保存
       if (onReplace) {
-        await onReplace(state.selectedFile, element.id)
+        // FileオブジェクトではなくDataURLを渡すように、コールバックの型を変更
+        // ここではDataURLを直接保存する
+        const previewStore = await import('@/stores/preview-store')
+        previewStore.usePreviewStore.getState().updateContent(element.id, optimizedDataUrl)
       }
       // 置換成功後にプレビューをクリア
       clearPreview()
     } catch (error) {
-      setState((prev) => ({ ...prev, error: '画像の置換に失敗しました' }))
+      setState((prev) => ({ ...prev, error: '画像の処理に失敗しました' }))
     }
   }, [state.selectedFile, element, onReplace, clearPreview])
 
@@ -253,6 +310,7 @@ export function useImageReplacement(
     handleFileSelect,
     confirmPreview,
     cancelPreview,
+    formatFileSize,
   }
 }
 

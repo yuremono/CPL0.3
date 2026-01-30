@@ -13,6 +13,7 @@ import { usePendingPreview } from '@/stores/chat-store'
 import { cn } from '@/lib/utils'
 import type { A11yElementInfo } from '@/lib/content-projection/types'
 import { useElementRef } from '@/hooks/use-element-ref'
+import { formatFileSize } from '@/lib/image/image-optimizer'
 
 export interface EditableImageWrapperProps {
   element: A11yElementInfo
@@ -115,7 +116,7 @@ export function EditableImageWrapper({
   }
 
   // ホバー時の薄いハイライト（プレビューモード時のみ）
-  const showHoverHighlight = isPreviewMode && element.editable && isHovered && !isSelected && !state.previewMode
+  const showHoverHighlight = isPreviewMode && element.editable && isHovered && !state.previewMode
 
   // ドラッグ中のハイライト（ドラッグ中は常時表示）
   const showDragHighlight = isPreviewMode && element.editable && (state.dragOver || state.isDragging) && !state.previewMode
@@ -214,10 +215,23 @@ export function EditableImageWrapper({
           />
 
           {/* プレビューモードの幕 */}
-          <div className="absolute inset-0 bg-black/50 flex flex-col items-center justify-center gap-4 p-4">
+          <div className="absolute inset-0 bg-black/50 flex flex-col items-center justify-center gap-3 p-4">
             <p className="text-white text-sm font-medium bg-black/70 px-3 py-1 rounded">
               画像を置換します
             </p>
+            {/* ファイルサイズ情報 */}
+            {state.originalFileSize && (
+              <div className="text-xs text-white bg-black/70 px-3 py-1 rounded">
+                {state.originalFileSize && (
+                  <span>元: {formatFileSize(state.originalFileSize)}</span>
+                )}
+                {state.optimizedFileSize && (
+                  <span className="ml-2 text-green-300">
+                    → {formatFileSize(state.optimizedFileSize)}
+                  </span>
+                )}
+              </div>
+            )}
             <div className="flex gap-2">
               <button
                 onClick={(e) => {
