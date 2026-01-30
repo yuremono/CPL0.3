@@ -84,18 +84,6 @@ export function ElementInfoCard({ element, onDeselect }: ElementInfoCardProps) {
             <dd className="flex-1">{element.context.section}</dd>
           </div>
         )}
-
-        {/* 編集可能かどうか */}
-        <div className="flex">
-          <dt className="font-semibold min-w-[80px]">編集可能:</dt>
-          <dd className="flex-1">
-            {element.editable ? (
-              <span className="text-green-600">可</span>
-            ) : (
-              <span className="text-red-600">不可</span>
-            )}
-          </dd>
-        </div>
       </dl>
     </div>
   )
