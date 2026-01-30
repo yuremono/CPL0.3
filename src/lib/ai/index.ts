@@ -6,16 +6,18 @@ import type { AIProvider } from './base-provider'
 import { OpenAIProvider } from './providers/openai'
 import { AnthropicProvider } from './providers/anthropic'
 import { GoogleProvider } from './providers/google'
+import { ZAIProvider } from './providers/zai'
 
 // 環境変数名のマッピング
 const API_KEY_NAMES = {
   openai: 'NEXT_PUBLIC_OPENAI_API_KEY',
   anthropic: 'NEXT_PUBLIC_ANTHROPIC_API_KEY',
-  google: 'NEXT_PUBLIC_GOOGLE_API_KEY'
+  google: 'NEXT_PUBLIC_GOOGLE_API_KEY',
+  zai: 'NEXT_PUBLIC_ZAI_API_KEY',
 } as const
 
 // デフォルトプロバイダー
-const DEFAULT_PROVIDER = 'anthropic'
+const DEFAULT_PROVIDER = 'zai'
 
 /**
  * プロバイダーを作成する
@@ -45,6 +47,8 @@ export function createProvider(providerId?: string): AIProvider | null {
       return new AnthropicProvider(apiKey)
     case 'google':
       return new GoogleProvider(apiKey)
+    case 'zai':
+      return new ZAIProvider(apiKey)
     default:
       console.warn(`Unknown provider: ${id}`)
       return null
