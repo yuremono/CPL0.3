@@ -1,38 +1,55 @@
 /**
  * ID Generation Utility
+ *
+ * SSR/CSR互換のため、決定論的なID生成を行います。
+ * 同じprefixに対しては常に同じIDを生成します。
  */
 
 const ALPHABET = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'
-const ID_LENGTH = 12
 
-let counter = 0
-let timestamp = 0
+// IDキャッシュ - 同じprefixに対して同じIDを返す
+const idCache = new Map<string, string>()
+let globalCounter = 0
 
 /**
- * 短い一意IDを生成する（NanoID風）
+ * プレフィックスから決定論的なハッシュを生成
+ * @param prefix IDのプレフィックス
+ * @returns ハッシュ値
+ */
+function hashString(prefix: string): string {
+  let hash = 0
+  for (let i = 0; i < prefix.length; i++) {
+    const char = prefix.charCodeAt(i)
+    hash = ((hash << 5) - hash) + char
+    hash = hash & hash // Convert to 32bit integer
+  }
+  return Math.abs(hash).toString(36)
+}
+
+/**
+ * 短い一意IDを生成する（決定論的）
  * @param prefix IDのプレフィックス（デフォルト: 'cpl_'）
  * @returns 一意なID文字列
+ *
+ * SSR/CSR互換のため、同じprefixに対しては常に同じIDを返します。
  */
 export function generateId(prefix = 'cpl_'): string {
-  const now = Date.now()
-
-  // タイムスタンプが変わったらカウンターをリセット
-  if (now !== timestamp) {
-    timestamp = now
-    counter = 0
+  // キャッシュにあればそれを返す
+  if (idCache.has(prefix)) {
+    return idCache.get(prefix)!
   }
 
-  // カウンターをインクリメント（1ミリ秒に複数生成対応）
-  counter++
+  // 決定論的なIDを生成: prefix + ハッシュ + カウンター
+  const hashPart = hashString(prefix).padStart(4, '0')
+  globalCounter++
+  const counterPart = globalCounter.toString(36).padStart(4, '0')
 
-  // タイムスタンプ + カウンター + ランダム文字
-  const timePart = timestamp.toString(36)
-  const counterPart = counter.toString(36).padStart(4, '0')
-  const randomPart = Array.from({ length: 4 }, () =>
-    ALPHABET[Math.floor(Math.random() * ALPHABET.length)]
-  ).join('')
+  const id = `${prefix}${hashPart}${counterPart}`
 
-  return `${prefix}${timePart}${counterPart}${randomPart}`
+  // キャッシュに保存
+  idCache.set(prefix, id)
+
+  return id
 }
 
 /**

@@ -106,6 +106,8 @@ export function EditableWrapper({
     e.stopPropagation()
     if (!element.editable) return
 
+    console.log('[EditableWrapper] Double click detected:', { id: element.id, editable: element.editable })
+
     // 編集モードを開始
     const startEditing = usePreviewStore.getState().startEditing
     startEditing(element.id)
@@ -160,7 +162,7 @@ export function EditableWrapper({
     ? pendingPreview?.previewContent ?? (editedContent ?? extractTextContent(children))
     : (editedContent ?? extractTextContent(children))
 
-  const displayChildren = (isPreviewing && pendingPreview?.previewContent) || editedContent
+  const displayChildren = !isEditing && ((isPreviewing && pendingPreview?.previewContent) || editedContent)
     ? replaceTextContent(children, displayContent)
     : children
 
