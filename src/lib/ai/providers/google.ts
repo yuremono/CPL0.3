@@ -26,7 +26,7 @@ export class GoogleProvider implements AIProvider {
       throw new Error('Google AI client is not initialized. API key is missing.')
     }
 
-    const model = this.client.getGenerativeModel({ model: 'gemini-2.0-flash-exp' })
+    const model = this.client.getGenerativeModel({ model: 'gemini-2.5-flash' })
 
     const userPrompt = this.buildPrompt(request)
     const fullPrompt = `${SYSTEM_PROMPT}\n\n${userPrompt}`

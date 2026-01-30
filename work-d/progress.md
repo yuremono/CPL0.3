@@ -57,7 +57,8 @@
 ## Remaining Tasks
 
 ### テスト
-- [ ] 単体テストを作成
+- [x] 単体テストを作成 (preview-store: 16 tests, edit-history-store: 17 tests)
+- [x] chat-storeのテストを修正 (12 tests)
 - [ ] 結合テストを作成
 - [ ] テストカバレッジ 80% 以上を達成
 
@@ -97,6 +98,12 @@ src/
 ### Issue 2: useManualSaveの型エラー
 **発生**: `triggerAutoSave` が `getState` を期待しているが、`usePreviewStore()` は状態を返す
 **解決**: フック自体（`usePreviewStore`）を直接渡すように修正
+
+### Issue 3: SSR時にIndexedDBが利用できない（未解決）
+**発生**: ビルド時に `IndexedDB getItem error: ReferenceError: indexedDB is not defined` エラー
+**報告者**: 作業B担当
+**対応が必要**: `createIndexedDBStorage()` にSSR対応を追加（`typeof window !== 'undefined'` でチェック）
+**優先度**: 中（ビルドは成功するが、警告が出力される）
 
 ---
 

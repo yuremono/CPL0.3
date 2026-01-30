@@ -1,5 +1,7 @@
 'use client';
 
+import { ChatSidebar, ChatApp, PreviewModeToggle } from '@/components/chat';
+
 export default function Home() {
   return (
     <div className="min-h-screen bg-white">
@@ -353,6 +355,14 @@ export default function Home() {
       >
         Skip to main content
       </a>
+
+      {/* Chat Sidebar */}
+      <ChatSidebar>
+        <ChatApp />
+      </ChatSidebar>
+
+      {/* Preview Mode Toggle */}
+      <PreviewModeToggle />
     </div>
   );
 }

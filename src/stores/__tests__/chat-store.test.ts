@@ -3,6 +3,7 @@
  */
 
 import { describe, it, expect, beforeEach } from 'vitest'
+import { renderHook, act } from '@testing-library/react'
 import { useChatStore, useMessages, useIsSending, useIsChatOpen } from '../chat-store'
 
 describe('ChatStore', () => {
@@ -15,18 +16,18 @@ describe('ChatStore', () => {
 
   describe('初期状態', () => {
     it('空のメッセージ配列を持つ', () => {
-      const messages = useMessages()
-      expect(messages).toEqual([])
+      const { result } = renderHook(() => useMessages())
+      expect(result.current).toEqual([])
     })
 
     it('送信中でない', () => {
-      const isSending = useIsSending()
-      expect(isSending).toBe(false)
+      const { result } = renderHook(() => useIsSending())
+      expect(result.current).toBe(false)
     })
 
     it('サイドバーが開いている', () => {
-      const isOpen = useIsChatOpen()
-      expect(isOpen).toBe(true)
+      const { result } = renderHook(() => useIsChatOpen())
+      expect(result.current).toBe(true)
     })
   })
 
@@ -130,30 +131,33 @@ describe('ChatStore', () => {
 
   describe('セレクターフック', () => {
     it('useMessagesでメッセージ一覧を取得できる', () => {
-      const store = useChatStore.getState()
+      const { result } = renderHook(() => useMessages())
 
-      store.addMessage({ role: 'user', content: 'テスト' })
+      act(() => {
+        useChatStore.getState().addMessage({ role: 'user', content: 'テスト' })
+      })
 
-      const messages = useMessages()
-      expect(messages).toHaveLength(1)
+      expect(result.current).toHaveLength(1)
     })
 
     it('useIsSendingで送信状態を取得できる', () => {
-      const store = useChatStore.getState()
+      const { result } = renderHook(() => useIsSending())
 
-      store.setSending(true)
+      act(() => {
+        useChatStore.getState().setSending(true)
+      })
 
-      const isSending = useIsSending()
-      expect(isSending).toBe(true)
+      expect(result.current).toBe(true)
     })
 
     it('useIsChatOpenで開閉状態を取得できる', () => {
-      const store = useChatStore.getState()
+      const { result } = renderHook(() => useIsChatOpen())
 
-      store.setOpen(false)
+      act(() => {
+        useChatStore.getState().setOpen(false)
+      })
 
-      const isOpen = useIsChatOpen()
-      expect(isOpen).toBe(false)
+      expect(result.current).toBe(false)
     })
   })
 })

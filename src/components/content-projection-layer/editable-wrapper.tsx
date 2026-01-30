@@ -42,6 +42,14 @@ export function EditableWrapper({
   // 編集内容を取得（AI編集後に更新される）
   const editedContent = useEditContent(element.id)
 
+  // デバッグ: 編集内容を監視
+  if (editedContent) {
+    console.log(`[EditableWrapper] 編集内容を検出: ${element.id}`, {
+      元の内容: element.content,
+      編集後: editedContent,
+    })
+  }
+
   const handleClick = (e: MouseEvent<HTMLDivElement>) => {
     e.stopPropagation()
     onSelect?.(element)
@@ -76,6 +84,14 @@ export function EditableWrapper({
   const displayChildren = editedContent
     ? replaceTextContent(children, editedContent)
     : children
+
+  // デバッグ: 置換後のchildrenを監視
+  if (editedContent) {
+    console.log(`[EditableWrapper] 置換実行: ${element.id}`, {
+      元のchildren: children,
+      置換後: displayChildren,
+    })
+  }
 
   return (
     <div

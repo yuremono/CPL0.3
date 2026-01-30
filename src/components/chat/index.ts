@@ -5,6 +5,8 @@
  */
 
 export { ChatSidebar } from './chat-sidebar'
+export { ChatApp } from './chat-app'
+export { PreviewModeToggle } from './preview-mode-toggle'
 export { MessageList } from './message-list'
 export { MessageInput } from './message-input'
 export type { MessageInputProps } from './message-input'
