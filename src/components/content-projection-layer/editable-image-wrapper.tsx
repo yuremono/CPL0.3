@@ -6,7 +6,7 @@
 
 'use client'
 
-import { type ReactElement } from 'react'
+import { useState, type ReactElement } from 'react'
 import { useImageReplacement, fileToDataURL } from '@/hooks/use-image-replacement'
 import { usePreviewStore } from '@/stores/preview-store'
 import { cn } from '@/lib/utils'
@@ -34,6 +34,7 @@ export function EditableImageWrapper({
   className,
   children,
 }: EditableImageWrapperProps) {
+  const [isHovered, setIsHovered] = useState(false)
   const isPreviewMode = usePreviewStore((state) => state.mode === 'preview')
   const updateContent = usePreviewStore((state) => state.updateContent)
 
@@ -57,8 +58,11 @@ export function EditableImageWrapper({
       clearPreview()
     })
 
-  // ホバー時のハイライト（ドラッグ中またはホバー時）
-  const showHighlight = isPreviewMode && element.editable
+  // ホバー時の薄いハイライト（プレビューモード時のみ）
+  const showHoverHighlight = isPreviewMode && element.editable && isHovered && !isSelected
+
+  // ドラッグオーバー時の目立つハイライト
+  const showDragHighlight = isPreviewMode && element.editable && state.dragOver
 
   // クリックハンドラー
   const handleClick = () => {
@@ -72,6 +76,10 @@ export function EditableImageWrapper({
     clearError()
   }
 
+  // マウスイベントハンドラー
+  const handleMouseEnter = () => setIsHovered(true)
+  const handleMouseLeave = () => setIsHovered(false)
+
   return (
     <div
       data-cpl-id={element.id}
@@ -83,9 +91,12 @@ export function EditableImageWrapper({
         'relative inline-block',
         className,
         isSelected && 'ring-2 ring-blue-500 ring-offset-2',
-        showHighlight && 'ring-2 ring-yellow-400 ring-offset-2 bg-yellow-50'
+        showHoverHighlight && 'ring-2 ring-yellow-300 ring-offset-2',
+        showDragHighlight && 'ring-2 ring-yellow-500 ring-offset-2 bg-yellow-100'
       )}
       onClick={handleClick}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
       onDragStart={handleDragStart}
       onDragEnd={handleDragEnd}
       onDragOver={isPreviewMode && element.editable ? handleDragOver : undefined}
@@ -104,8 +115,8 @@ export function EditableImageWrapper({
       />
 
       {/* ドラッグオーバー時のオーバーレイ */}
-      {showHighlight && (
-        <div className="absolute inset-0 flex items-center justify-center bg-yellow-200/50 border-2 border-dashed border-yellow-600 rounded">
+      {showDragHighlight && (
+        <div className="absolute inset-0 flex items-center justify-center bg-yellow-200/70 border-2 border-dashed border-yellow-600 rounded">
           <p className="text-sm font-medium text-yellow-800 bg-white px-3 py-1 rounded shadow-sm">
             画像をドロップ
           </p>
