@@ -86,12 +86,17 @@ export interface ChatState {
 
 ### 1. 作業開始時
 
+**重要**: Git操作は1回だけ実行すればOKです（どれか1つのターミナルで実行すれば、全ターミナルで同じブランチが有効になります）。
+
 ```bash
-# 統合ブランチを作成（全ターミナル共通）
+# 1回だけ実行（どれか1つのターミナルで）
 git checkout main
 git pull origin main
-git checkout -b feature/integration
+git checkout feature/integration
 ```
+
+**あなたのターミナルで行うこと**:
+1. ユーザーから「あなたは作業B担当です」と明示的に指示を受ける
 
 ### 2. 実装中
 

@@ -268,16 +268,23 @@ graph TD
 
 全てのターミナルで**統合ブランチ（feature/integration）**を使用し、ファイル単位で担当を分けます。
 
-### 作業開始時の手順（全ターミナル共通）
+### 作業開始時の手順
+
+**重要**: 同じMacの同じプロジェクトフォルダでは、`.git` は1つしかありません。したがって、**1つのターミナルでブランチを切り替えると、全てのターミナルで同じブランチが有効になります**。
 
 ```bash
-# mainを最新にする
+# 1回だけ実行すればOK（どれか1つのターミナルで実行）
 git checkout main
 git pull origin main
-
-# 統合ブランチを作成
-git checkout -b feature/integration
+git checkout feature/integration
+# または初めての場合: git checkout -b feature/integration
 ```
+
+**各ターミナルで行うこと**:
+1. Claude Code を起動
+2. ユーザーから「あなたは作業X担当です」と明示的に指示を受ける
+
+**Git操作は1回で十分です。各ターミナルで git コマンドを実行する必要はありません。**
 
 ### 各作業の担当ファイル
 
@@ -294,7 +301,9 @@ git checkout -b feature/integration
 2. **コミット前の確認**: `git status` で変更内容を確認してからコミット
 3. **コミットメッセージ**: 担当作業を明記（例: `feat(chat-ui): サイドバーコンポーネント実装`）
 
-### 作業完了時のプッシュ（全ターミナル共通）
+### 作業完了時のプッシュ
+
+**どのターミナルでも実行可能です**（ブランチは全ターミナルで共通のため）：
 
 ```bash
 # 変更を確認
@@ -306,8 +315,9 @@ git add src/components/chat/
 # コミット（担当を明記）
 git commit -m "feat(chat-ui): サイドバーコンポーネント実装"
 
-# プッシュ
-git push origin feature/integration
+# プッシュ（初回のみ -u フラグが必要）
+git push -u origin feature/integration
+# 2回目以降: git push
 ```
 
 ---
