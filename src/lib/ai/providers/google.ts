@@ -34,9 +34,19 @@ export class GoogleProvider implements AIProvider {
       throw new APIKeyMissingError('Google AI')
     }
 
-    // 利用可能なモデル: gemini-2.5-flash（最も高速）
+    // 画像生成リクエストかどうかを判定
+    const isImageRequest = request.selectedElement.role === 'image' ||
+      request.userIntent.includes('イラスト') ||
+      request.userIntent.includes('画像') ||
+      request.userIntent.includes('絵') ||
+      request.userIntent.includes('illustration') ||
+      request.userIntent.includes('image')
+
+    // 画像生成の場合はGemini 2.5 Flashの画像生成機能を使用
+    const modelName = isImageRequest ? 'models/gemini-2.0-flash-exp' : 'models/gemini-2.5-flash'
+
     const model = this.client.getGenerativeModel({
-      model: 'models/gemini-2.5-flash',
+      model: modelName,
       generationConfig: {
         responseMimeType: 'application/json',
         responseSchema: {
@@ -69,8 +79,45 @@ export class GoogleProvider implements AIProvider {
 
     try {
       const response = await model.generateContent(userPrompt)
-      const content = response.response.text()
 
+      // 画像生成リクエストの場合、画像データを取得
+      const isImageRequest = request.selectedElement.role === 'image' ||
+        request.userIntent.includes('イラスト') ||
+        request.userIntent.includes('画像') ||
+        request.userIntent.includes('絵') ||
+        request.userIntent.includes('illustration') ||
+        request.userIntent.includes('image')
+
+      if (isImageRequest) {
+        // Geminiからの画像応答を処理
+        const parts = response.response.candidates?.[0]?.content?.parts || []
+        const imagePart = parts.find((part: any) => part.inlineData)
+
+        if (imagePart?.inlineData?.data) {
+          // Base64画像データを取得
+          const base64Data = imagePart.inlineData.data
+          const mimeType = imagePart.inlineData.mimeType || 'image/png'
+          const dataUrl = `data:${mimeType};base64,${base64Data}`
+
+          return {
+            elementId: request.selectedElement.id,
+            newContent: dataUrl,
+            reason: 'AIが生成した画像',
+            confidence: 0.9,
+          }
+        }
+
+        // 画像が生成されなかった場合はフォールバック
+        const textContent = response.response.text()
+        if (textContent) {
+          return this.parseResponse(textContent)
+        }
+
+        throw new InvalidResponseError('画像生成に失敗しました')
+      }
+
+      // テキスト編集の場合
+      const content = response.response.text()
       return this.parseResponse(content)
     } catch (error) {
       console.error('Google AI API error:', error)
@@ -112,7 +159,7 @@ export class GoogleProvider implements AIProvider {
   private buildPrompt(request: AIEditRequest): string {
     const { selectedElement, userIntent, pageContext } = request
 
-    // 画像要素の場合、画像URLを生成
+    // 画像要素の場合、Geminiの画像生成機能を使用
     const isImageRequest = selectedElement.role === 'image' ||
       userIntent.includes('イラスト') ||
       userIntent.includes('画像') ||
@@ -121,28 +168,16 @@ export class GoogleProvider implements AIProvider {
       userIntent.includes('image')
 
     if (isImageRequest) {
-      // 画像生成用プロンプト（文字列結合を使用）
-      const seed = Math.random().toString(36).substring(2, 9)
-
+      // Geminiの画像生成用プロンプト
       let prompt = '画像生成リクエスト\n\n'
-      prompt += `要素ID: ${selectedElement.id}\n`
-      prompt += `役割: ${selectedElement.role}\n`
-      prompt += `説明: ${selectedElement.label || selectedElement.content}\n\n`
-      prompt += `ユーザーの意図: ${userIntent}\n\n`
-      prompt += `指示:\n`
-      prompt += `あなたは画像URL生成アシスタントです。以下の手順で回答してください：\n\n`
-      prompt += `1. ユーザーの意図を解析して、適切な画像生成プロンプト（英語）を作成\n`
-      prompt += `2. Pollinations.aiの画像URL形式で回答\n\n`
-      prompt += `画像URL形式:\n`
-      prompt += `https://image.pollinations.ai/prompt/{プロンプト}?width=1024&height=1024&seed=${seed}&model=flux&nologo=true\n\n`
-      prompt += `例:\n`
-      prompt += `ユーザー: "犬のイラスト" → https://image.pollinations.ai/prompt/cute%20dog%20illustration\n`
-      prompt += `ユーザー: "海の写真" → https://image.pollinations.ai/prompt/ocean%20landscape%20photography\n\n`
-      prompt += `重要:\n`
-      prompt += `- プロンプトは英語に変換してください\n`
-      prompt += `- URLのみを回答してください\n`
-      prompt += `- 必ずJSON形式で回答してください\n\n`
-      prompt += `回答形式: {"elementId": "...", "newContent": "https://image.pollinations.ai/prompt/..."}`
+      prompt += `ユーザーの意図: ${userIntent}\n`
+      if (selectedElement.label || selectedElement.content) {
+        prompt += `現在の要素: ${selectedElement.label || selectedElement.content}\n`
+      }
+      prompt += '\n'
+      prompt += '指示:\n'
+      prompt += 'ユーザーの意図に基づいて適切な画像を生成してください。\n'
+      prompt += '日本語のリクエストを理解し、適切な画像を作成してください。\n'
 
       return prompt
     }
