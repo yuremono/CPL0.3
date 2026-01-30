@@ -73,7 +73,7 @@ export function ChatApp() {
       const data = await response.json()
 
       if (data.success) {
-        const newContent = data.data.content || ''
+        const newContent = data.data.newContent || ''
 
         // AI応答を追加
         addMessage({
