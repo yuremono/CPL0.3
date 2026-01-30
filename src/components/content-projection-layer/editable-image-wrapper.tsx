@@ -9,6 +9,7 @@
 import { useState, type ReactElement } from 'react'
 import { useImageReplacement, fileToDataURL } from '@/hooks/use-image-replacement'
 import { usePreviewStore } from '@/stores/preview-store'
+import { usePendingPreview } from '@/stores/chat-store'
 import { cn } from '@/lib/utils'
 import type { A11yElementInfo } from '@/lib/content-projection/types'
 import { useElementRef } from '@/hooks/use-element-ref'
@@ -41,7 +42,15 @@ export function EditableImageWrapper({
 
   // 編集内容を取得
   const editedContent = usePreviewStore((state) => state.edits[element.id])
-  const currentSrc = editedContent || src
+
+  // プレビュー状態を取得
+  const pendingPreview = usePendingPreview()
+  const isPreviewing = pendingPreview?.elementId === element.id
+
+  // 表示する画像URL: プレビュー > 編集済み > 元のsrc
+  const displaySrc = isPreviewing && pendingPreview?.previewContent
+    ? pendingPreview.previewContent
+    : (editedContent || src)
 
   // 元のclassNameを取得（型アサーション）
   const originalClassName = (children as any)?.props?.className || ''
@@ -108,7 +117,7 @@ export function EditableImageWrapper({
       draggable={false}
     >
       <img
-        src={currentSrc}
+        src={displaySrc}
         alt={element.content || alt}
         className={cn(
           'w-full h-full object-cover',
@@ -116,6 +125,14 @@ export function EditableImageWrapper({
           originalClassName
         )}
       />
+
+      {/* プレビューインジケーター */}
+      {isPreviewing && (
+        <div className="absolute top-2 left-2 bg-yellow-500 text-white text-xs px-2 py-1 rounded shadow-sm flex items-center gap-1">
+          <span className="animate-pulse">●</span>
+          プレビュー
+        </div>
+      )}
 
       {/* ドラッグオーバー時のオーバーレイ */}
       {showDragHighlight && (
