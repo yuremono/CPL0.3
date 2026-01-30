@@ -114,6 +114,25 @@ git checkout feature/integration
 1. `/code-review` コマンドでレビュー
 2. `work-b/progress.md` を更新
 3. ビルド確認: `npm run build`
+4. **ローカルコミット**（プッシュはしない！）
+
+### Git操作の手順（作業B担当）
+
+**重要**: GitHubへのプッシュはマネージャー（作業A担当）が一元化します。あなたはローカルコミットまでを行います。
+
+```bash
+# 変更を確認
+git status
+
+# 変更をステージ（担当ファイルのみ）
+git add src/components/chat/
+
+# ローカルコミット（担当を明記）
+git commit -m "feat(chat-ui): サイドバーコンポーネント実装"
+# プッシュはしない！マネージャーが行います
+```
+
+**コミット後**: マネージャーに「作業B完了」を報告してください
 
 ---
 

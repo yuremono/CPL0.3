@@ -132,6 +132,25 @@ git checkout feature/integration
 2. セキュリティレビューを実施
 3. `work-c/progress.md` を更新
 4. ビルド確認: `npm run build`
+5. **ローカルコミット**（プッシュはしない！）
+
+### Git操作の手順（作業C担当）
+
+**重要**: GitHubへのプッシュはマネージャー（作業A担当）が一元化します。あなたはローカルコミットまでを行います。
+
+```bash
+# 変更を確認
+git status
+
+# 変更をステージ（担当ファイルのみ）
+git add src/lib/ai/
+
+# ローカルコミット（担当を明記）
+git commit -m "feat(ai-integration): OpenAIプロバイダー実装"
+# プッシュはしない！マネージャーが行います
+```
+
+**コミット後**: マネージャーに「作業C完了」を報告してください
 
 ---
 

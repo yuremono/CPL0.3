@@ -103,6 +103,7 @@ git checkout feature/integration
 1. `/code-review` コマンドでレビュー
 2. `work-a/progress.md` を更新
 3. ビルド確認: `npm run build`
+4. **マネージャーとしてのGit操作**（後述）
 
 ---
 
@@ -114,8 +115,26 @@ git checkout feature/integration
 2. 各作業の `work-{id}/progress.md` を確認してサマリー化
 3. ブロッカーの検出と調整
 4. 次のアクションの指示
+5. **GitHub操作の一元化**（重要）
 
-**注意**: `docs/progress-report.md` はマネージャー（作業A担当）のみが編集できます。
+### GitHub操作の手順（マネージャーのみ）
+
+各作業担当者（B・C・D）からの完了報告を受けたら、マネージャーが一括してプッシュします。
+
+```bash
+# 全変更を確認
+git status
+
+# リモートと同期
+git pull origin feature/integration
+
+# 全てのローカルコミットをプッシュ
+git push origin feature/integration
+```
+
+**注意**:
+- `docs/progress-report.md` はマネージャー（作業A担当）のみが編集できます
+- GitHubへのプッシュはマネージャーのみが行います
 
 ---
 
