@@ -127,6 +127,30 @@ function HomeContent() {
                   Developer
                 </h2>
               </EditableWrapper>
+
+              <EditableWrapper
+                element={{
+                  id: generateId('hero-description'),
+                  role: 'paragraph',
+                  content: 'Building digital experiences with precision and purpose.',
+                  editable: true,
+                }}
+                isSelected={selectedElement?.id === 'hero-description'}
+                onSelect={handleSelectElement}
+              >
+                <p className="text-lg mt-6">
+                  Building digital experiences with precision and purpose.
+                </p>
+              </EditableWrapper>
+
+              <div className="flex flex-col gap-4 mt-6">
+                <a href="#projects" className="inline-flex items-center justify-center px-6 py-3 font-semibold text-lg border-2 border-black bg-accent text-white hover:bg-accent-dark hover:text-white shadow-[2px_2px_0_0_#0A0A0A] hover:shadow-[0_0_0_0_#0A0A0A] hover:translate-x-0.5 hover:translate-y-0.5 active:shadow-none active:translate-x-[2px] active:translate-y-[2px] transition-all duration-150 focus:outline-none focus:ring-2 focus:ring-accent focus:ring-offset-2 disabled:pointer-events-none disabled:opacity-50">
+                  View Projects
+                </a>
+                <a href="#contact" className="inline-flex items-center justify-center px-6 py-3 font-semibold text-lg border-2 border-black bg-white text-black hover:bg-black hover:text-white shadow-[2px_2px_0_0_#0A0A0A] hover:shadow-[0_0_0_0_#0A0A0A] hover:translate-x-0.5 hover:translate-y-0.5 active:shadow-none active:translate-x-[2px] active:translate-y-[2px] transition-all duration-150 focus:outline-none focus:ring-2 focus:ring-accent focus:ring-offset-2 disabled:pointer-events-none disabled:opacity-50">
+                  Get in Touch
+                </a>
+              </div>
             </div>
           </div>
         </section>
