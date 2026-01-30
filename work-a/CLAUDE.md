@@ -2,6 +2,40 @@
 
 このファイルは作業A（プレビューUI実装）固有のルールと設定です。
 
+## 📋 進捗報告（必ず目を通してください）
+
+### 進捗報告のタイミング
+以下の場合は必ず進捗報告を行ってください：
+- ✅ 作業完了時
+- ✅ 1日以上作業した場合
+- ✅ 週の終わり
+- ✅ 問題が発生した場合
+
+### 進捗報告の手順
+1. **テンプレート確認**: `docs/REPORTING.md` を確認してください
+2. **日報作成**: テンプレートに従って進捗を記載してください
+3. **提出先**: `docs/PROGRESS.md` と `work-a/progress.md` に報告してください
+
+### 進捗報告テンプレート（簡易版）
+
+作業終了時に以下の形式で報告してください：
+
+```
+## 進捗報告 - 作業A ({日付})
+
+### 完了したタスク
+- [x] タスク1
+- [x] タスク2
+
+### 作成/更新したファイル
+- `path/to/file.ts` (変更内容の説明)
+
+### 次のステップ
+- 次に行う作業
+```
+
+---
+
 ## 作業の範囲と目的
 
 プレビューモードの検出、編集可能要素のラッパー、ホバー/クリックによる選択機能を実装します。
@@ -11,7 +45,7 @@
 - a11y準拠の属性を生成して要素に付与
 - ホバー時に要素をハイライト（色変更）
 - クリックで要素を選択
-- ダブルクリックで直接編集モード（開発中）
+- ダブルクリックで直接編集モード
 
 ## 使用する型・インターフェース
 
@@ -42,7 +76,6 @@ export interface A11yElementInfo {
 
 ### a11y属性の構造
 ```tsx
-// プレビューモード時に付与する属性例
 <div
   data-cpl-id="blk_abc123"
   data-cpl-type="heading"
@@ -62,36 +95,16 @@ export interface A11yElementInfo {
 | クリック | 選択状態になり、情報を保存 |
 | ダブルクリック | 直接編集モードに切り替え |
 
-### CSSクラス
-- `.hover-highlight`: ホバー時のハイライト（黄色の背景と点線）
-- `.selected`: 選択時のハイライト（青色の背景と実線）
-
-### 不変性の維持
-```typescript
-// 良い例: 不変性の維持
-const newElements = [...elements, newElement]
-
-// 悪い例: 直接変更
-elements.push(newElement)
-```
-
 ## テストの実行方法
 
 ```bash
-# すべてのテストを実行
 npx vitest run --project node
-
-# 特定のテストファイルを実行
-npx vitest run --project node src/components/content-projection-layer/__tests__/preview-provider.test.tsx
 ```
 
 ## ビルドの確認方法
 
 ```bash
-# ビルドを実行
 npm run build
-
-# 開発サーバーを起動
 npm run dev
 ```
 
@@ -101,18 +114,8 @@ npm run dev
 2. `editable-wrapper.tsx` が実装され、要素をラップできる
 3. `hover-highlight.tsx` が実装され、ホバー/クリックが動作する
 4. `preview-provider.tsx` が実装され、プレビューモードを制御できる
-5. すべてのテストがパスする（24テスト）
+5. すべてのテストがパスする
 6. ビルドが成功する
-
-## 進捗報告
-
-作業完了時または進捗がある場合は、`progress.md` を更新してください。
-
-## マネージャーへの連絡
-
-- 進捗報告: `work-a/progress.md` を更新
-- ブロッカー発生: 即座に報告
-- 質問がある: マネージャー（伝達役経由）に相談
 
 ## 作成したファイル
 
@@ -130,12 +133,6 @@ npm run dev
 
 ### Hook Files
 - `src/hooks/use-preview-mode.ts`
-
-### Test Files
-- `src/lib/content-projection/__tests__/attributes.test.ts` (8 tests)
-- `src/components/content-projection-layer/__tests__/preview-provider.test.tsx` (3 tests)
-- `src/components/content-projection-layer/__tests__/editable-wrapper.test.tsx` (7 tests)
-- `src/components/content-projection-layer/__tests__/hover-highlight.test.tsx` (6 tests)
 
 ## 実装完了時の状態
 

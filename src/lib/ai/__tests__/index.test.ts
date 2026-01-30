@@ -29,10 +29,12 @@ describe('AI Provider Factory', () => {
       delete process.env.NEXT_PUBLIC_OPENAI_API_KEY
       delete process.env.NEXT_PUBLIC_ANTHROPIC_API_KEY
       delete process.env.NEXT_PUBLIC_GOOGLE_API_KEY
+      delete process.env.NEXT_PUBLIC_ZAI_API_KEY
 
       expect(createProvider('openai')).toBeNull()
       expect(createProvider('anthropic')).toBeNull()
       expect(createProvider('google')).toBeNull()
+      expect(createProvider('zai')).toBeNull()
     })
 
     it('should return OpenAI provider when API key exists', () => {
@@ -56,11 +58,18 @@ describe('AI Provider Factory', () => {
       expect(provider?.id).toBe('google')
     })
 
-    it('should default to Anthropic when no provider specified', () => {
-      process.env.NEXT_PUBLIC_ANTHROPIC_API_KEY = 'sk-ant-test-key'
+    it('should return ZAI provider when API key exists', () => {
+      process.env.NEXT_PUBLIC_ZAI_API_KEY = 'test-zai-key'
+      const provider = createProvider('zai')
+      expect(provider).not.toBeNull()
+      expect(provider?.id).toBe('zai')
+    })
+
+    it('should default to ZAI when no provider specified', () => {
+      process.env.NEXT_PUBLIC_ZAI_API_KEY = 'test-zai-key'
       const provider = createProvider()
       expect(provider).not.toBeNull()
-      expect(provider?.id).toBe('anthropic')
+      expect(provider?.id).toBe('zai')
     })
   })
 
@@ -69,6 +78,7 @@ describe('AI Provider Factory', () => {
       delete process.env.NEXT_PUBLIC_OPENAI_API_KEY
       delete process.env.NEXT_PUBLIC_ANTHROPIC_API_KEY
       delete process.env.NEXT_PUBLIC_GOOGLE_API_KEY
+      delete process.env.NEXT_PUBLIC_ZAI_API_KEY
 
       const providers = getAvailableProviders()
       expect(providers).toEqual([])
@@ -78,12 +88,14 @@ describe('AI Provider Factory', () => {
       process.env.NEXT_PUBLIC_OPENAI_API_KEY = 'sk-test-key'
       process.env.NEXT_PUBLIC_ANTHROPIC_API_KEY = 'sk-ant-test-key'
       // Google key is not set
+      // ZAI key is not set
 
       const providers = getAvailableProviders()
       expect(providers).toHaveLength(2)
       expect(providers.map((p) => p.id)).toContain('openai')
       expect(providers.map((p) => p.id)).toContain('anthropic')
       expect(providers.map((p) => p.id)).not.toContain('google')
+      expect(providers.map((p) => p.id)).not.toContain('zai')
     })
   })
 })

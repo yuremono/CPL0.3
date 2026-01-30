@@ -3,11 +3,40 @@
  *
  * Zustandのpersistミドルウェアで使用するための
  * IndexedDBストレージ実装。
+ *
+ * SSR環境（window/indexedDBなし）ではインメモリストレージを
+ * フォールバックとして使用します。
  */
 
 const DB_NAME = 'cpl-storage'
 const DB_VERSION = 1
 const STORE_NAME = 'key-value-store'
+
+/**
+ * SSR環境かどうかを判定
+ */
+export function isSSREnvironment(): boolean {
+  return typeof window === 'undefined' || typeof indexedDB === 'undefined'
+}
+
+/**
+ * インメモリストレージ（SSR環境用）
+ */
+export function createInMemoryStorage() {
+  const store = new Map<string, string>()
+
+  return {
+    async getItem(key: string): Promise<string | null> {
+      return store.get(key) ?? null
+    },
+    async setItem(key: string, value: string): Promise<void> {
+      store.set(key, value)
+    },
+    async removeItem(key: string): Promise<void> {
+      store.delete(key)
+    },
+  }
+}
 
 /**
  * IndexedDBデータベースの初期化
@@ -39,8 +68,14 @@ async function initDB(): Promise<IDBDatabase> {
  * IndexedDBベースのストレージを作成
  *
  * Zustandのpersistミドルウェアと互換性のあるAPIを提供。
+ * SSR環境ではインメモリストレージをフォールバックとして使用します。
  */
 export function createIndexedDBStorage() {
+  // SSR環境の場合はインメモリストレージを返す
+  if (isSSREnvironment()) {
+    return createInMemoryStorage()
+  }
+
   let dbPromise: Promise<IDBDatabase> | null = null
 
   const getDB = async (): Promise<IDBDatabase> => {

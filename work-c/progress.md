@@ -122,3 +122,77 @@ OpenAI/Anthropic SDKはブラウザ環境での実行を制限しているため
 | 日時 | 更新内容 |
 |------|----------|
 | 2025-01-28 | 作業C完了、20テスト全てパス |
+| 2026-01-31 | フェーズ3: API監視テスト完了 |
+
+---
+
+## フェーズ3: API監視テスト（完了）
+
+### 完了したタスク
+
+- [x] API健全性テストの実装（health.test.ts）
+- [x] エラーハンドリングのレビューと改善
+- [x] リトライロジックの実装とテスト
+
+### 作成・更新したファイル
+
+#### 新規ファイル
+- `src/lib/ai/errors.ts` - カスタムエラークラス
+  - `AIProviderError` - ベースエラークラス
+  - `APIKeyMissingError` - APIキー未設定エラー
+  - `NetworkError` - ネットワークエラー（リトライ可能）
+  - `TimeoutError` - タイムアウトエラー（リトライ可能）
+  - `RateLimitError` - レート制限エラー（リトライ可能）
+  - `InvalidResponseError` - 無効なレスポンスエラー
+  - `AuthenticationError` - 認証エラー
+  - `ContentPolicyError` - コンテンツポリシーエラー
+  - `UserInputError` - ユーザー入力エラー
+
+- `src/lib/ai/retry.ts` - リトライロジック
+  - `withRetry()` - 指数バックオフ付きリトライ
+  - `withTimeout()` - タイムアウト付き実行
+  - `withRetryAndTimeout()` - リトライとタイムアウトの組み合わせ
+  - ジッター（ランダムな揺らぎ）によるスレッド回避
+
+- `src/lib/ai/__tests__/health.test.ts` - API健全性テスト（15テスト）
+- `src/lib/ai/__tests__/errors.test.ts` - エラーハンドリングテスト（21テスト）
+- `src/lib/ai/__tests__/retry.test.ts` - リトライロジックテスト（12テスト）
+
+#### 更新ファイル
+- `src/app/api/ai/edit/route.ts` - エラーレスポンス形式の強化
+- `src/lib/ai/providers/google.ts` - エラーハンドリングの強化
+- `src/lib/ai/providers/zai.ts` - エラーハンドリングの強化
+- `src/lib/ai/__tests__/index.test.ts` - デフォルトプロバイダー変更対応
+
+### テスト結果
+
+```
+✓ 69 tests passed (6 test files)
+  - base-provider.test.ts: 3 tests
+  - providers.test.ts: 9 tests
+  - index.test.ts: 9 tests
+  - health.test.ts: 15 tests (新規)
+  - errors.test.ts: 21 tests (新規)
+  - retry.test.ts: 12 tests (新規)
+```
+
+### 実装の詳細
+
+#### エラーハンドリングの強化
+- カスタムエラークラスによるエラー分類
+- 適切なHTTPステータスコードの返却（400, 401, 429, 451, 502, 503, 504）
+- リトライ可能かどうかのフラグ（`retryable`）
+- 詳細なエラーコード（`code`）
+
+#### リトライロジック
+- 指数バックオフ（デフォルト: 1000ms × 2^n）
+- ジッターによる雷同時アクセス回避
+- 最大遅延時間の設定（デフォルト: 10000ms）
+- リトライ可能なエラーのみをリトライ
+- タイムアウトとの組み合わせ
+
+### 完了基準の達成
+
+- ✅ API健全性テストがパスする（15テスト）
+- ✅ すべてのAPI関数にエラーハンドリングがある
+- ✅ リトライロジックが正しく動作する（12テスト）

@@ -9,6 +9,13 @@ import OpenAI from 'openai'
 import type { AIProvider } from '../base-provider'
 import type { AIEditRequest, AIEditResponse } from '@/lib/content-projection/types'
 import { SYSTEM_PROMPT } from '../base-provider'
+import {
+  APIKeyMissingError,
+  NetworkError,
+  TimeoutError,
+  InvalidResponseError,
+  AuthenticationError,
+} from '../errors'
 
 export class ZAIProvider implements AIProvider {
   readonly id = 'zai'
@@ -35,7 +42,7 @@ export class ZAIProvider implements AIProvider {
 
   async editContent(request: AIEditRequest): Promise<AIEditResponse> {
     if (!this.client) {
-      throw new Error('ZAI client is not initialized. API key is missing.')
+      throw new APIKeyMissingError('ZAI')
     }
 
     const userPrompt = this.buildPrompt(request)
@@ -59,7 +66,35 @@ export class ZAIProvider implements AIProvider {
       return this.parseResponse(content)
     } catch (error) {
       console.error('ZAI API error:', error)
-      throw new Error(
+
+      // エラーメッセージの詳細をログに出力
+      if (error instanceof Error) {
+        console.error('Error name:', error.name)
+        console.error('Error message:', error.message)
+      }
+
+      // ZAI API のエラーを分類
+      if (error instanceof Error) {
+        const errorMessage = error.message.toLowerCase()
+
+        // 認証エラー
+        if (errorMessage.includes('api key') || errorMessage.includes('authentication') || errorMessage.includes('unauthorized')) {
+          throw new AuthenticationError('ZAI API key is invalid or missing')
+        }
+
+        // レート制限
+        if (errorMessage.includes('quota') || errorMessage.includes('rate limit') || errorMessage.includes('too many requests')) {
+          throw new TimeoutError('ZAI rate limit exceeded. Please try again later')
+        }
+
+        // タイムアウト
+        if (errorMessage.includes('timeout') || errorMessage.includes('timed out')) {
+          throw new TimeoutError('ZAI request timed out')
+        }
+      }
+
+      // ネットワークエラー
+      throw new NetworkError(
         `Failed to get AI response: ${error instanceof Error ? error.message : 'Unknown error'}`
       )
     }

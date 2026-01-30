@@ -26,15 +26,6 @@ export function ChatSidebar({ children }: ChatSidebarProps) {
 
   return (
     <>
-      {/* オーバーレイ */}
-      {isOpen && (
-        <div
-          className="fixed inset-0 bg-black/20 backdrop-blur-sm z-40 transition-opacity"
-          onClick={() => setOpen(false)}
-          aria-hidden="true"
-        />
-      )}
-
       {/* サイドバー */}
       <aside
         className={`

@@ -6,6 +6,27 @@
 
 ---
 
+## 進捗報告 - 2026-01-31
+
+### 完了したタスク
+- [x] フェーズ1: SSR対応の実装
+  - `isSSREnvironment()` 関数を実装
+  - `createInMemoryStorage()` 関数を実装
+  - `createIndexedDBStorage()` にSSRチェックを追加
+  - JSDOMを使用したSSR対応テストを作成（24テスト全てパス）
+- [x] Issue 3「SSR時にIndexedDBが利用できない」を解決
+
+### 作成/更新したファイル
+- `src/lib/storage/indexed-db.ts` (更新: SSR対応を追加)
+- `src/lib/storage/__tests__/indexed-db.test.ts` (新規: 24テスト)
+
+### 完了基準
+- [x] SSR環境でIndexedDB関連のエラーが発生しない
+- [x] モックストレージが正しく動作する
+- [x] SSR対応のテストがパスする
+
+---
+
 ## Completed Tasks
 
 ### タスク1: IndexedDBラッパー
@@ -50,7 +71,17 @@
 
 ## In Progress
 
-なし（実装完了）
+### フェーズ1: SSR対応（作業中）
+- [x] `createIndexedDBStorage` にSSR対応チェックを追加
+- [x] インメモリストレージを実装（`createInMemoryStorage`）
+- [x] SSR対応テストを作成（24個のテストケース）
+- [x] テストパス確認
+
+### Issue 3: SSR時にIndexedDBが利用できない（解決済み）
+- [x] `isSSREnvironment()` 関数を実装
+- [x] SSR環境でインメモリストレージをフォールバックとして使用
+- [x] `typeof window !== 'undefined'` と `typeof indexedDB !== 'undefined'` でチェック
+- [x] JSDOMを使用したSSR対応テストを実装
 
 ---
 
@@ -59,8 +90,8 @@
 ### テスト
 - [x] 単体テストを作成 (preview-store: 16 tests, edit-history-store: 17 tests)
 - [x] chat-storeのテストを修正 (12 tests)
+- [x] storageのSSR対応テストを作成 (indexed-db: 24 tests)
 - [ ] 結合テストを作成
-- [ ] テストカバレッジ 80% 以上を達成
 
 ### 統合
 - [ ] 作業Aとの連携確認

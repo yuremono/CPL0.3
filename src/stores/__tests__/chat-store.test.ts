@@ -4,7 +4,7 @@
 
 import { describe, it, expect, beforeEach } from 'vitest'
 import { renderHook, act } from '@testing-library/react'
-import { useChatStore, useMessages, useIsSending, useIsChatOpen } from '../chat-store'
+import { useChatStore, useMessages, useIsSending, useIsChatOpen, useSelectedProvider, useLastMessage } from '../chat-store'
 
 describe('ChatStore', () => {
   beforeEach(() => {
@@ -158,6 +158,44 @@ describe('ChatStore', () => {
       })
 
       expect(result.current).toBe(false)
+    })
+
+    it('useSelectedProviderで選択されたプロバイダーを取得できる', () => {
+      const { result } = renderHook(() => useSelectedProvider())
+
+      expect(result.current).toBe('google')
+
+      act(() => {
+        useChatStore.getState().setProvider('zai')
+      })
+
+      expect(result.current).toBe('zai')
+    })
+
+    it('useLastMessageで最後のメッセージを取得できる', () => {
+      const { result } = renderHook(() => useLastMessage())
+
+      // 最初はnull
+      expect(result.current).toBeNull()
+
+      act(() => {
+        useChatStore.getState().addMessage({ role: 'user', content: '最初のメッセージ' })
+      })
+
+      expect(result.current).toMatchObject({
+        role: 'user',
+        content: '最初のメッセージ',
+      })
+
+      act(() => {
+        useChatStore.getState().addMessage({ role: 'assistant', content: '2番目のメッセージ' })
+      })
+
+      // 最後のメッセージが返される
+      expect(result.current).toMatchObject({
+        role: 'assistant',
+        content: '2番目のメッセージ',
+      })
     })
   })
 })

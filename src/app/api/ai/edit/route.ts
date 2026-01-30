@@ -6,6 +6,12 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createProvider } from '@/lib/ai'
 import type { AIEditRequest, AIEditResponse } from '@/lib/content-projection/types'
+import {
+  AIProviderError,
+  UserInputError,
+  getStatusCode,
+  isRetryableError,
+} from '@/lib/ai/errors'
 
 // リクエストボディの型
 interface EditRequest {
@@ -34,7 +40,9 @@ interface EditRequest {
 interface ErrorResponse {
   success: false
   error: string
+  code: string
   details?: string
+  retryable?: boolean
 }
 
 // 成功レスポンスの型
@@ -52,25 +60,30 @@ export async function POST(request: NextRequest) {
     // リクエストボディのパース
     const body: EditRequest = await request.json()
 
+    // デバッグ用: リクエスト内容をログに出力
+    console.log('[AI Edit API] Received request:', {
+      provider: body.provider,
+      selectedElementId: body.selectedElement?.id,
+      selectedElementRole: body.selectedElement?.role,
+      selectedElementContent: body.selectedElement?.content?.substring(0, 100),
+      userIntent: body.userIntent?.substring(0, 100),
+    })
+
     // バリデーション
     if (!body.selectedElement) {
-      return NextResponse.json<ErrorResponse>(
-        {
-          success: false,
-          error: 'selectedElement is required'
-        },
-        { status: 400 }
-      )
+      throw new UserInputError('selectedElement is required')
     }
 
     if (!body.userIntent) {
-      return NextResponse.json<ErrorResponse>(
-        {
-          success: false,
-          error: 'userIntent is required'
-        },
-        { status: 400 }
-      )
+      throw new UserInputError('userIntent is required')
+    }
+
+    // 選択要素の追加バリデーション
+    if (!body.selectedElement.id) {
+      throw new UserInputError('selectedElement.id is required')
+    }
+    if (!body.selectedElement.content) {
+      throw new UserInputError('selectedElement.content is required')
     }
 
     // プロバイダーの作成
@@ -81,7 +94,9 @@ export async function POST(request: NextRequest) {
         {
           success: false,
           error: 'AI provider is not available',
-          details: `Check if API key for ${body.provider || 'default provider'} is configured`
+          code: 'PROVIDER_NOT_AVAILABLE',
+          details: `Check if API key for ${body.provider || 'default provider'} is configured`,
+          retryable: false,
         },
         { status: 503 }
       )
@@ -116,11 +131,35 @@ export async function POST(request: NextRequest) {
   } catch (error) {
     console.error('AI Edit API error:', error)
 
+    // 詳細なエラー情報をログに出力
+    if (error instanceof Error) {
+      console.error('Error name:', error.name)
+      console.error('Error message:', error.message)
+      console.error('Error stack:', error.stack)
+    }
+
+    // AIProviderError の場合、適切なステータスコードを返す
+    if (error instanceof AIProviderError) {
+      return NextResponse.json<ErrorResponse>(
+        {
+          success: false,
+          error: error.message,
+          code: error.code,
+          details: error.message,
+          retryable: error.retryable,
+        },
+        { status: error.statusCode }
+      )
+    }
+
+    // その他のエラー
     return NextResponse.json<ErrorResponse>(
       {
         success: false,
         error: 'Failed to process edit request',
-        details: error instanceof Error ? error.message : 'Unknown error'
+        code: 'INTERNAL_ERROR',
+        details: error instanceof Error ? error.message : 'Unknown error',
+        retryable: false,
       },
       { status: 500 }
     )

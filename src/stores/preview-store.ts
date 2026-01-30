@@ -26,6 +26,9 @@ export interface PreviewState {
   // 選択中の要素
   selectedElement: A11yElementInfo | null
 
+  // 編集中の要素ID
+  editingElementId: string | null
+
   // 編集内容（elementId -> newContent）
   edits: Record<string, string>
 
@@ -35,14 +38,17 @@ export interface PreviewState {
   updateContent: (elementId: string, newContent: string) => void
   removeEdit: (elementId: string) => void
   reset: () => void
+  startEditing: (elementId: string) => void
+  stopEditing: () => void
 }
 
 /**
  * 初期状態
  */
-const initialState: Omit<PreviewState, 'setMode' | 'selectElement' | 'updateContent' | 'removeEdit' | 'reset'> = {
+const initialState: Omit<PreviewState, 'setMode' | 'selectElement' | 'updateContent' | 'removeEdit' | 'reset' | 'startEditing' | 'stopEditing'> = {
   mode: 'preview',
   selectedElement: null,
+  editingElementId: null,
   edits: {},
 }
 
@@ -99,6 +105,20 @@ export const usePreviewStore = create<PreviewState>()(
       reset: () => {
         set(initialState)
       },
+
+      /**
+       * 編集モードを開始
+       */
+      startEditing: (elementId: string) => {
+        set({ editingElementId: elementId })
+      },
+
+      /**
+       * 編集モードを終了
+       */
+      stopEditing: () => {
+        set({ editingElementId: null })
+      },
     }),
     {
       name: 'preview-storage',
@@ -147,3 +167,14 @@ export const useIsPreviewMode = () => usePreviewStore((state) => state.mode === 
  * 編集モードかどうか
  */
 export const useIsEditMode = () => usePreviewStore((state) => state.mode === 'edit')
+
+/**
+ * 編集中の要素IDを取得
+ */
+export const useEditingElementId = () => usePreviewStore((state) => state.editingElementId)
+
+/**
+ * 特定の要素が編集中かどうか
+ */
+export const useIsEditing = (elementId: string) =>
+  usePreviewStore((state) => state.editingElementId === elementId)

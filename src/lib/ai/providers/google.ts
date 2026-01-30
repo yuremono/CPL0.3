@@ -6,6 +6,14 @@ import { GoogleGenerativeAI } from '@google/generative-ai'
 import type { AIProvider } from '../base-provider'
 import type { AIEditRequest, AIEditResponse } from '@/lib/content-projection/types'
 import { SYSTEM_PROMPT } from '../base-provider'
+import {
+  APIKeyMissingError,
+  NetworkError,
+  TimeoutError,
+  InvalidResponseError,
+  AuthenticationError,
+  ContentPolicyError,
+} from '../errors'
 
 export class GoogleProvider implements AIProvider {
   readonly id = 'google'
@@ -23,28 +31,79 @@ export class GoogleProvider implements AIProvider {
 
   async editContent(request: AIEditRequest): Promise<AIEditResponse> {
     if (!this.client) {
-      throw new Error('Google AI client is not initialized. API key is missing.')
+      throw new APIKeyMissingError('Google AI')
     }
 
-    const model = this.client.getGenerativeModel({ model: 'gemini-2.5-flash' })
+    // 利用可能なモデル: gemini-2.5-flash（最も高速）
+    const model = this.client.getGenerativeModel({
+      model: 'models/gemini-2.5-flash',
+      generationConfig: {
+        responseMimeType: 'application/json',
+        responseSchema: {
+          type: 'object' as 'object',
+          properties: {
+            elementId: {
+              type: 'string' as 'string',
+              description: '対象の要素ID',
+            },
+            newContent: {
+              type: 'string' as 'string',
+              description: '編集後のコンテンツ',
+            },
+            reason: {
+              type: 'string' as 'string',
+              description: '変更理由の説明',
+            },
+            confidence: {
+              type: 'number' as 'number',
+              description: '確信度（0.0-1.0）',
+            },
+          },
+          required: ['elementId', 'newContent'] as string[],
+        } as any, // 型キャストでGoogleGenerativeAIの型定義を回避
+        temperature: 0.7,
+      },
+    })
 
     const userPrompt = this.buildPrompt(request)
-    const fullPrompt = `${SYSTEM_PROMPT}\n\n${userPrompt}`
 
     try {
-      const response = await model.generateContent(fullPrompt)
+      const response = await model.generateContent(userPrompt)
       const content = response.response.text()
-      const jsonMatch = content.match(/```json\n([\s\S]*?)\n```/) || content.match(/\{[\s\S]*\}/)
 
-      if (!jsonMatch) {
-        throw new Error('No JSON found in response')
-      }
-
-      const jsonContent = jsonMatch[1] || jsonMatch[0]
-      return this.parseResponse(jsonContent)
+      return this.parseResponse(content)
     } catch (error) {
       console.error('Google AI API error:', error)
-      throw new Error(
+
+      // エラーメッセージの詳細をログに出力
+      if (error instanceof Error) {
+        console.error('Error name:', error.name)
+        console.error('Error message:', error.message)
+        console.error('Error stack:', error.stack)
+      }
+
+      // Google API のエラーを分類
+      if (error instanceof Error) {
+        const errorMessage = error.message.toLowerCase()
+
+        // 認証エラー
+        if (errorMessage.includes('api key') || errorMessage.includes('authentication')) {
+          throw new AuthenticationError('Google AI API key is invalid or missing')
+        }
+
+        // コンテンツポリシー違反
+        if (errorMessage.includes('safety') || errorMessage.includes('policy')) {
+          throw new ContentPolicyError('Content was rejected by Google safety filters')
+        }
+
+        // レート制限
+        if (errorMessage.includes('quota') || errorMessage.includes('rate limit')) {
+          throw new TimeoutError('Google AI quota exceeded. Please try again later')
+        }
+      }
+
+      // ネットワークエラー
+      throw new NetworkError(
         `Failed to get AI response: ${error instanceof Error ? error.message : 'Unknown error'}`
       )
     }
@@ -117,6 +176,7 @@ export class GoogleProvider implements AIProvider {
       }
     } catch (error) {
       console.error('Failed to parse AI response:', error)
+      console.error('Response content:', content)
       throw new Error('Invalid JSON response from AI')
     }
   }

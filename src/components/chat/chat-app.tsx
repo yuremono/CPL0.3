@@ -8,11 +8,22 @@
 
 import { useSelectedElement, usePreviewStore } from '@/stores/preview-store'
 import { useEditHistoryStore } from '@/stores/edit-history-store'
-import { useChatStore, useIsSending, useMessages } from '@/stores/chat-store'
+import { useChatStore, useIsSending, useSelectedProvider, type AIProvider } from '@/stores/chat-store'
 import { ElementInfoCard } from './element-info-card'
 import { MessageList } from './message-list'
 import { MessageInput } from './message-input'
-import { LoadingIndicator } from './loading-indicator'
+import { LoadingIndicatorEnhanced } from './loading-indicator-enhanced'
+import { ProviderSelector } from './provider-selector'
+
+/**
+ * 推定応答時間（秒）- プロバイダー別
+ */
+const ESTIMATED_TIME: Record<AIProvider, number> = {
+  zai: 10,
+  openai: 8,
+  anthropic: 8,
+  google: 5, // Gemini Flashは高速
+}
 
 /**
  * チャットアプリコンポーネント
@@ -26,6 +37,7 @@ export function ChatApp() {
   const addOperation = useEditHistoryStore((state) => state.addOperation)
 
   const isSending = useIsSending()
+  const selectedProvider = useSelectedProvider()
   const addMessage = useChatStore((state) => state.addMessage)
   const setSending = useChatStore((state) => state.setSending)
 
@@ -65,6 +77,7 @@ export function ChatApp() {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
+          provider: selectedProvider,
           selectedElement,
           userIntent: content,
         }),
@@ -128,6 +141,9 @@ export function ChatApp() {
 
   return (
     <div className="flex flex-col h-full">
+      {/* プロバイダー選択 */}
+      <ProviderSelector disabled={isSending} />
+
       {/* 選択要素情報カード */}
       {selectedElement && (
         <ElementInfoCard element={selectedElement} onDeselect={handleDeselect} />
@@ -136,8 +152,8 @@ export function ChatApp() {
       {/* メッセージ一覧 */}
       <MessageList />
 
-      {/* ローディング表示 */}
-      {isSending && <LoadingIndicator />}
+      {/* ローディング表示（強化版） */}
+      {isSending && <LoadingIndicatorEnhanced estimatedTime={ESTIMATED_TIME[selectedProvider]} />}
 
       {/* メッセージ入力 */}
       <MessageInput onSend={handleSendMessage} disabled={isSending} />

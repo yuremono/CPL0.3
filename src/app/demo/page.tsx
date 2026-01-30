@@ -17,10 +17,15 @@ import { useEditHistoryStore } from '@/stores/edit-history-store'
 import { useAutoSave } from '@/hooks/use-auto-save'
 import {
   ChatSidebar,
+  ChatToggleButton,
   MessageList,
   MessageInput,
   ElementInfoCard,
+  ProviderSelector,
+  LoadingIndicatorEnhanced,
   useChatStore,
+  useSelectedProvider,
+  type AIProvider,
 } from '@/components/chat'
 
 function DemoContent() {
@@ -54,6 +59,7 @@ function DemoContent() {
   const addMessage = useChatStore((state) => state.addMessage)
   const setSending = useChatStore((state) => state.setSending)
   const isSending = useChatStore((state) => state.isSending)
+  const selectedProvider = useSelectedProvider()
 
   useEffect(() => {
     // preview-storeのモードを設定
@@ -99,20 +105,13 @@ function DemoContent() {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
+          provider: selectedProvider,
           selectedElement,
           userIntent: message,
         }),
       })
 
       const data = await response.json()
-
-      // デバッグ: APIレスポンス全体を確認
-      console.log('[AI API レスポンス]', {
-        status: response.status,
-        success: data.success,
-        data: data.data,
-        fullResponse: data,
-      })
 
       if (data.success) {
         const newContent = data.data.newContent || ''
@@ -138,13 +137,6 @@ function DemoContent() {
           // プレビューストアに保存
           updateContent(selectedElement.id, newContent)
 
-          // デバッグ: ストアに保存されたことを確認
-          console.log('[AI編集完了]', {
-            elementId: selectedElement.id,
-            元の内容: selectedElement.content,
-            新しい内容: newContent,
-          })
-
           // 選択中の要素情報も更新
           selectElement({
             ...selectedElement,
@@ -165,13 +157,6 @@ function DemoContent() {
         })
       }
     } catch (error) {
-      // デバッグ: 例外エラーを確認
-      console.log('[AI API 例外]', {
-        error,
-        message: error instanceof Error ? error.message : 'Unknown error',
-        stack: error instanceof Error ? error.stack : undefined,
-      })
-
       console.error('AI API error:', error)
       addMessage({
         role: 'assistant',
@@ -183,7 +168,6 @@ function DemoContent() {
   }
 
   const handleSelectElement = (element: Parameters<typeof selectElement>[0]) => {
-    console.log('選択された要素:', element)
     selectElement(element)
   }
 
@@ -192,6 +176,9 @@ function DemoContent() {
       <div className="min-h-screen bg-white relative">
         {/* チャットUI（作業B統合） */}
         <ChatSidebar>
+          {/* プロバイダー選択 */}
+          <ProviderSelector disabled={isSending} />
+
           {/* 選択中の要素情報カード */}
           {selectedElement && (
             <ElementInfoCard
@@ -203,9 +190,28 @@ function DemoContent() {
           {/* メッセージ一覧 */}
           <MessageList />
 
+          {/* ローディング表示（強化版） */}
+          {isSending && (
+            <LoadingIndicatorEnhanced
+              estimatedTime={
+                selectedProvider === 'google'
+                  ? 5
+                  : selectedProvider === 'zai'
+                    ? 10
+                    : selectedProvider === 'openai'
+                      ? 8
+                      : 8
+              }
+            />
+          )}
+
           {/* 入力フォーム */}
           <MessageInput onSend={handleSendMessage} disabled={isSending} />
         </ChatSidebar>
+
+        {/* チャット開閉ボタン */}
+        <ChatToggleButton />
+
         {/* モード表示ヘッダー */}
         <div className="sticky top-0 z-50 border-b-2 border-black bg-white">
           <div className="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">

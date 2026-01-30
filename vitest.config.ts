@@ -21,6 +21,18 @@ export default defineConfig({
   },
   test: {
     include: ['src/**/*.test.{ts,tsx}', 'src/**/*.spec.{ts,tsx}'],
+    coverage: {
+      provider: 'v8',
+      reporter: ['text', 'html', 'lcov'],
+      exclude: [
+        'node_modules/',
+        '.storybook/',
+        'src/**/*.stories.{ts,tsx}',
+        'src/**/*.test.{ts,tsx}',
+        'src/**/*.spec.{ts,tsx}',
+        'src/test-setup.ts',
+      ],
+    },
     projects: [
       {
         extends: true,
