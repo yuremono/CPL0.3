@@ -2,11 +2,15 @@
  * Edit History Panel Component
  *
  * 編集履歴を表示し、Undo/Redoを可能にするパネルコンポーネント。
+ * キーボードショートカット（Cmd+Z / Cmd+Shift+Z）に対応。
  */
+
+'use client'
 
 import { useEditHistoryStore } from '@/stores/edit-history-store'
 import { ArrowUturnLeftIcon, ArrowUturnRightIcon } from '@heroicons/react/24/outline'
 import type { EditOperation } from '@/lib/content-projection/types'
+import { useEffect } from 'react'
 
 export function EditHistoryPanel() {
   const past = useEditHistoryStore((state) => state.past)
@@ -16,6 +20,41 @@ export function EditHistoryPanel() {
   const undo = useEditHistoryStore((state) => state.undo)
   const redo = useEditHistoryStore((state) => state.redo)
   const clear = useEditHistoryStore((state) => state.clear)
+
+  // キーボードショートカットの実装
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      const isMac = navigator.platform.toUpperCase().indexOf('MAC') >= 0
+      const cmdOrCtrl = isMac ? event.metaKey : event.ctrlKey
+
+      // Cmd+Z / Ctrl+Z でUndo
+      if (cmdOrCtrl && event.key === 'z' && !event.shiftKey) {
+        event.preventDefault()
+        if (canUndo) {
+          undo()
+        }
+      }
+
+      // Cmd+Shift+Z / Ctrl+Shift+Z でRedo
+      if (cmdOrCtrl && event.key === 'z' && event.shiftKey) {
+        event.preventDefault()
+        if (canRedo) {
+          redo()
+        }
+      }
+
+      // Windows向け: Ctrl+Y もRedoとして扱う
+      if (!isMac && cmdOrCtrl && event.key === 'y') {
+        event.preventDefault()
+        if (canRedo) {
+          redo()
+        }
+      }
+    }
+
+    window.addEventListener('keydown', handleKeyDown)
+    return () => window.removeEventListener('keydown', handleKeyDown)
+  }, [canUndo, canRedo, undo, redo])
 
   // 履歴が空の場合は表示しない
   if (past.length === 0 && future.length === 0) {
@@ -116,7 +155,7 @@ export function EditHistoryPanel() {
           aria-label="元に戻す"
         >
           <ArrowUturnLeftIcon className="w-4 h-4" />
-          Undo
+          Undo ({past.length})
         </button>
         <button
           onClick={() => redo()}
@@ -124,7 +163,7 @@ export function EditHistoryPanel() {
           className="flex-1 px-3 py-2 text-sm font-medium border-2 border-black bg-white hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-1"
           aria-label="やり直す"
         >
-          Redo
+          Redo ({future.length})
           <ArrowUturnRightIcon className="w-4 h-4" />
         </button>
       </div>
