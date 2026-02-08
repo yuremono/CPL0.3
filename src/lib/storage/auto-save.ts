@@ -5,7 +5,7 @@
  */
 
 import type { PreviewState } from '@/stores/preview-store'
-import { createIndexedDBStorage, STORAGE_KEYS } from './IndexedDB'
+import { createIndexedDBStorage, STORAGE_KEYS } from './indexed-db'
 
 /**
  * 自動保存のデバウンス時間（ミリ秒）

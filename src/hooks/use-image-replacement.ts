@@ -7,7 +7,7 @@
 
 import { useCallback, useState, useRef } from 'react'
 import type { A11yElementInfo } from '@/lib/content-projection/types'
-import { getOptimizedImageDataUrl, formatFileSize } from '@/lib/image/ImageOptimizer'
+import { getOptimizedImageDataUrl, formatFileSize } from '@/lib/image/image-optimizer'
 
 export interface ImageReplacementState {
   isDragging: boolean

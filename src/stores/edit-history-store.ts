@@ -7,8 +7,8 @@
 import { create } from 'zustand'
 import { persist, createJSONStorage } from 'zustand/middleware'
 import type { EditOperation, EditableElementType } from '@/lib/content-projection/types'
-import { generateId } from '@/lib/content-projection/GenerateId'
-import { createIndexedDBStorage } from '@/lib/storage/IndexedDB'
+import { generateId } from '@/lib/content-projection/generate-id'
+import { createIndexedDBStorage } from '@/lib/storage/indexed-db'
 
 /**
  * 履歴の最大保持数

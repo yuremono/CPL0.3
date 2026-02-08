@@ -2,7 +2,7 @@
  * AI Provider Factory
  */
 
-import type { AIProvider } from './BaseProvider'
+import type { AIProvider } from './base-provider'
 import { OpenAIProvider } from './providers/openai'
 import { AnthropicProvider } from './providers/anthropic'
 import { GoogleProvider } from './providers/google'
@@ -84,6 +84,6 @@ export function getDefaultProvider(): AIProvider | null {
 }
 
 // 型をエクスポート
-export type { AIProvider } from './BaseProvider'
-export { SYSTEM_PROMPT } from './BaseProvider'
+export type { AIProvider } from './base-provider'
+export { SYSTEM_PROMPT } from './base-provider'
 export type { A11yElementInfo, AIEditRequest, AIEditResponse } from '@/lib/content-projection/types'

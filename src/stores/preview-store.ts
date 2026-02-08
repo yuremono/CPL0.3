@@ -8,7 +8,7 @@ import { create } from 'zustand'
 import { persist, createJSONStorage } from 'zustand/middleware'
 import type { A11yElementInfo } from '@/lib/content-projection/types'
 import type { PreviewMode } from '@/lib/content-projection/types'
-import { createIndexedDBStorage } from '@/lib/storage/IndexedDB'
+import { createIndexedDBStorage } from '@/lib/storage/indexed-db'
 
 /**
  * 編集内容のマップ型

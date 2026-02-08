@@ -9,7 +9,7 @@ import { cn } from '@/lib/utils'
 import type { A11yElementInfo } from '@/lib/content-projection/types'
 import { useEditContent, useIsEditing, usePreviewStore, useIsEditMode } from '@/stores/preview-store'
 import { useChatStore, usePendingPreview } from '@/stores/chat-store'
-import { useElementRef } from '@/hooks/UseElementRef'
+import { useElementRef } from '@/hooks/use-element-ref'
 
 /**
  * EditableWrapperのプロパティ

@@ -12,10 +12,10 @@ import { useSearchParams, useRouter } from 'next/navigation'
 import { PreviewProvider, EditLayerToggle } from '@/components/content-projection-layer'
 import { EditableWrapper } from '@/components/content-projection-layer'
 import { EditableImageWrapper } from '@/components/content-projection-layer'
-import { generateId } from '@/lib/content-projection/GenerateId'
+import { generateId } from '@/lib/content-projection/generate-id'
 import { usePreviewStore } from '@/stores/preview-store'
 import { useEditHistoryStore } from '@/stores/edit-history-store'
-import { useAutoSave } from '@/hooks/UseAutoSave'
+import { useAutoSave } from '@/hooks/use-auto-save'
 import {
   ChatSidebar,
   ChatToggleButton,

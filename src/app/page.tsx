@@ -11,11 +11,11 @@ import { Suspense, useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { PreviewProvider } from '@/components/content-projection-layer'
 import { EditableWrapper, EditableImageWrapper } from '@/components/content-projection-layer'
-import { generateId } from '@/lib/content-projection/GenerateId'
+import { generateId } from '@/lib/content-projection/generate-id'
 import { usePreviewStore } from '@/stores/preview-store'
 import { useEditHistoryStore } from '@/stores/edit-history-store'
-import { useAutoSave } from '@/hooks/UseAutoSave'
-import { useSectionRef } from '@/hooks/UseElementRef'
+import { useAutoSave } from '@/hooks/use-auto-save'
+import { useSectionRef } from '@/hooks/use-element-ref'
 import {
   ChatSidebar,
   ChatApp,

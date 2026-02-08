@@ -21,7 +21,7 @@ import { MessageInput } from './MessageInput'
 import { LoadingIndicatorEnhanced } from './LoadingIndicatorEnhanced'
 import { ProviderSelector } from './ProviderSelector'
 // import { EditHistoryPanel } from './EditHistoryPanel'
-import { extractOrGenerateImageUrl } from '@/lib/ai/ImageGeneration'
+import { extractOrGenerateImageUrl } from '@/lib/ai/image-generation'
 
 /**
  * 推定応答時間（秒）- プロバイダー別
