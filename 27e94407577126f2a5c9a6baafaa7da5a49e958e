@@ -1,0 +1,27 @@
+src/app/page.tsx
+  97e89e701d84c7ce 29-32,48,50-51,54,645-646,650,659
+src/components/chat/preview-mode-toggle.tsx
+  97e89e701d84c7ce 40
+src/components/content-projection-layer/editable-wrapper.tsx
+  97e89e701d84c7ce 10,59,77,104-107,165
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.0.42",
+  "base_commit_sha": "27e94407577126f2a5c9a6baafaa7da5a49e958e",
+  "prompts": {
+    "97e89e701d84c7ce": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "81e31267-bc64-485a-8bb4-35ae02402328",
+        "model": "glm-4.7"
+      },
+      "human_author": "yuremono <5alviaofficinali50@gmail.com>",
+      "messages": [],
+      "total_additions": 28,
+      "total_deletions": 27,
+      "accepted_lines": 22,
+      "overriden_lines": 0
+    }
+  }
+}
