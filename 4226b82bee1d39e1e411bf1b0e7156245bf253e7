@@ -1,0 +1,23 @@
+src/app/demo/page.tsx
+  492edd2bd8dbcba6 32,44,47-49,69,71,74,217,269,272-273,276-278,282-283,285-295,297
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.0.42",
+  "base_commit_sha": "4226b82bee1d39e1e411bf1b0e7156245bf253e7",
+  "prompts": {
+    "492edd2bd8dbcba6": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "22b0b0f2-cfdb-4487-a888-da46526bad09",
+        "model": "glm-4.7"
+      },
+      "human_author": "yuremono <5alviaofficinali50@gmail.com>",
+      "messages": [],
+      "total_additions": 39,
+      "total_deletions": 36,
+      "accepted_lines": 30,
+      "overriden_lines": 0
+    }
+  }
+}
