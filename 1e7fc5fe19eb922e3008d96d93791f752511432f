@@ -1,0 +1,36 @@
+tests/e2e/mode-toggle.spec.ts
+  6e51447aff49fd15 1-77
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.0.42",
+  "base_commit_sha": "1e7fc5fe19eb922e3008d96d93791f752511432f",
+  "prompts": {
+    "2e95e22b5332682a": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "628e9495-0771-4635-98dd-bffd1b5e741e",
+        "model": "glm-4.7"
+      },
+      "human_author": "yuremono <5alviaofficinali50@gmail.com>",
+      "messages": [],
+      "total_additions": 73,
+      "total_deletions": 16,
+      "accepted_lines": 73,
+      "overriden_lines": 0
+    },
+    "6e51447aff49fd15": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "1663bdb5-5a19-47e7-9966-37654acb0856",
+        "model": "glm-4.7"
+      },
+      "human_author": "yuremono <5alviaofficinali50@gmail.com>",
+      "messages": [],
+      "total_additions": 77,
+      "total_deletions": 0,
+      "accepted_lines": 77,
+      "overriden_lines": 0
+    }
+  }
+}
