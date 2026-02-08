@@ -8,7 +8,7 @@
  */
 
 import { Suspense, useEffect, useState } from 'react'
-import { useSearchParams, useRouter } from 'next/navigation'
+import { useRouter } from 'next/navigation'
 import { PreviewProvider } from '@/components/content-projection-layer'
 import { EditableWrapper, EditableImageWrapper } from '@/components/content-projection-layer'
 import { generateId } from '@/lib/content-projection/generate-id'
@@ -24,12 +24,12 @@ import {
 } from '@/components/chat'
 
 function HomeContent() {
-  const searchParams = useSearchParams()
   const router = useRouter()
-  const mode = searchParams.get('mode')
-  const isPreviewMode = mode === 'preview'
 
-  // 状態管理統合: 選択機能
+  // 状態管理統合: モード・選択機能
+  const mode = usePreviewStore((state) => state.mode)
+  const isPreviewMode = mode === 'preview'
+  const isEditMode = mode === 'edit'
   const selectElement = usePreviewStore((state) => state.selectElement)
   const selectedElement = usePreviewStore((state) => state.selectedElement)
   const updateContent = usePreviewStore((state) => state.updateContent)
@@ -45,15 +45,13 @@ function HomeContent() {
   // チャットストア初期化
   const setIsChatOpen = useChatStore((state) => state.setOpen)
 
+  // モード変更時の副作用
   useEffect(() => {
-    // preview-storeのモードを設定
-    setMode(isPreviewMode ? 'preview' : 'edit')
-
-    // チャットUIの開閉を設定
-    if (isPreviewMode) {
+    // 編集モード時はチャットUIを開く
+    if (isEditMode) {
       setIsChatOpen(true)
     }
-  }, [isPreviewMode, setIsChatOpen, setMode])
+  }, [isEditMode, setIsChatOpen])
 
   const handleSelectElement = (element: Parameters<typeof selectElement>[0]) => {
     selectElement(element)
@@ -100,7 +98,7 @@ function HomeContent() {
         </header>
 
         {/* Hero Section - Asymmetric Grid */}
-        <section data-ref={heroSectionRef} data-id={heroSectionId} aria-labelledby="hero-title" className="border-b-2 border-black">
+        <section data-ref={heroSectionRef} aria-labelledby="hero-title" className="border-b-2 border-black">
                                   <div className="grid md:grid-cols-12 min-h-[60vh]">
                                                       {/* Right - Hero Image */}
             <div className="md:col-span-4 p-0 flex items-center justify-center bg-gray-50">
@@ -162,7 +160,7 @@ function HomeContent() {
         </section>
 
         {/* About Section */}
-        <section data-ref={aboutSectionRef} data-id={aboutSectionId} aria-labelledby="about-title" className="border-b-2 border-black">
+        <section data-ref={aboutSectionRef} aria-labelledby="about-title" className="border-b-2 border-black">
           <div className="grid md:grid-cols-12">
             {/* Left - Title */}
             <div className="md:col-span-4 border-b-2 md:border-b-0 md:border-r-2 border-black p-8 md:p-12 bg-gray-50">
@@ -251,7 +249,7 @@ function HomeContent() {
         </section>
 
         {/* Features Section - Grid Layout */}
-        <section data-ref={featuresSectionRef} data-id={featuresSectionId} aria-label="Features" className="border-b-2 border-black">
+        <section data-ref={featuresSectionRef} aria-label="Features" className="border-b-2 border-black">
           <div className="grid md:grid-cols-3 divide-y-2 md:divide-y-0 md:divide-x-2 divide-black">
             {/* Feature 1 */}
             <div className="p-8 md:p-12 hover:bg-gray-50 transition-colors group">
@@ -289,7 +287,7 @@ function HomeContent() {
         </section>
 
         {/* Projects Section */}
-        <section data-ref={projectsSectionRef} data-id={projectsSectionId} aria-labelledby="projects-title" className="border-b-2 border-black">
+        <section data-ref={projectsSectionRef} aria-labelledby="projects-title" className="border-b-2 border-black">
           <div className="p-8 md:p-12">
             <EditableWrapper
               element={{
@@ -504,7 +502,7 @@ function HomeContent() {
         </section>
 
         {/* Contact Section */}
-        <section data-ref={contactSectionRef} data-id={contactSectionId} aria-labelledby="contact-title">
+        <section data-ref={contactSectionRef} aria-labelledby="contact-title">
           <div className="grid md:grid-cols-12">
             {/* Left - Title */}
             <div className="md:col-span-4 md:border-r-2 border-black p-8 md:p-12 bg-gray-50">
@@ -644,10 +642,12 @@ function HomeContent() {
           Skip to main content
         </a>
 
-        {/* Chat Sidebar - Always render, condition handled inside */}
-        <ChatSidebar>
-          <ChatApp />
-        </ChatSidebar>
+        {/* Chat Sidebar - 編集モード時のみ表示 */}
+        {isEditMode && (
+          <ChatSidebar>
+            <ChatApp />
+          </ChatSidebar>
+        )}
 
         {/* Preview Mode Toggle */}
         <PreviewModeToggle />
@@ -656,7 +656,7 @@ function HomeContent() {
   )
 }
 
-// Suspenseでラップして、useSearchParams()のエラーを回避
+// Suspenseでラップ
 export default function Home() {
   return (
     <Suspense fallback={

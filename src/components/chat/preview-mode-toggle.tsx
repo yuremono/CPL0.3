@@ -6,7 +6,6 @@
 
 'use client'
 
-import { useRouter, useSearchParams } from 'next/navigation'
 import { usePreviewStore } from '@/stores/preview-store'
 import type { PreviewMode } from '@/lib/content-projection/types'
 import { EyeIcon, PencilIcon } from '@heroicons/react/24/outline'
@@ -35,16 +34,12 @@ const MODE_OPTIONS: Array<{
  * プレビューモードのトグルボタン
  */
 export function PreviewModeToggle() {
-  const router = useRouter()
-  const searchParams = useSearchParams()
   const mode = usePreviewStore((state) => state.mode)
   const setMode = usePreviewStore((state) => state.setMode)
 
-  // モード変更ハンドラー（URLとストアを更新）
+  // モード変更ハンドラー（ストアのみ更新）
   const handleModeChange = (newMode: PreviewMode) => {
     setMode(newMode)
-    const url = newMode === 'preview' ? '/?mode=preview' : '/'
-    router.push(url)
   }
 
   return (

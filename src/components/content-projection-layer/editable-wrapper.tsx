@@ -7,7 +7,7 @@
 import React, { useState, isValidElement, cloneElement, Fragment, type ReactNode, type MouseEvent, useRef, useEffect } from 'react'
 import { cn } from '@/lib/utils'
 import type { A11yElementInfo } from '@/lib/content-projection/types'
-import { useEditContent, useIsEditing, usePreviewStore, useShowEditLayer } from '@/stores/preview-store'
+import { useEditContent, useIsEditing, usePreviewStore, useIsEditMode } from '@/stores/preview-store'
 import { useChatStore, usePendingPreview } from '@/stores/chat-store'
 import { useElementRef } from '@/hooks/use-element-ref'
 
@@ -56,6 +56,7 @@ function extractTextContent(node: ReactNode): string {
  * - ホバーでハイライト
  * - クリックで選択
  * - 編集内容を動的に反映
+ * - プレビューモード時は編集機能を無効化
  */
 export function EditableWrapper({
   children,
@@ -73,7 +74,7 @@ export function EditableWrapper({
   const updateContent = usePreviewStore((state) => state.updateContent)
   const stopEditing = usePreviewStore((state) => state.stopEditing)
   const setOpen = useChatStore((state) => state.setOpen)
-  const showEditLayer = useShowEditLayer()
+  const isEditMode = useIsEditMode()
 
   // 編集内容を取得（AI編集後に更新される）
   const editedContent = useEditContent(element.id)
@@ -86,6 +87,7 @@ export function EditableWrapper({
   const ref = useElementRef(element.id)
 
   // 編集モード開始時にテキストを抽出
+  // ※早期リターンの前に配置することで、フックの順序を一定に保つ
   useEffect(() => {
     if (isEditing) {
       const text = editedContent || extractTextContent(children)
@@ -96,6 +98,13 @@ export function EditableWrapper({
       }, 0)
     }
   }, [isEditing, editedContent, children])
+
+  // プレビューモード時は編集機能を無効化（childrenのみ返す）
+  // ※すべてのフック呼び出しの後に配置すること
+  if (!isEditMode && !isPreviewing) {
+    // 属性は保持したまま、childrenのみ返す
+    return <>{children}</>
+  }
 
   const handleClick = (e: MouseEvent<HTMLDivElement>) => {
     // 編集中はクリックを無視
@@ -153,7 +162,7 @@ export function EditableWrapper({
   const wrapperClassName = cn(
     'transition-colors duration-150 rounded relative',
     {
-      'hover-highlight': showEditLayer && isHovered && element.editable && !isEditing,
+      'hover-highlight': isEditMode && isHovered && element.editable && !isEditing,
       'selected': isSelected && !isEditing,
       'cursor-pointer': element.editable && !isEditing,
       'cursor-default': isEditing,
@@ -174,7 +183,6 @@ export function EditableWrapper({
   return (
     <div
       data-ref={ref}
-      data-id={element.id}
       data-cpl-editable={element.editable ? 'true' : 'false'}
       role={element.role}
       aria-label={element.label || element.content}

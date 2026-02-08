@@ -1,10 +1,8 @@
-<testsuites id="" name="" tests="3" failures="0" skipped="0" errors="0" time="7.694343000000001">
-<testsuite name="mode-toggle.spec.ts" timestamp="2026-02-08T07:32:39.882Z" hostname="chromium" tests="3" failures="0" skipped="0" time="6.138" errors="0">
-<testcase name="Mode Toggle Verification › should verify production mode (default)" classname="mode-toggle.spec.ts" time="1.245">
+<testsuites id="" name="" tests="2" failures="0" skipped="0" errors="0" time="8.669349">
+<testsuite name="smoke-test.spec.ts" timestamp="2026-02-08T07:40:14.057Z" hostname="chromium" tests="2" failures="0" skipped="0" time="3.253" errors="0">
+<testcase name="0205CPL0.3 Smoke Test › should display homepage" classname="smoke-test.spec.ts" time="1.51">
 </testcase>
-<testcase name="Mode Toggle Verification › should verify edit mode (toggle ON)" classname="mode-toggle.spec.ts" time="1.89">
-</testcase>
-<testcase name="Mode Toggle Verification › should verify toggle ON/OFF functionality" classname="mode-toggle.spec.ts" time="3.003">
+<testcase name="0205CPL0.3 Smoke Test › should display demo page" classname="smoke-test.spec.ts" time="1.743">
 </testcase>
 </testsuite>
 </testsuites>

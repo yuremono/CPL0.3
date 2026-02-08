@@ -77,20 +77,20 @@
   },
   "suites": [
     {
-      "title": "mode-toggle.spec.ts",
-      "file": "mode-toggle.spec.ts",
+      "title": "smoke-test.spec.ts",
+      "file": "smoke-test.spec.ts",
       "column": 0,
       "line": 0,
       "specs": [],
       "suites": [
         {
-          "title": "Mode Toggle Verification",
-          "file": "mode-toggle.spec.ts",
+          "title": "0205CPL0.3 Smoke Test",
+          "file": "smoke-test.spec.ts",
           "line": 3,
           "column": 6,
           "specs": [
             {
-              "title": "should verify production mode (default)",
+              "title": "should display homepage",
               "ok": true,
               "tags": [],
               "tests": [
@@ -105,12 +105,12 @@
                       "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 1245,
+                      "duration": 1510,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-02-08T07:32:40.738Z",
+                      "startTime": "2026-02-08T07:40:15.125Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -118,13 +118,13 @@
                   "status": "expected"
                 }
               ],
-              "id": "fb0782d77cdb6cb4ff99-6dd4356cd84dee365500",
-              "file": "mode-toggle.spec.ts",
+              "id": "3f58d441499060f9c0b2-57a10b61cc9d4fedd639",
+              "file": "smoke-test.spec.ts",
               "line": 4,
               "column": 7
             },
             {
-              "title": "should verify edit mode (toggle ON)",
+              "title": "should display demo page",
               "ok": true,
               "tags": [],
               "tests": [
@@ -139,12 +139,12 @@
                       "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 1890,
+                      "duration": 1743,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-02-08T07:32:42.412Z",
+                      "startTime": "2026-02-08T07:40:17.078Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -152,43 +152,9 @@
                   "status": "expected"
                 }
               ],
-              "id": "fb0782d77cdb6cb4ff99-0271c9dfd18be764f2e8",
-              "file": "mode-toggle.spec.ts",
-              "line": 24,
-              "column": 7
-            },
-            {
-              "title": "should verify toggle ON/OFF functionality",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [
-                    {
-                      "workerIndex": 0,
-                      "parallelIndex": 0,
-                      "status": "passed",
-                      "duration": 3003,
-                      "errors": [],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2026-02-08T07:32:44.312Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "expected"
-                }
-              ],
-              "id": "fb0782d77cdb6cb4ff99-ec857198e7241697e078",
-              "file": "mode-toggle.spec.ts",
-              "line": 55,
+              "id": "3f58d441499060f9c0b2-8028739e1001a504edf1",
+              "file": "smoke-test.spec.ts",
+              "line": 22,
               "column": 7
             }
           ]
@@ -198,9 +164,9 @@
   ],
   "errors": [],
   "stats": {
-    "startTime": "2026-02-08T07:32:39.670Z",
-    "duration": 7694.343000000001,
-    "expected": 3,
+    "startTime": "2026-02-08T07:40:10.261Z",
+    "duration": 8669.349,
+    "expected": 2,
     "skipped": 0,
     "unexpected": 0,
     "flaky": 0
