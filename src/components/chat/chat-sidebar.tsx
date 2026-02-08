@@ -28,11 +28,6 @@ export function ChatSidebar({ children }: ChatSidebarProps) {
   const [isResizing, setIsResizing] = useState(false)
   const sidebarRef = useRef<HTMLDivElement>(null)
 
-  // プレビューモードでない場合は表示しない
-  if (mode !== 'preview') {
-    return null
-  }
-
   /**
    * リサイズ開始
    */
@@ -60,6 +55,11 @@ export function ChatSidebar({ children }: ChatSidebarProps) {
     document.addEventListener('mousemove', handleMouseMove)
     document.addEventListener('mouseup', handleMouseUp)
   }, [sidebarWidth, setSidebarWidth])
+
+  // プレビューモードでない場合は何も表示しない
+  if (mode !== 'preview') {
+    return null
+  }
 
   return (
     <>
