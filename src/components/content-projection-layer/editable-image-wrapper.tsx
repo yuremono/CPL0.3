@@ -191,20 +191,18 @@ export function EditableImageWrapper({
         </div>
       )}
 
-      {/* ファイル選択ボタン（プレビューモードかつホバー時） */}
-      {showHoverHighlight && !state.previewMode && (
-        <div className="absolute inset-0 flex items-center justify-center bg-black/40 rounded z-10">
-          <button
-            onClick={(e) => {
-              e.stopPropagation()
-              handleOpenFileSelector()
-            }}
-            className="bg-white hover:bg-gray-100 text-gray-800 px-4 py-2 rounded shadow-lg text-sm font-medium transition-colors"
-            type="button"
-          >
-            画像を選択
-          </button>
-        </div>
+      {/* ファイル選択ボタン（選択時のみ表示） */}
+      {isSelected && !state.previewMode && (
+        <button
+          onClick={(e) => {
+            e.stopPropagation()
+            handleOpenFileSelector()
+          }}
+          className="absolute inset-0 flex items-center justify-center text-white text-sm font-medium drop-shadow-lg z-10"
+          type="button"
+        >
+          Double click to select or Drop Image Here
+        </button>
       )}
 
       {/* プレビューモードのオーバーレイ */}

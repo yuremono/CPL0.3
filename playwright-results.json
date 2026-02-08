@@ -77,20 +77,20 @@
   },
   "suites": [
     {
-      "title": "chat-toggle.spec.ts",
-      "file": "chat-toggle.spec.ts",
+      "title": "source-locator.spec.ts",
+      "file": "source-locator.spec.ts",
       "column": 0,
       "line": 0,
       "specs": [],
       "suites": [
         {
-          "title": "Chat Toggle Button & Mode Switch",
-          "file": "chat-toggle.spec.ts",
-          "line": 17,
+          "title": "Source Locator Plugin",
+          "file": "source-locator.spec.ts",
+          "line": 3,
           "column": 6,
           "specs": [
             {
-              "title": "1. should show chat toggle button in bottom right corner",
+              "title": "dev環境でdata-l属性がJSX要素に注入されている",
               "ok": true,
               "tags": [],
               "tests": [
@@ -105,16 +105,12 @@
                       "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 2806,
+                      "duration": 1265,
                       "errors": [],
-                      "stdout": [
-                        {
-                          "text": "Chat buttons found: \u001b[33m2\u001b[39m\n"
-                        }
-                      ],
+                      "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-02-08T09:35:47.085Z",
+                      "startTime": "2026-02-08T12:13:47.299Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -122,13 +118,13 @@
                   "status": "expected"
                 }
               ],
-              "id": "66c89309c11276797a03-e8f8128e88c6f657135e",
-              "file": "chat-toggle.spec.ts",
-              "line": 18,
+              "id": "f3584e4f0523f03aea7b-1348a498d52e71db5b4a",
+              "file": "source-locator.spec.ts",
+              "line": 4,
               "column": 7
             },
             {
-              "title": "2. should show mode display next to chat button (when chat is closed)",
+              "title": "data-l属性の値は一意である（重複なし）",
               "ok": true,
               "tags": [],
               "tests": [
@@ -143,22 +139,12 @@
                       "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 3070,
+                      "duration": 1419,
                       "errors": [],
-                      "stdout": [
-                        {
-                          "text": "Sidebar class: \n          fixed right-0 top-0 h-full\n          bg-white/95 backdrop-blur-md\n          border-l-2 border-black\n          shadow-[4px_0_0_0_#0A0A0A]\n          z-50\n          transition-transform duration-300 ease-in-out\n          translate-x-0\n        \n"
-                        },
-                        {
-                          "text": "Has \"プレビュー\": \u001b[33mfalse\u001b[39m\n"
-                        },
-                        {
-                          "text": "Has \"編集\": \u001b[33mtrue\u001b[39m\n"
-                        }
-                      ],
+                      "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-02-08T09:35:50.276Z",
+                      "startTime": "2026-02-08T12:13:48.967Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -166,211 +152,9 @@
                   "status": "expected"
                 }
               ],
-              "id": "66c89309c11276797a03-e900fa17d4a8dd2fc56d",
-              "file": "chat-toggle.spec.ts",
-              "line": 43,
-              "column": 7
-            },
-            {
-              "title": "3. should open chat sidebar when chat button is clicked",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [
-                    {
-                      "workerIndex": 0,
-                      "parallelIndex": 0,
-                      "status": "passed",
-                      "duration": 2546,
-                      "errors": [],
-                      "stdout": [
-                        {
-                          "text": "Initial sidebar state: open\n"
-                        }
-                      ],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2026-02-08T09:35:53.354Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "expected"
-                }
-              ],
-              "id": "66c89309c11276797a03-58b49f51a571cca6648a",
-              "file": "chat-toggle.spec.ts",
-              "line": 83,
-              "column": 7
-            },
-            {
-              "title": "4. should show mode menu when mode display is clicked",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [
-                    {
-                      "workerIndex": 0,
-                      "parallelIndex": 0,
-                      "status": "passed",
-                      "duration": 2661,
-                      "errors": [],
-                      "stdout": [
-                        {
-                          "text": "Before click - Preview count: \u001b[33m0\u001b[39m\n"
-                        },
-                        {
-                          "text": "Before click - Edit count: \u001b[33m1\u001b[39m\n"
-                        },
-                        {
-                          "text": "Fixed elements: \u001b[33m2\u001b[39m\n"
-                        },
-                        {
-                          "text": "Mode text element not found\n"
-                        }
-                      ],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2026-02-08T09:35:55.906Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "expected"
-                }
-              ],
-              "id": "66c89309c11276797a03-bce11e99e7a79cb62baf",
-              "file": "chat-toggle.spec.ts",
-              "line": 138,
-              "column": 7
-            },
-            {
-              "title": "5. should switch to edit mode and open chat when edit mode is selected",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [
-                    {
-                      "workerIndex": 0,
-                      "parallelIndex": 0,
-                      "status": "passed",
-                      "duration": 2601,
-                      "errors": [],
-                      "stdout": [
-                        {
-                          "text": "Mode elements found: \u001b[33m0\u001b[39m\n"
-                        }
-                      ],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2026-02-08T09:35:58.580Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "expected"
-                }
-              ],
-              "id": "66c89309c11276797a03-e96b59135a94f29dcd75",
-              "file": "chat-toggle.spec.ts",
-              "line": 208,
-              "column": 7
-            },
-            {
-              "title": "6. should switch to preview mode when preview is selected",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [
-                    {
-                      "workerIndex": 0,
-                      "parallelIndex": 0,
-                      "status": "passed",
-                      "duration": 2617,
-                      "errors": [],
-                      "stdout": [
-                        {
-                          "text": "Mode elements found: \u001b[33m0\u001b[39m\n"
-                        }
-                      ],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2026-02-08T09:36:01.188Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "expected"
-                }
-              ],
-              "id": "66c89309c11276797a03-8378aa1e441063741ba9",
-              "file": "chat-toggle.spec.ts",
-              "line": 271,
-              "column": 7
-            },
-            {
-              "title": "7. complete user flow: close chat -> toggle mode",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [
-                    {
-                      "workerIndex": 0,
-                      "parallelIndex": 0,
-                      "status": "passed",
-                      "duration": 2518,
-                      "errors": [],
-                      "stdout": [
-                        {
-                          "text": "Step 2 - Has \"プレビュー\": \u001b[33mfalse\u001b[39m\n"
-                        },
-                        {
-                          "text": "Step 2 - Has \"編集\": \u001b[33mtrue\u001b[39m\n"
-                        }
-                      ],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2026-02-08T09:36:03.812Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "expected"
-                }
-              ],
-              "id": "66c89309c11276797a03-2d32509606892dfb0aa1",
-              "file": "chat-toggle.spec.ts",
-              "line": 331,
+              "id": "f3584e4f0523f03aea7b-ae7d245cddeee2362828",
+              "file": "source-locator.spec.ts",
+              "line": 34,
               "column": 7
             }
           ]
@@ -380,9 +164,9 @@
   ],
   "errors": [],
   "stats": {
-    "startTime": "2026-02-08T09:35:46.035Z",
-    "duration": 20337.847999999998,
-    "expected": 7,
+    "startTime": "2026-02-08T12:13:46.247Z",
+    "duration": 4183.111,
+    "expected": 2,
     "skipped": 0,
     "unexpected": 0,
     "flaky": 0

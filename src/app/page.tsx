@@ -1,7 +1,7 @@
 'use client';
 
 /**
- * Z.AI ポートフォリオサイト - 本番ページ
+ * CPL ポートフォリオサイト - 本番ページ
  *
  * Content Projection Layer 統合版
  * ?mode=preview クエリパラメータでプレビューモードが有効になります。
@@ -22,6 +22,7 @@ import {
   ChatToggleButton,
   useChatStore,
 } from '@/components/chat'
+import { FontTester } from '@/components/font-tester'
 
 function HomeContent() {
   const router = useRouter()
@@ -101,19 +102,19 @@ function HomeContent() {
               element={{
                 id: generateId('header-title'),
                 role: 'heading',
-                content: 'Z.AI',
+                content: 'CPL',
                 level: 1,
                 editable: true,
               }}
               isSelected={selectedElement?.id === generateId('header-title')}
               onSelect={handleSelectElement}
             >
-              <h1 className="text-xl font-bold">Z.AI</h1>
+              <h1 className="text-xl font-bold">CPL</h1>
             </EditableWrapper>
 
             <nav className="flex gap-6 pr-[var(--header-height)]" aria-label="Main navigation">
-              <a href="/" className="hover:underline focus:outline-none focus:ring-2 focus:ring-accent focus:ring-offset-2 rounded">ホーム</a>
-              <a href="/preview" className="hover:underline focus:outline-none focus:ring-2 focus:ring-accent focus:ring-offset-2 rounded">プレビュー</a>
+              <a href="/" className="hover:underline focus:outline-none focus:ring-2 focus:ring-accent focus:ring-offset-2 rounded">Home</a>
+              <a href="/preview" className="hover:underline focus:outline-none focus:ring-2 focus:ring-accent focus:ring-offset-2 rounded">Preview</a>
               <a href="#about" className="hover:underline focus:outline-none focus:ring-2 focus:ring-accent focus:ring-offset-2 rounded">About</a>
               <a href="#projects" className="hover:underline focus:outline-none focus:ring-2 focus:ring-accent focus:ring-offset-2 rounded">Projects</a>
               <a href="#contact" className="hover:underline focus:outline-none focus:ring-2 focus:ring-accent focus:ring-offset-2 rounded">Contact</a>
@@ -121,11 +122,11 @@ function HomeContent() {
           </div>
         </header>
 
-        {/* Hero Section - Asymmetric Grid */}
+        {/* Hero Section - Flex Layout */}
         <section data-ref={heroSectionRef} aria-labelledby="hero-title" className="border-b-2 border-black">
-                                  <div className="grid md:grid-cols-12 min-h-[60vh]">
-                                                      {/* Right - Hero Image */}
-            <div className="md:col-span-4 p-0 flex items-center justify-center bg-gray-50">
+          <div className="flex flex-col md:flex-row min-h-[60vh]">
+            {/* Hero Image */}
+            <div className="md:w-[360px] flex-shrink-0 p-0 flex items-center justify-center bg-gray-50 border-b-2 md:border-b-0 md:border-r-2 border-black">
               <EditableImageWrapper
                 element={{
                   id: generateId('hero-image'),
@@ -146,26 +147,26 @@ function HomeContent() {
                 />
               </EditableImageWrapper>
             </div>
-            {/* Left - Large Typography */}
-            <div className="md:col-span-6 border-b-2 md:border-b-0 md:border-r-2 border-black p-8 md:p-16 flex flex-col justify-center">
+            {/* Large Typography */}
+            <div className="flex-1 p-8 md:p-16 flex flex-col justify-center">
               <EditableWrapper
                 element={{
                   id: generateId('hero-label'),
                   role: 'text',
-                  content: 'Portfolio',
+                  content: 'Content Projection Layer',
                   editable: true,
                 }}
                 isSelected={selectedElement?.id === generateId('hero-label')}
                 onSelect={handleSelectElement}
               >
-                <p className="text-lg font-mono mb-4 text-gray-600">Portfolio</p>
+                <p className="text-lg mb-4 text-gray-600">Content Projection Layer</p>
               </EditableWrapper>
 
               <EditableWrapper
                 element={{
                   id: generateId('hero-title'),
                   role: 'heading',
-                  content: 'Creative\nDeveloper',
+                  content: 'AI-Driven\nEditing Experience',
                   level: 1,
                   editable: true,
                 }}
@@ -173,13 +174,71 @@ function HomeContent() {
                 onSelect={handleSelectElement}
               >
                 <h2 id="hero-title" className="text-5xl md:text-7xl font-bold leading-tight">
-                  Creative<br/>
-                  Developer
+                  AI-Driven<br/>
+                  Editing Experience
                 </h2>
               </EditableWrapper>
             </div>
+          </div>
+        </section>
 
+        {/* Hero Section 2 - Reversed Layout */}
+        <section  data-ref={heroSectionRef} aria-labelledby="hero-title-2" className="border-b-2 border-black">
+          <div className="flex flex-col md:flex-row-reverse min-h-[60vh]">
+            {/* Hero Image */}
+            <div className="md:w-[360px] flex-shrink-0 p-0 flex items-center justify-center bg-gray-50 border-b-2 md:border-b-0 md:border-l-2 border-black">
+              <EditableImageWrapper
+                element={{
+                  id: generateId('hero2-image'),
+                  role: 'image',
+                  content: 'Hero workspace image',
+                  label: 'Hero Image',
+                  editable: true,
+                }}
+                isSelected={selectedElement?.id === generateId('hero2-image')}
+                onSelect={handleSelectElement}
+                src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=800&h=1200&fit=crop"
+                alt="Creative developer workspace"
+              >
+                <img
+                  src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=800&h=1200&fit=crop"
+                  alt="Creative developer workspace"
+                  className="w-full h-full object-cover min-h-[60vh]"
+                />
+              </EditableImageWrapper>
+            </div>
+            {/* Large Typography */}
+            <div className="flex-1 p-8 md:p-16 flex flex-col justify-center">
+              <EditableWrapper
+                element={{
+                  id: generateId('hero2-label'),
+                  role: 'text',
+                  content: 'Content Projection Layer',
+                  editable: true,
+                }}
+                isSelected={selectedElement?.id === generateId('hero2-label')}
+                onSelect={handleSelectElement}
+              >
+                <p className="text-lg mb-4 text-gray-600">Content Projection Layer</p>
+              </EditableWrapper>
 
+              <EditableWrapper
+                element={{
+                  id: generateId('hero2-title'),
+                  role: 'heading',
+                  content: 'AI-Driven\nEditing Experience',
+                  level: 1,
+                  editable: true,
+                }}
+                isSelected={selectedElement?.id === generateId('hero2-title')}
+                onSelect={handleSelectElement}
+              >
+                <h2 id="hero-title-2" className="text-5xl md:text-7xl font-bold leading-tight">
+                  AI-Driven<br/>
+                  Editing Experience
+                </h2>
+              </EditableWrapper>
+            </div>
           </div>
         </section>
 
@@ -333,7 +392,7 @@ function HomeContent() {
               {/* Project 1 */}
               <article className="p-8 hover:bg-gray-50 transition-colors border-b-2 md:border-b-0 md:border-r-2 border-black">
                 <div className="flex items-start justify-between mb-4">
-                  <span className="text-sm font-mono text-gray-500">01</span>
+                  <span className="text-sm text-gray-500">01</span>
                   <a
                     href="#"
                     className="text-sm underline hover:no-underline focus:outline-none focus:ring-2 focus:ring-accent focus:ring-offset-2 rounded"
@@ -381,7 +440,7 @@ function HomeContent() {
               {/* Project 2 */}
               <article className="p-8 hover:bg-gray-50 transition-colors border-b-2 md:border-b-0 border-black">
                 <div className="flex items-start justify-between mb-4">
-                  <span className="text-sm font-mono text-gray-500">02</span>
+                  <span className="text-sm text-gray-500">02</span>
                   <a
                     href="#"
                     className="text-sm underline hover:no-underline focus:outline-none focus:ring-2 focus:ring-accent focus:ring-offset-2 rounded"
@@ -429,7 +488,7 @@ function HomeContent() {
               {/* Project 3 */}
               <article className="p-8 hover:bg-gray-50 transition-colors md:border-r-2 border-black">
                 <div className="flex items-start justify-between mb-4">
-                  <span className="text-sm font-mono text-gray-500">03</span>
+                  <span className="text-sm text-gray-500">03</span>
                   <a
                     href="#"
                     className="text-sm underline hover:no-underline focus:outline-none focus:ring-2 focus:ring-accent focus:ring-offset-2 rounded"
@@ -477,7 +536,7 @@ function HomeContent() {
               {/* Project 4 */}
               <article className="p-8 hover:bg-gray-50 transition-colors border-black">
                 <div className="flex items-start justify-between mb-4">
-                  <span className="text-sm font-mono text-gray-500">04</span>
+                  <span className="text-sm text-gray-500">04</span>
                   <a
                     href="#"
                     className="text-sm underline hover:no-underline focus:outline-none focus:ring-2 focus:ring-accent focus:ring-offset-2 rounded"
@@ -644,7 +703,7 @@ function HomeContent() {
           <div className="max-w-6xl mx-auto px-4 py-8">
             <div className="flex flex-col md:flex-row items-center justify-between gap-4">
               <p className="text-sm text-gray-600">
-                © 2025 Z.AI. All rights reserved.
+                © 2025 CPL. All rights reserved.
               </p>
               <nav className="flex gap-6" aria-label="Footer navigation">
                 <a href="#" className="text-sm hover:underline focus:outline-none focus:ring-2 focus:ring-accent focus:ring-offset-2 rounded">GitHub</a>
@@ -675,6 +734,9 @@ function HomeContent() {
 
         {/* Chat Toggle Button - チャット開閉＆モード切り替え */}
         <ChatToggleButton />
+
+        {/* Font Tester - Y2Kフォント比較用 (非表示) */}
+        {/* <FontTester /> */}
       </div>
     </PreviewProvider>
   )
