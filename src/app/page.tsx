@@ -644,12 +644,10 @@ function HomeContent() {
           Skip to main content
         </a>
 
-        {/* Chat Sidebar - Only show in preview mode */}
-        {isPreviewMode && (
-          <ChatSidebar>
-            <ChatApp />
-          </ChatSidebar>
-        )}
+        {/* Chat Sidebar - Always render, condition handled inside */}
+        <ChatSidebar>
+          <ChatApp />
+        </ChatSidebar>
 
         {/* Preview Mode Toggle */}
         <PreviewModeToggle />
