@@ -1,0 +1,101 @@
+# ============================================================
+# 0205CPL0.3 プロジェクト詳細情報
+# ============================================================
+# このファイルはプロジェクトの詳細情報を記載する。
+# Git管理外（WORKS/フォルダは.gitignore対象）
+
+project:
+  id: "0205cpl0.3"
+  name: "Content Projection Layer (CPL)"
+  description: "AI主導の編集体験を実現する中間層。ユーザーはAIチャットボットと対話しながら、ウェブサイトのコンテンツを編集できる"
+
+  tech_stack:
+    framework: "Next.js 16.1.4"
+    language: "React 19.2.3"
+    language_version: "TypeScript"
+    styling: "Tailwind CSS 4"
+    ui_library: "Radix UI"
+    state_management: "Zustand"
+    ai_providers: "OpenAI / Anthropic / Google"
+
+  git:
+    repository: "https://github.com/yuremono/CPL0.2"
+    branch: "main"
+
+  status: "active"
+  created_at: "2026-02-05"
+  updated_at: "2026-02-08"
+
+# ============================================================
+# 詳細情報（随時更新）
+# ============================================================
+
+# ディレクトリ構造
+structure:
+  root:
+    - ".git/"
+    - ".github/"
+    - "src/"
+    - "docs/"
+    - "tests/"
+    - "e2e/"
+    - ".storybook/"
+  src:
+    - "app/（Next.js app router）"
+    - "components/ui/"
+    - "components/chat/"
+    - "components/content-projection-layer/"
+    - "components/build-confirmation/"
+    - "hooks/"
+    - "lib/"
+    - "stores/"
+    - "stories/"
+
+# 実装済みコンポーネント
+implemented_components:
+  preview_ui:
+    - "editable-wrapper.tsx"
+    - "preview-provider.tsx"
+    - "hover-highlight.tsx"
+    - "editable-image-wrapper.tsx"
+  chat_ui:
+    - "chat-app.tsx"
+    - "chat-sidebar.tsx"
+    - "message-list.tsx"
+    - "message-input.tsx"
+    - "provider-selector.tsx"
+    - "element-info-card.tsx"
+    - "edit-preview-actions.tsx"
+    - "edit-history-panel.tsx"
+    - "loading-indicator.tsx"
+  build_confirmation:
+    - "build-confirmation-dialog.tsx"
+    - "file-change-list.tsx"
+    - "page-impact-list.tsx"
+    - "build-time-estimate.tsx"
+
+# ストア
+stores:
+  - "edit-history-store.ts"
+  - "chat-store.ts"
+  - "preview-store.ts"
+  - "build-confirmation-store.ts"
+
+# テスト
+tests:
+  unit: "Vitestを使用（ストア・コンポーネントのテストあり）"
+  e2e: "Playwrightを使用"
+  coverage_target: "80%"
+
+# 並列作業計画
+parallel_work_plan:
+  plan_a: "プレビューUI（feature/preview-ui）"
+  plan_b: "チャットUI（feature/chat-ui）"
+  plan_c: "AI連携（feature/ai-integration）"
+  plan_d: "状態管理（feature/state-management）"
+
+# 環境変数
+env_vars:
+  - "NEXT_PUBLIC_OPENAI_API_KEY"
+  - "NEXT_PUBLIC_ANTHROPIC_API_KEY"
+  - "NEXT_PUBLIC_GOOGLE_API_KEY"

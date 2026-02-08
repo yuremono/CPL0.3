@@ -1,54 +1,51 @@
-<testsuites id="" name="" tests="19" failures="0" skipped="0" errors="0" time="36.867966">
-<testsuite name="chat-toggle.spec.ts" timestamp="2026-01-30T18:14:01.532Z" hostname="chromium" tests="5" failures="0" skipped="0" time="6.969" errors="0">
-<testcase name="Chat Toggle Button › should show chat toggle button in bottom right corner" classname="chat-toggle.spec.ts" time="1.42">
+<testsuites id="" name="" tests="2" failures="1" skipped="0" errors="0" time="20.528665">
+<testsuite name="smoke-test.spec.ts" timestamp="2026-02-08T07:09:02.526Z" hostname="chromium" tests="2" failures="1" skipped="0" time="19.126" errors="0">
+<testcase name="0205CPL0.3 Smoke Test › should display homepage" classname="smoke-test.spec.ts" time="12.863">
 </testcase>
-<testcase name="Chat Toggle Button › should close chat when toggle button is clicked" classname="chat-toggle.spec.ts" time="1.386">
-</testcase>
-<testcase name="Chat Toggle Button › should open chat when toggle button is clicked after closing" classname="chat-toggle.spec.ts" time="1.722">
-</testcase>
-<testcase name="Chat Toggle Button › should not blur content area when chat is open" classname="chat-toggle.spec.ts" time="1.113">
-</testcase>
-<testcase name="Chat Toggle Button › should toggle button icon change between chat and close icons" classname="chat-toggle.spec.ts" time="1.328">
-</testcase>
-</testsuite>
-<testsuite name="double-click-edit.spec.ts" timestamp="2026-01-30T18:14:01.532Z" hostname="chromium" tests="11" failures="0" skipped="0" time="13.364" errors="0">
-<testcase name="Double Click Edit Mode › should enter edit mode when double-clicking an editable element" classname="double-click-edit.spec.ts" time="1.155">
-</testcase>
-<testcase name="Double Click Edit Mode › should allow editing text in the textarea" classname="double-click-edit.spec.ts" time="1.138">
-</testcase>
-<testcase name="Double Click Edit Mode › should save edited content when save button is clicked" classname="double-click-edit.spec.ts" time="1.163">
-</testcase>
-<testcase name="Double Click Edit Mode › should cancel editing and revert to original content" classname="double-click-edit.spec.ts" time="1.185">
-</testcase>
-<testcase name="Double Click Edit Mode › should open chat sidebar when entering edit mode" classname="double-click-edit.spec.ts" time="1.166">
-</testcase>
-<testcase name="Double Click Edit Mode › should handle multiple edits on the same element" classname="double-click-edit.spec.ts" time="1.433">
-</testcase>
-<testcase name="Double Click Edit Mode › should handle editing different elements" classname="double-click-edit.spec.ts" time="1.345">
-</testcase>
-<testcase name="Double Click Edit Mode › should maintain selection state while editing" classname="double-click-edit.spec.ts" time="1.257">
-</testcase>
-<testcase name="Double Click Edit Mode › should preserve element attributes after editing" classname="double-click-edit.spec.ts" time="1.142">
-</testcase>
-<testcase name="Double Click Edit Mode › should handle empty text edit" classname="double-click-edit.spec.ts" time="1.243">
-</testcase>
-<testcase name="Double Click Edit Mode › should handle special characters in edit" classname="double-click-edit.spec.ts" time="1.137">
-</testcase>
-</testsuite>
-<testsuite name="google-provider.spec.ts" timestamp="2026-01-30T18:14:01.532Z" hostname="chromium" tests="3" failures="0" skipped="0" time="11.376" errors="0">
-<testcase name="Google Provider - AI Editing › should switch to Google provider and edit content" classname="google-provider.spec.ts" time="8.222">
+<testcase name="0205CPL0.3 Smoke Test › should display demo page" classname="smoke-test.spec.ts" time="6.263">
+<failure message="smoke-test.spec.ts:22:7 should display demo page" type="FAILURE">
+<![CDATA[  [chromium] › smoke-test.spec.ts:22:7 › 0205CPL0.3 Smoke Test › should display demo page ──────────
+
+    Error: expect(page).toHaveTitle(expected) failed
+
+    Expected pattern: /Demo/
+    Received string:  ""
+    Timeout: 5000ms
+
+    Call log:
+      - Expect "toHaveTitle" with timeout 5000ms
+        9 × unexpected value ""
+
+
+      25 |
+      26 |     // ページタイトルを確認
+    > 27 |     await expect(page).toHaveTitle(/Demo/);
+         |                        ^
+      28 |
+      29 |     // スクリーンショットを撮影
+      30 |     await page.screenshot({
+        at /Users/yanoseiji/Desktop/0205multi-agent-shogun/WORKS/0205CPL0.3/tests/e2e/smoke-test.spec.ts:27:24
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ../../test-results/smoke-test-0205CPL0-3-Smoke-Test-should-display-demo-page-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    ../../test-results/smoke-test-0205CPL0-3-Smoke-Test-should-display-demo-page-chromium/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ../../test-results/smoke-test-0205CPL0-3-Smoke-Test-should-display-demo-page-chromium/error-context.md
+]]>
+</failure>
 <system-out>
-<![CDATA[Original content: これは編集可能な段落です。ホバーするとハイライトされ、クリックで選択できます。
-Element ID: demo-paragraph-1
-Total messages: [33m2[39m
-New content: これは、実にダンディーな段落です。ホバーすると、粋にハイライトされ、クリックで優雅に選択できます。
-Content was successfully updated by AI
+<![CDATA[
+[[ATTACHMENT|test-results/smoke-test-0205CPL0-3-Smoke-Test-should-display-demo-page-chromium/test-failed-1.png]]
+
+[[ATTACHMENT|test-results/smoke-test-0205CPL0-3-Smoke-Test-should-display-demo-page-chromium/video.webm]]
+
+[[ATTACHMENT|test-results/smoke-test-0205CPL0-3-Smoke-Test-should-display-demo-page-chromium/error-context.md]]
 ]]>
 </system-out>
-</testcase>
-<testcase name="Google Provider - AI Editing › should select provider and verify availability" classname="google-provider.spec.ts" time="2.101">
-</testcase>
-<testcase name="Google Provider - AI Editing › should show error when no element is selected" classname="google-provider.spec.ts" time="1.053">
 </testcase>
 </testsuite>
 </testsuites>
