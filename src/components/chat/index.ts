@@ -4,9 +4,9 @@
  * チャット関連コンポーネントのエクスポート
  */
 
-export { ChatSidebar } from './chat-sidebar'
-export { ChatApp } from './chat-app'
-export { ChatToggleButton } from './chat-toggle-button'
+export { ChatSidebar } from './ChatSidebar'
+export { ChatApp } from './ChatApp'
+export { ChatToggleButton } from './ChatToggleButton'
 export { PreviewModeToggle } from './preview-mode-toggle'
 export { MessageList } from './message-list'
 export { MessageInput } from './message-input'
