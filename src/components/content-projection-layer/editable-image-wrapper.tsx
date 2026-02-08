@@ -7,6 +7,7 @@
 'use client'
 
 import { useState, useRef, type ReactElement } from 'react'
+import { useSearchParams } from 'next/navigation'
 import { useImageReplacement, fileToDataURL } from '@/hooks/use-image-replacement'
 import { usePreviewStore } from '@/stores/preview-store'
 import { usePendingPreview } from '@/stores/chat-store'
@@ -40,7 +41,12 @@ export function EditableImageWrapper({
   onOpenFileSelector,
 }: EditableImageWrapperProps) {
   const [isHovered, setIsHovered] = useState(false)
-  const isPreviewMode = usePreviewStore((state) => state.mode === 'preview')
+
+  // URLクエリパラメータからmodeを取得（/?mode=preview のみ画像編集有効）
+  const searchParams = useSearchParams()
+  const urlMode = searchParams.get('mode')
+  const isImageEditEnabled = urlMode === 'preview'
+
   const updateContent = usePreviewStore((state) => state.updateContent)
   const dragHighlightTimer = useRef<NodeJS.Timeout | null>(null)
 
@@ -115,15 +121,15 @@ export function EditableImageWrapper({
     // 子要素からのdragleaveを無視するための処理はフック内で行う
   }
 
-  // ホバー時の薄いハイライト（プレビューモード時のみ）
-  const showHoverHighlight = isPreviewMode && element.editable && isHovered && !state.previewMode
+  // ホバー時の薄いハイライト（画像編集有効時のみ）
+  const showHoverHighlight = isImageEditEnabled && element.editable && isHovered && !state.previewMode
 
   // ドラッグ中のハイライト（ドラッグ中は常時表示）
-  const showDragHighlight = isPreviewMode && element.editable && (state.dragOver || state.isDragging) && !state.previewMode
+  const showDragHighlight = isImageEditEnabled && element.editable && (state.dragOver || state.isDragging) && !state.previewMode
 
   // クリックハンドラー
   const handleClick = () => {
-    if (isPreviewMode && onSelect && element.editable) {
+    if (isImageEditEnabled && onSelect && element.editable) {
       onSelect(element)
     }
   }
@@ -153,12 +159,12 @@ export function EditableImageWrapper({
       onClick={handleClick}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
-      onDragEnter={isPreviewMode && element.editable ? handleDragEnter : undefined}
+      onDragEnter={isImageEditEnabled && element.editable ? handleDragEnter : undefined}
       onDragStart={handleDragStart}
       onDragEnd={handleDragEnd}
-      onDragOver={isPreviewMode && element.editable ? handleDragOver : undefined}
-      onDragLeave={isPreviewMode && element.editable ? handleDragLeaveWrapper : undefined}
-      onDrop={isPreviewMode && element.editable ? handleDrop : undefined}
+      onDragOver={isImageEditEnabled && element.editable ? handleDragOver : undefined}
+      onDragLeave={isImageEditEnabled && element.editable ? handleDragLeaveWrapper : undefined}
+      onDrop={isImageEditEnabled && element.editable ? handleDrop : undefined}
       draggable={false}
     >
       <img
