@@ -1,0 +1,31 @@
+src/components/content-projection-layer/editable-image-wrapper.tsx
+  e33756bae05a4136 194-196,201,204-205
+src/app/layout.tsx
+  e33756bae05a4136 4-10,30-65,97
+src/app/globals.css
+  e33756bae05a4136 4-6,8-11,13-16,19-21,24-25,28-29,32-33,75,78-84,96,193-213
+src/app/page.tsx
+  e33756bae05a4136 4,25,105,112,125,127,129,151,156,162,169,177-178,185,187-191,193-197,199-213,215-218,220-223,225-226,228-232,234-241,395,443,491,539,706,737-739
+src/components/font-tester.tsx
+  e33756bae05a4136 1-126
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.0.42",
+  "base_commit_sha": "8bfb1a80859e4f0104589b0d82d4572ba712bc6f",
+  "prompts": {
+    "e33756bae05a4136": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "d546bd3f-4de9-42da-a53d-d3e257e5084f",
+        "model": "glm-4.7"
+      },
+      "human_author": "yuremono <5alviaofficinali50@gmail.com>",
+      "messages": [],
+      "total_additions": 808,
+      "total_deletions": 537,
+      "accepted_lines": 448,
+      "overriden_lines": 7
+    }
+  }
+}
