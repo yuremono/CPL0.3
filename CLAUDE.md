@@ -94,6 +94,107 @@ DOMに見えないもの = kebab-case
 
 ---
 
+## data-l属性: ソースロケーションシステム
+
+このプロジェクトでは、**開発環境でのみ**全JSX要素に `data-l` 属性を自動注入しています。
+
+### 技術実装
+
+**Babelカスタムプラグイン** (`babel-plugin-source-locator.js`) を使用：
+
+1. `.babelrc` で開発環境のみプラグイン有効化
+2. 全JSX要素のオープニングタグを検出
+3. 要素名（ファイル名から生成）+ 行番号を `data-l` 属性として注入
+4. 属性は他の属性よりも前に配置（要素名の直後）
+
+```javascript
+// babel-plugin-source-locator.js
+module.exports = function ({ types: t }) {
+  return {
+    visitor: {
+      JSXOpeningElement(path, state) {
+        const filename = state.file.opts.filename;
+        const loc = path.node.loc;
+
+        // ファイル名からコンポーネント名を生成
+        // editable-wrapper.tsx → EditableWrapper
+        const componentName = filename
+          .split('/')
+          .pop()
+          .replace(/\.(tsx?|jsx?)$/, '')
+          .split('-')
+          .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+          .join('');
+
+        // data-l="EditableWrapper184" を注入
+        const attr = t.jsxAttribute(
+          t.jsxIdentifier("data-l"),
+          t.stringLiteral(`${componentName}${loc.start.line}`)
+        );
+
+        path.node.attributes.unshift(attr);
+      }
+    }
+  };
+};
+```
+
+### data-l属性の形式
+
+```
+data-l="{コンポーネント名}{行番号}"
+```
+
+| 例 | ファイル | 行番号 |
+|----|---------|--------|
+| `EditableWrapper184` | `EditableWrapper.tsx` | 184 |
+| `Page463` | `page.tsx` | 463 |
+| `ChatSidebar60` | `ChatSidebar.tsx` | 60 |
+| `Layout95` | `layout.tsx` | 95 |
+
+### AIへの指示方法
+
+ユーザーは以下のいずれかの形式で要素を指定できます：
+
+| 指示形式 | 例 | AIの解釈 |
+|---------|-----|----------|
+| **data-l値のみ** | `EditableWrapper184` | `EditableWrapper.tsx` の184行目 |
+| **行番号のみ** | `L184` | 同一ファイル内の184行目（曖昧） |
+| **要素名 + 行番号** | `EditableWrapper:184` | `EditableWrapper.tsx` の184行目 |
+| **自然言語** | 「保存ボタン」 | 文脈から推測 |
+
+**推奨される指示形式:**
+
+```
+「EditableWrapper184のボタンを削除して」
+「Page463の見出しを『新製品』に変更して」
+```
+
+### AIの解釈ロジック
+
+1. **data-l値が指定された場合**
+   - `EditableWrapper184` → `src/components/content-projection-layer/EditableWrapper.tsx:184`
+   - 即座にファイルと行番号が特定できる
+
+2. **行番号のみの場合**
+   - `L184` → 文脈（直前の会話、現在開いているファイル）から推測
+   - 複数候補がある場合は確認を求める
+
+3. **自然言語の場合**
+   - 「保存ボタン」 → `data-l` 属性や要素の内容から検索
+   - 「右上の青いボタン」 → 視覚的特徴から推測
+
+### 開発者ツールでの確認手順
+
+1. ブラウザで要素を右クリック → 「検証」
+2. 要素の `data-l` 属性を確認（例: `data-l="EditableWrapper184"`）
+3. `EditableWrapper.tsx` の184行目にジャンプ
+
+**ショートカット:**
+- Cmd+G (Mac) / Ctrl+G (Windows) → 行番号入力 → Enter
+
+---
+
 ## 重要なルール
 
 ### 1. コード構成
