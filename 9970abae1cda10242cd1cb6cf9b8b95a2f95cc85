@@ -1,0 +1,23 @@
+src/app/page.tsx
+  99205c54b4ad9f2e 95
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.0.42",
+  "base_commit_sha": "9970abae1cda10242cd1cb6cf9b8b95a2f95cc85",
+  "prompts": {
+    "99205c54b4ad9f2e": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "6b8458cb-d1bc-4168-b07a-8094d3ff1593",
+        "model": "glm-4.7"
+      },
+      "human_author": "yuremono <5alviaofficinali50@gmail.com>",
+      "messages": [],
+      "total_additions": 1,
+      "total_deletions": 0,
+      "accepted_lines": 1,
+      "overriden_lines": 0
+    }
+  }
+}
