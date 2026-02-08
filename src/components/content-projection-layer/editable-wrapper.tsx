@@ -7,7 +7,7 @@
 import React, { useState, isValidElement, cloneElement, Fragment, type ReactNode, type MouseEvent, useRef, useEffect } from 'react'
 import { cn } from '@/lib/utils'
 import type { A11yElementInfo } from '@/lib/content-projection/types'
-import { useEditContent, useIsEditing, usePreviewStore } from '@/stores/preview-store'
+import { useEditContent, useIsEditing, usePreviewStore, useShowEditLayer } from '@/stores/preview-store'
 import { useChatStore, usePendingPreview } from '@/stores/chat-store'
 import { useElementRef } from '@/hooks/use-element-ref'
 
@@ -73,6 +73,7 @@ export function EditableWrapper({
   const updateContent = usePreviewStore((state) => state.updateContent)
   const stopEditing = usePreviewStore((state) => state.stopEditing)
   const setOpen = useChatStore((state) => state.setOpen)
+  const showEditLayer = useShowEditLayer()
 
   // 編集内容を取得（AI編集後に更新される）
   const editedContent = useEditContent(element.id)
@@ -152,7 +153,7 @@ export function EditableWrapper({
   const wrapperClassName = cn(
     'transition-colors duration-150 rounded relative',
     {
-      'hover-highlight': isHovered && element.editable && !isEditing,
+      'hover-highlight': showEditLayer && isHovered && element.editable && !isEditing,
       'selected': isSelected && !isEditing,
       'cursor-pointer': element.editable && !isEditing,
       'cursor-default': isEditing,

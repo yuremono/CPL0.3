@@ -9,7 +9,7 @@
 
 import { Suspense, useEffect, useState } from 'react'
 import { useSearchParams, useRouter } from 'next/navigation'
-import { PreviewProvider } from '@/components/content-projection-layer'
+import { PreviewProvider, EditLayerToggle } from '@/components/content-projection-layer'
 import { EditableWrapper } from '@/components/content-projection-layer'
 import { EditableImageWrapper } from '@/components/content-projection-layer'
 import { generateId } from '@/lib/content-projection/generate-id'
@@ -272,6 +272,10 @@ function DemoContent() {
               </p>
             </div>
             <div className="flex gap-2">
+              {/* 編集レイヤートグルボタン（URLに依存しない） */}
+              <EditLayerToggle />
+
+              {/* URLモード切り替えボタン（従来通り） */}
               <button
                 type="button"
                 onClick={handleModeToggle}
@@ -281,18 +285,7 @@ function DemoContent() {
                     : 'bg-white text-black hover:bg-gray-50'
                 }`}
               >
-                {isPreviewMode ? 'プレビューモード' : 'プレビューに切り替え'}
-              </button>
-              <button
-                type="button"
-                onClick={handleModeToggle}
-                className={`px-4 py-2 text-sm font-semibold border-2 border-black ${
-                  !isPreviewMode
-                    ? 'bg-accent text-white'
-                    : 'bg-white text-black hover:bg-gray-50'
-                }`}
-              >
-                {!isPreviewMode ? '通常モード' : '通常に切り替え'}
+                {isPreviewMode ? 'URL: プレビュー' : 'URL: 通常'}
               </button>
             </div>
           </div>

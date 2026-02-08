@@ -23,6 +23,9 @@ export interface PreviewState {
   // プレビューモード
   mode: PreviewMode
 
+  // 編集レイヤー表示フラグ（URLに依存しない純粋なUIトグル）
+  showEditLayer: boolean
+
   // 選択中の要素
   selectedElement: A11yElementInfo | null
 
@@ -34,6 +37,8 @@ export interface PreviewState {
 
   // アクション
   setMode: (mode: PreviewMode) => void
+  toggleEditLayer: () => void
+  setShowEditLayer: (show: boolean) => void
   selectElement: (element: A11yElementInfo | null) => void
   updateContent: (elementId: string, newContent: string) => void
   removeEdit: (elementId: string) => void
@@ -45,8 +50,9 @@ export interface PreviewState {
 /**
  * 初期状態
  */
-const initialState: Omit<PreviewState, 'setMode' | 'selectElement' | 'updateContent' | 'removeEdit' | 'reset' | 'startEditing' | 'stopEditing'> = {
+const initialState: Omit<PreviewState, 'setMode' | 'toggleEditLayer' | 'setShowEditLayer' | 'selectElement' | 'updateContent' | 'removeEdit' | 'reset' | 'startEditing' | 'stopEditing'> = {
   mode: 'preview',
+  showEditLayer: false,
   selectedElement: null,
   editingElementId: null,
   edits: {},
@@ -67,6 +73,20 @@ export const usePreviewStore = create<PreviewState>()(
        */
       setMode: (mode: PreviewMode) => {
         set({ mode })
+      },
+
+      /**
+       * 編集レイヤー表示をトグル
+       */
+      toggleEditLayer: () => {
+        set((state) => ({ showEditLayer: !state.showEditLayer }))
+      },
+
+      /**
+       * 編集レイヤー表示を設定
+       */
+      setShowEditLayer: (show: boolean) => {
+        set({ showEditLayer: show })
       },
 
       /**
@@ -126,6 +146,7 @@ export const usePreviewStore = create<PreviewState>()(
       // 選択中の要素も永続化（モード切り替え時に選択を保持）
       partialize: (state) => ({
         mode: state.mode,
+        showEditLayer: state.showEditLayer,
         selectedElement: state.selectedElement,
         edits: state.edits,
       }),
@@ -167,6 +188,16 @@ export const useIsPreviewMode = () => usePreviewStore((state) => state.mode === 
  * 編集モードかどうか
  */
 export const useIsEditMode = () => usePreviewStore((state) => state.mode === 'edit')
+
+/**
+ * 編集レイヤー表示状態を取得
+ */
+export const useShowEditLayer = () => usePreviewStore((state) => state.showEditLayer)
+
+/**
+ * 編集レイヤートグルアクションを取得
+ */
+export const useToggleEditLayer = () => usePreviewStore((state) => state.toggleEditLayer)
 
 /**
  * 編集中の要素IDを取得

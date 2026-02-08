@@ -1,51 +1,10 @@
-<testsuites id="" name="" tests="2" failures="1" skipped="0" errors="0" time="20.528665">
-<testsuite name="smoke-test.spec.ts" timestamp="2026-02-08T07:09:02.526Z" hostname="chromium" tests="2" failures="1" skipped="0" time="19.126" errors="0">
-<testcase name="0205CPL0.3 Smoke Test › should display homepage" classname="smoke-test.spec.ts" time="12.863">
+<testsuites id="" name="" tests="3" failures="0" skipped="0" errors="0" time="7.694343000000001">
+<testsuite name="mode-toggle.spec.ts" timestamp="2026-02-08T07:32:39.882Z" hostname="chromium" tests="3" failures="0" skipped="0" time="6.138" errors="0">
+<testcase name="Mode Toggle Verification › should verify production mode (default)" classname="mode-toggle.spec.ts" time="1.245">
 </testcase>
-<testcase name="0205CPL0.3 Smoke Test › should display demo page" classname="smoke-test.spec.ts" time="6.263">
-<failure message="smoke-test.spec.ts:22:7 should display demo page" type="FAILURE">
-<![CDATA[  [chromium] › smoke-test.spec.ts:22:7 › 0205CPL0.3 Smoke Test › should display demo page ──────────
-
-    Error: expect(page).toHaveTitle(expected) failed
-
-    Expected pattern: /Demo/
-    Received string:  ""
-    Timeout: 5000ms
-
-    Call log:
-      - Expect "toHaveTitle" with timeout 5000ms
-        9 × unexpected value ""
-
-
-      25 |
-      26 |     // ページタイトルを確認
-    > 27 |     await expect(page).toHaveTitle(/Demo/);
-         |                        ^
-      28 |
-      29 |     // スクリーンショットを撮影
-      30 |     await page.screenshot({
-        at /Users/yanoseiji/Desktop/0205multi-agent-shogun/WORKS/0205CPL0.3/tests/e2e/smoke-test.spec.ts:27:24
-
-    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
-    ../../test-results/smoke-test-0205CPL0-3-Smoke-Test-should-display-demo-page-chromium/test-failed-1.png
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
-    ../../test-results/smoke-test-0205CPL0-3-Smoke-Test-should-display-demo-page-chromium/video.webm
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    Error Context: ../../test-results/smoke-test-0205CPL0-3-Smoke-Test-should-display-demo-page-chromium/error-context.md
-]]>
-</failure>
-<system-out>
-<![CDATA[
-[[ATTACHMENT|test-results/smoke-test-0205CPL0-3-Smoke-Test-should-display-demo-page-chromium/test-failed-1.png]]
-
-[[ATTACHMENT|test-results/smoke-test-0205CPL0-3-Smoke-Test-should-display-demo-page-chromium/video.webm]]
-
-[[ATTACHMENT|test-results/smoke-test-0205CPL0-3-Smoke-Test-should-display-demo-page-chromium/error-context.md]]
-]]>
-</system-out>
+<testcase name="Mode Toggle Verification › should verify edit mode (toggle ON)" classname="mode-toggle.spec.ts" time="1.89">
+</testcase>
+<testcase name="Mode Toggle Verification › should verify toggle ON/OFF functionality" classname="mode-toggle.spec.ts" time="3.003">
 </testcase>
 </testsuite>
 </testsuites>

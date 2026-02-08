@@ -77,20 +77,20 @@
   },
   "suites": [
     {
-      "title": "smoke-test.spec.ts",
-      "file": "smoke-test.spec.ts",
+      "title": "mode-toggle.spec.ts",
+      "file": "mode-toggle.spec.ts",
       "column": 0,
       "line": 0,
       "specs": [],
       "suites": [
         {
-          "title": "0205CPL0.3 Smoke Test",
-          "file": "smoke-test.spec.ts",
+          "title": "Mode Toggle Verification",
+          "file": "mode-toggle.spec.ts",
           "line": 3,
           "column": 6,
           "specs": [
             {
-              "title": "should display homepage",
+              "title": "should verify production mode (default)",
               "ok": true,
               "tags": [],
               "tests": [
@@ -105,12 +105,12 @@
                       "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 12863,
+                      "duration": 1245,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-02-08T07:09:03.265Z",
+                      "startTime": "2026-02-08T07:32:40.738Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -118,14 +118,14 @@
                   "status": "expected"
                 }
               ],
-              "id": "3f58d441499060f9c0b2-57a10b61cc9d4fedd639",
-              "file": "smoke-test.spec.ts",
+              "id": "fb0782d77cdb6cb4ff99-6dd4356cd84dee365500",
+              "file": "mode-toggle.spec.ts",
               "line": 4,
               "column": 7
             },
             {
-              "title": "should display demo page",
-              "ok": false,
+              "title": "should verify edit mode (toggle ON)",
+              "ok": true,
               "tags": [],
               "tests": [
                 {
@@ -138,63 +138,57 @@
                     {
                       "workerIndex": 0,
                       "parallelIndex": 0,
-                      "status": "failed",
-                      "duration": 6263,
-                      "error": {
-                        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mpage\u001b[39m\u001b[2m).\u001b[22mtoHaveTitle\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nExpected pattern: \u001b[32m/Demo/\u001b[39m\nReceived string:  \u001b[31m\"\"\u001b[39m\nTimeout: 5000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveTitle\" with timeout 5000ms\u001b[22m\n\u001b[2m    9 × unexpected value \"\"\u001b[22m\n",
-                        "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mpage\u001b[39m\u001b[2m).\u001b[22mtoHaveTitle\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nExpected pattern: \u001b[32m/Demo/\u001b[39m\nReceived string:  \u001b[31m\"\"\u001b[39m\nTimeout: 5000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveTitle\" with timeout 5000ms\u001b[22m\n\u001b[2m    9 × unexpected value \"\"\u001b[22m\n\n    at /Users/yanoseiji/Desktop/0205multi-agent-shogun/WORKS/0205CPL0.3/tests/e2e/smoke-test.spec.ts:27:24",
-                        "location": {
-                          "file": "/Users/yanoseiji/Desktop/0205multi-agent-shogun/WORKS/0205CPL0.3/tests/e2e/smoke-test.spec.ts",
-                          "column": 24,
-                          "line": 27
-                        },
-                        "snippet": "  25 |\n  26 |     // ページタイトルを確認\n> 27 |     await expect(page).toHaveTitle(/Demo/);\n     |                        ^\n  28 |\n  29 |     // スクリーンショットを撮影\n  30 |     await page.screenshot({"
-                      },
-                      "errors": [
-                        {
-                          "location": {
-                            "file": "/Users/yanoseiji/Desktop/0205multi-agent-shogun/WORKS/0205CPL0.3/tests/e2e/smoke-test.spec.ts",
-                            "column": 24,
-                            "line": 27
-                          },
-                          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mpage\u001b[39m\u001b[2m).\u001b[22mtoHaveTitle\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nExpected pattern: \u001b[32m/Demo/\u001b[39m\nReceived string:  \u001b[31m\"\"\u001b[39m\nTimeout: 5000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveTitle\" with timeout 5000ms\u001b[22m\n\u001b[2m    9 × unexpected value \"\"\u001b[22m\n\n\n  25 |\n  26 |     // ページタイトルを確認\n> 27 |     await expect(page).toHaveTitle(/Demo/);\n     |                        ^\n  28 |\n  29 |     // スクリーンショットを撮影\n  30 |     await page.screenshot({\n    at /Users/yanoseiji/Desktop/0205multi-agent-shogun/WORKS/0205CPL0.3/tests/e2e/smoke-test.spec.ts:27:24"
-                        }
-                      ],
+                      "status": "passed",
+                      "duration": 1890,
+                      "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-02-08T07:09:16.531Z",
+                      "startTime": "2026-02-08T07:32:42.412Z",
                       "annotations": [],
-                      "attachments": [
-                        {
-                          "name": "screenshot",
-                          "contentType": "image/png",
-                          "path": "/Users/yanoseiji/Desktop/0205multi-agent-shogun/WORKS/0205CPL0.3/test-results/smoke-test-0205CPL0-3-Smoke-Test-should-display-demo-page-chromium/test-failed-1.png"
-                        },
-                        {
-                          "name": "video",
-                          "contentType": "video/webm",
-                          "path": "/Users/yanoseiji/Desktop/0205multi-agent-shogun/WORKS/0205CPL0.3/test-results/smoke-test-0205CPL0-3-Smoke-Test-should-display-demo-page-chromium/video.webm"
-                        },
-                        {
-                          "name": "error-context",
-                          "contentType": "text/markdown",
-                          "path": "/Users/yanoseiji/Desktop/0205multi-agent-shogun/WORKS/0205CPL0.3/test-results/smoke-test-0205CPL0-3-Smoke-Test-should-display-demo-page-chromium/error-context.md"
-                        }
-                      ],
-                      "errorLocation": {
-                        "file": "/Users/yanoseiji/Desktop/0205multi-agent-shogun/WORKS/0205CPL0.3/tests/e2e/smoke-test.spec.ts",
-                        "column": 24,
-                        "line": 27
-                      }
+                      "attachments": []
                     }
                   ],
-                  "status": "unexpected"
+                  "status": "expected"
                 }
               ],
-              "id": "3f58d441499060f9c0b2-8028739e1001a504edf1",
-              "file": "smoke-test.spec.ts",
-              "line": 22,
+              "id": "fb0782d77cdb6cb4ff99-0271c9dfd18be764f2e8",
+              "file": "mode-toggle.spec.ts",
+              "line": 24,
+              "column": 7
+            },
+            {
+              "title": "should verify toggle ON/OFF functionality",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 3003,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-02-08T07:32:44.312Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "fb0782d77cdb6cb4ff99-ec857198e7241697e078",
+              "file": "mode-toggle.spec.ts",
+              "line": 55,
               "column": 7
             }
           ]
@@ -204,11 +198,11 @@
   ],
   "errors": [],
   "stats": {
-    "startTime": "2026-02-08T07:09:02.410Z",
-    "duration": 20528.665,
-    "expected": 1,
+    "startTime": "2026-02-08T07:32:39.670Z",
+    "duration": 7694.343000000001,
+    "expected": 3,
     "skipped": 0,
-    "unexpected": 1,
+    "unexpected": 0,
     "flaky": 0
   }
 }

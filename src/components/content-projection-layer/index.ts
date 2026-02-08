@@ -13,3 +13,5 @@ export type { HoverHighlightProps } from './hover-highlight'
 
 export { EditableImageWrapper } from './editable-image-wrapper'
 export type { EditableImageWrapperProps } from './editable-image-wrapper'
+
+export { EditLayerToggle } from './edit-layer-toggle'
