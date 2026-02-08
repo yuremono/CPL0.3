@@ -22,11 +22,15 @@ test.describe('Source Locator Plugin', () => {
       // data-l属性が存在すること
       expect(dataLValue).toBeDefined();
 
-      // 形式が "L" + 数字であること（例: L95, L96）
-      expect(dataLValue).toMatch(/^L\d+$/);
+      // 形式が "{コンポーネント名}{行番号}" であること（例: Page95, EditableWrapper184）
+      expect(dataLValue).toMatch(/^[A-Z][a-zA-Z0-9]*\d+$/);
+
+      // コンポーネント名と行番号を分離
+      const match = dataLValue!.match(/^([A-Z][a-zA-Z0-9]*)(\d+)$/);
+      expect(match).not.toBeNull();
 
       // 行番号が正の整数であること
-      const lineNumber = parseInt(dataLValue!.substring(1));
+      const lineNumber = parseInt(match![2]);
       expect(lineNumber).toBeGreaterThan(0);
     }
   });
