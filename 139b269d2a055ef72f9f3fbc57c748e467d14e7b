@@ -1,0 +1,29 @@
+src/app/page.tsx
+  a625959fe885987b 22,46,669-670,676-677
+tests/e2e/chat-toggle.spec.ts
+  a625959fe885987b 2,4,6-12,17-22,24-27,29-30,32-34,36-40,43-50,52-61,63-64,66-69,71-72,74,76-80,83-90,92-94,96-99,101-103,105-107,109-117,119-128,130-135,138-142,144-168,171-192,194-195,197-205,208-222,224-235,237-239,241-275,278-374,376-377
+src/components/chat/chat-sidebar.tsx
+  a625959fe885987b 5
+src/components/chat/chat-toggle-button.tsx
+  a625959fe885987b 6,11,32-33,35,49-55,57
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.0.42",
+  "base_commit_sha": "139b269d2a055ef72f9f3fbc57c748e467d14e7b",
+  "prompts": {
+    "a625959fe885987b": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "f70f4540-f03d-4475-9acb-47e320e5ef2e",
+        "model": "glm-4.7"
+      },
+      "human_author": "yuremono <5alviaofficinali50@gmail.com>",
+      "messages": [],
+      "total_additions": 942,
+      "total_deletions": 599,
+      "accepted_lines": 373,
+      "overriden_lines": 16
+    }
+  }
+}
