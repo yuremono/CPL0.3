@@ -4,7 +4,7 @@
 
 import { describe, it, expect, vi } from 'vitest'
 import { renderHook } from '@testing-library/react'
-import { PreviewProvider, usePreviewContext } from '../preview-provider'
+import { PreviewProvider, usePreviewContext } from '../PreviewProvider'
 
 describe('PreviewProvider', () => {
   it('プレビューモードの状態を提供する', () => {

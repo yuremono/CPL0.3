@@ -6,7 +6,7 @@
  */
 
 import { useMemo } from 'react'
-import { generateId } from '@/lib/content-projection/generate-id'
+import { generateId } from '@/lib/content-projection/GenerateId'
 
 /**
  * 要素IDを生成するフック

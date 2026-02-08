@@ -4,7 +4,7 @@
 
 import { describe, it, expect } from 'vitest'
 import { render, screen } from '@testing-library/react'
-import { HoverHighlight } from '../hover-highlight'
+import { HoverHighlight } from '../HoverHighlight'
 
 describe('HoverHighlight', () => {
   it('子要素をレンダリングする', () => {

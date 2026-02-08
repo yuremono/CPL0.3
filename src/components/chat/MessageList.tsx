@@ -7,7 +7,7 @@
 import { useEffect, useRef } from 'react'
 import { useMessages, usePendingPreview } from '@/stores/chat-store'
 import type { ChatMessage } from '@/stores/chat-store'
-import { EditPreviewActions } from './edit-preview-actions'
+import { EditPreviewActions } from './EditPreviewActions'
 
 interface MessageListProps {
   onApproveEdit: (message: ChatMessage) => void

@@ -7,7 +7,7 @@ import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { OpenAIProvider } from '../providers/openai'
 import { AnthropicProvider } from '../providers/anthropic'
 import { GoogleProvider } from '../providers/google'
-import { AIEditRequest } from '../base-provider'
+import { AIEditRequest } from '../BaseProvider'
 
 describe('AI Providers', () => {
   const mockRequest: AIEditRequest = {

@@ -6,7 +6,7 @@
 
 import { useEffect, useRef } from 'react'
 import { usePreviewStore } from '@/stores/preview-store'
-import { setupAutoSave, triggerAutoSave } from '@/lib/storage/auto-save'
+import { setupAutoSave, triggerAutoSave } from '@/lib/storage/AutoSave'
 
 /**
  * 自動保存をセットアップするフック

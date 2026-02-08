@@ -7,13 +7,13 @@
 'use client'
 
 import { useState, useRef, type ReactElement } from 'react'
-import { useImageReplacement, fileToDataURL } from '@/hooks/use-image-replacement'
+import { useImageReplacement, fileToDataURL } from '@/hooks/UseImageReplacement'
 import { usePreviewStore } from '@/stores/preview-store'
 import { usePendingPreview } from '@/stores/chat-store'
 import { cn } from '@/lib/utils'
 import type { A11yElementInfo } from '@/lib/content-projection/types'
-import { useElementRef } from '@/hooks/use-element-ref'
-import { formatFileSize } from '@/lib/image/image-optimizer'
+import { useElementRef } from '@/hooks/UseElementRef'
+import { formatFileSize } from '@/lib/image/ImageOptimizer'
 
 export interface EditableImageWrapperProps {
   element: A11yElementInfo

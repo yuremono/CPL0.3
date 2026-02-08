@@ -4,7 +4,7 @@
  */
 
 import { describe, it, expect, vi, beforeEach } from 'vitest'
-import { AIProvider, AIEditRequest, AIEditResponse } from '../base-provider'
+import { AIProvider, AIEditRequest, AIEditResponse } from '../BaseProvider'
 
 // モックプロバイダーの作成
 class MockProvider implements AIProvider {
