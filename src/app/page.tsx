@@ -19,7 +19,6 @@ import { useSectionRef } from '@/hooks/use-element-ref'
 import {
   ChatSidebar,
   ChatApp,
-  PreviewModeToggle,
   useChatStore,
 } from '@/components/chat'
 
@@ -648,9 +647,6 @@ function HomeContent() {
             <ChatApp />
           </ChatSidebar>
         )}
-
-        {/* Preview Mode Toggle */}
-        <PreviewModeToggle />
       </div>
     </PreviewProvider>
   )
