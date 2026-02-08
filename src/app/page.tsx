@@ -19,7 +19,9 @@ import { useSectionRef } from '@/hooks/use-element-ref'
 import {
   ChatSidebar,
   ChatApp,
+  ChatToggleButton,
   useChatStore,
+  useIsChatOpen,
 } from '@/components/chat'
 
 function HomeContent() {
@@ -43,6 +45,7 @@ function HomeContent() {
 
   // チャットストア初期化
   const setIsChatOpen = useChatStore((state) => state.setOpen)
+  const isChatOpen = useIsChatOpen()
 
   // モード変更時の副作用
   useEffect(() => {
@@ -74,19 +77,22 @@ function HomeContent() {
         {/* Header */}
         <header className="border-b-2 border-black sticky top-0 bg-white z-50">
           <div className="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
-            <EditableWrapper
-              element={{
-                id: generateId('header-title'),
-                role: 'heading',
-                content: 'Z.AI',
-                level: 1,
-                editable: true,
-              }}
-              isSelected={selectedElement?.id === generateId('header-title')}
-              onSelect={handleSelectElement}
-            >
-              <h1 className="text-xl font-bold">Z.AI</h1>
-            </EditableWrapper>
+            <div className="flex items-center gap-4">
+              <ChatToggleButton inHeader />
+              <EditableWrapper
+                element={{
+                  id: generateId('header-title'),
+                  role: 'heading',
+                  content: 'Z.AI',
+                  level: 1,
+                  editable: true,
+                }}
+                isSelected={selectedElement?.id === generateId('header-title')}
+                onSelect={handleSelectElement}
+              >
+                <h1 className="text-xl font-bold">Z.AI</h1>
+              </EditableWrapper>
+            </div>
 
             <nav className="flex gap-6" aria-label="Main navigation">
               <a href="/" className="hover:underline focus:outline-none focus:ring-2 focus:ring-accent focus:ring-offset-2 rounded">Home</a>
@@ -643,8 +649,8 @@ function HomeContent() {
           Skip to main content
         </a>
 
-        {/* Chat Sidebar - 編集モード時のみ表示 */}
-        {isEditMode && (
+        {/* Chat Sidebar - チャット開閉状態に応じて表示 */}
+        {isChatOpen && (
           <ChatSidebar>
             <ChatApp />
           </ChatSidebar>

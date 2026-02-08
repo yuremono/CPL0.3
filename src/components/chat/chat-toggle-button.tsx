@@ -1,17 +1,21 @@
 /**
  * Chat Toggle Button Component
  *
- * チャットサイドバーを開閉するための固定ボタン。
- * 右下に配置され、チャットの開閉状態に応じてアイコンが変化する。
+ * チャットサイドバーを開閉するためのボタン。
+ * inHeaderプロップでheader内配置か固定配置かを切り替え。
  */
 
 import { useIsChatOpen, useChatStore } from '@/stores/chat-store'
 import { ChatBubbleLeftRightIcon, XMarkIcon } from '@heroicons/react/24/outline'
 
+interface ChatToggleButtonProps {
+  inHeader?: boolean
+}
+
 /**
  * チャット開閉ボタン
  */
-export function ChatToggleButton() {
+export function ChatToggleButton({ inHeader = false }: ChatToggleButtonProps) {
   const isOpen = useIsChatOpen()
   const setOpen = useChatStore((state) => state.setOpen)
 
@@ -24,9 +28,9 @@ export function ChatToggleButton() {
       type="button"
       onClick={handleToggle}
       className={`
-        fixed bottom-6 right-6 z-50
+        ${inHeader ? 'relative' : 'fixed bottom-6 right-6'} z-50
         flex items-center justify-center
-        w-14 h-14
+        w-10 h-10
         border-2 border-black
         bg-accent text-white
         shadow-[4px_4px_0_0_#0A0A0A]
@@ -41,9 +45,9 @@ export function ChatToggleButton() {
       aria-expanded={isOpen}
     >
       {isOpen ? (
-        <XMarkIcon className="w-7 h-7" aria-hidden="true" />
+        <XMarkIcon className="w-5 h-5" aria-hidden="true" />
       ) : (
-        <ChatBubbleLeftRightIcon className="w-7 h-7" aria-hidden="true" />
+        <ChatBubbleLeftRightIcon className="w-5 h-5" aria-hidden="true" />
       )}
     </button>
   )
