@@ -2,12 +2,11 @@
  * Chat Sidebar Component
  *
  * チャットサイドバーメインコンポーネント。
- * プレビューモード時のみ表示される。
+ * チャットの開閉状態に応じて表示される。
  * 左端のドラッグハンドルで幅を変更可能。
  */
 
 import { type ReactNode, useRef, useState, useCallback } from 'react'
-import { usePreviewMode } from '@/stores/preview-store'
 import { useIsChatOpen, useChatStore, useSidebarWidth } from '@/stores/chat-store'
 import { XMarkIcon } from '@heroicons/react/24/outline'
 
@@ -19,7 +18,6 @@ const MIN_WIDTH = 320
 const MAX_WIDTH_RATIO = 0.5
 
 export function ChatSidebar({ children }: ChatSidebarProps) {
-  const mode = usePreviewMode()
   const isOpen = useIsChatOpen()
   const sidebarWidth = useSidebarWidth()
   const setOpen = useChatStore((state) => state.setOpen)
@@ -55,11 +53,6 @@ export function ChatSidebar({ children }: ChatSidebarProps) {
     document.addEventListener('mousemove', handleMouseMove)
     document.addEventListener('mouseup', handleMouseUp)
   }, [sidebarWidth, setSidebarWidth])
-
-  // プレビューモードでない場合は何も表示しない
-  if (mode !== 'preview') {
-    return null
-  }
 
   return (
     <>
@@ -102,7 +95,7 @@ export function ChatSidebar({ children }: ChatSidebarProps) {
         )}
 
         {/* ヘッダー */}
-        <div className="flex items-center justify-between p-4 border-b-2 border-black">
+        <div className="flex items-center justify-between px-4 border-b-2 border-black h-[var(--header-height)]">
           <h2 className="text-lg font-bold">AIアシスタント</h2>
           <button
             type="button"

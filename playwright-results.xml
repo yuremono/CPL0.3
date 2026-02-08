@@ -1,8 +1,60 @@
-<testsuites id="" name="" tests="2" failures="0" skipped="0" errors="0" time="8.669349">
-<testsuite name="smoke-test.spec.ts" timestamp="2026-02-08T07:40:14.057Z" hostname="chromium" tests="2" failures="0" skipped="0" time="3.253" errors="0">
-<testcase name="0205CPL0.3 Smoke Test › should display homepage" classname="smoke-test.spec.ts" time="1.51">
+<testsuites id="" name="" tests="7" failures="0" skipped="0" errors="0" time="20.337847999999997">
+<testsuite name="chat-toggle.spec.ts" timestamp="2026-02-08T09:35:46.253Z" hostname="chromium" tests="7" failures="0" skipped="0" time="18.819" errors="0">
+<testcase name="Chat Toggle Button &amp; Mode Switch › 1. should show chat toggle button in bottom right corner" classname="chat-toggle.spec.ts" time="2.806">
+<system-out>
+<![CDATA[Chat buttons found: [33m2[39m
+]]>
+</system-out>
 </testcase>
-<testcase name="0205CPL0.3 Smoke Test › should display demo page" classname="smoke-test.spec.ts" time="1.743">
+<testcase name="Chat Toggle Button &amp; Mode Switch › 2. should show mode display next to chat button (when chat is closed)" classname="chat-toggle.spec.ts" time="3.07">
+<system-out>
+<![CDATA[Sidebar class: 
+          fixed right-0 top-0 h-full
+          bg-white/95 backdrop-blur-md
+          border-l-2 border-black
+          shadow-[4px_0_0_0_#0A0A0A]
+          z-50
+          transition-transform duration-300 ease-in-out
+          translate-x-0
+        
+Has "プレビュー": [33mfalse[39m
+Has "編集": [33mtrue[39m
+]]>
+</system-out>
+</testcase>
+<testcase name="Chat Toggle Button &amp; Mode Switch › 3. should open chat sidebar when chat button is clicked" classname="chat-toggle.spec.ts" time="2.546">
+<system-out>
+<![CDATA[Initial sidebar state: open
+]]>
+</system-out>
+</testcase>
+<testcase name="Chat Toggle Button &amp; Mode Switch › 4. should show mode menu when mode display is clicked" classname="chat-toggle.spec.ts" time="2.661">
+<system-out>
+<![CDATA[Before click - Preview count: [33m0[39m
+Before click - Edit count: [33m1[39m
+Fixed elements: [33m2[39m
+Mode text element not found
+]]>
+</system-out>
+</testcase>
+<testcase name="Chat Toggle Button &amp; Mode Switch › 5. should switch to edit mode and open chat when edit mode is selected" classname="chat-toggle.spec.ts" time="2.601">
+<system-out>
+<![CDATA[Mode elements found: [33m0[39m
+]]>
+</system-out>
+</testcase>
+<testcase name="Chat Toggle Button &amp; Mode Switch › 6. should switch to preview mode when preview is selected" classname="chat-toggle.spec.ts" time="2.617">
+<system-out>
+<![CDATA[Mode elements found: [33m0[39m
+]]>
+</system-out>
+</testcase>
+<testcase name="Chat Toggle Button &amp; Mode Switch › 7. complete user flow: close chat -&gt; toggle mode" classname="chat-toggle.spec.ts" time="2.518">
+<system-out>
+<![CDATA[Step 2 - Has "プレビュー": [33mfalse[39m
+Step 2 - Has "編集": [33mtrue[39m
+]]>
+</system-out>
 </testcase>
 </testsuite>
 </testsuites>

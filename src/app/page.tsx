@@ -19,7 +19,7 @@ import { useSectionRef } from '@/hooks/use-element-ref'
 import {
   ChatSidebar,
   ChatApp,
-  PreviewModeToggle,
+  ChatToggleButton,
   useChatStore,
 } from '@/components/chat'
 
@@ -43,7 +43,29 @@ function HomeContent() {
   useAutoSave()
 
   // チャットストア初期化
+  const isOpen = useChatStore((state) => state.isOpen)
   const setIsChatOpen = useChatStore((state) => state.setOpen)
+  const stopEditing = usePreviewStore((state) => state.stopEditing)
+  const editingElementId = usePreviewStore((state) => state.editingElementId)
+
+  // Escキーでチャットを閉じる・編集モードを解除する
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        // テキスト編集中なら編集を解除
+        if (editingElementId) {
+          stopEditing()
+        }
+        // チャットが開いていれば閉じる
+        if (isOpen) {
+          setIsChatOpen(false)
+        }
+      }
+    }
+
+    window.addEventListener('keydown', handleKeyDown)
+    return () => window.removeEventListener('keydown', handleKeyDown)
+  }, [isOpen, editingElementId, stopEditing, setIsChatOpen])
 
   // モード変更時の副作用
   useEffect(() => {
@@ -73,8 +95,8 @@ function HomeContent() {
     <PreviewProvider isPreviewMode={isPreviewMode}>
       <div className="min-h-screen bg-white">
         {/* Header */}
-        <header className="border-b-2 border-black sticky top-0 bg-white z-50">
-          <div className="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
+        <header className="border-b-2 border-black sticky top-0 bg-white z-50 h-[var(--header-height)]">
+          <div className="max-w-6xl mx-auto px-4 h-full flex items-center justify-between">
             <EditableWrapper
               element={{
                 id: generateId('header-title'),
@@ -89,7 +111,9 @@ function HomeContent() {
               <h1 className="text-xl font-bold">Z.AI</h1>
             </EditableWrapper>
 
-            <nav className="flex gap-6" aria-label="Main navigation">
+            <nav className="flex gap-6 pr-[var(--header-height)]" aria-label="Main navigation">
+              <a href="/" className="hover:underline focus:outline-none focus:ring-2 focus:ring-accent focus:ring-offset-2 rounded">ホーム</a>
+              <a href="/preview" className="hover:underline focus:outline-none focus:ring-2 focus:ring-accent focus:ring-offset-2 rounded">プレビュー</a>
               <a href="#about" className="hover:underline focus:outline-none focus:ring-2 focus:ring-accent focus:ring-offset-2 rounded">About</a>
               <a href="#projects" className="hover:underline focus:outline-none focus:ring-2 focus:ring-accent focus:ring-offset-2 rounded">Projects</a>
               <a href="#contact" className="hover:underline focus:outline-none focus:ring-2 focus:ring-accent focus:ring-offset-2 rounded">Contact</a>
@@ -642,15 +666,15 @@ function HomeContent() {
           Skip to main content
         </a>
 
-        {/* Chat Sidebar - 編集モード時のみ表示 */}
-        {isEditMode && (
+        {/* Chat Sidebar - チャット開閉状態に応じて表示 */}
+        {isOpen && (
           <ChatSidebar>
             <ChatApp />
           </ChatSidebar>
         )}
 
-        {/* Preview Mode Toggle */}
-        <PreviewModeToggle />
+        {/* Chat Toggle Button - チャット開閉＆モード切り替え */}
+        <ChatToggleButton />
       </div>
     </PreviewProvider>
   )

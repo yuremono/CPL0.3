@@ -49,9 +49,11 @@ export interface PreviewState {
 
 /**
  * 初期状態
+ *
+ * NOTE: 常に編集モードで使用するため、初期値は 'edit' に固定
  */
 const initialState: Omit<PreviewState, 'setMode' | 'toggleEditLayer' | 'setShowEditLayer' | 'selectElement' | 'updateContent' | 'removeEdit' | 'reset' | 'startEditing' | 'stopEditing'> = {
-  mode: 'preview',
+  mode: 'edit',
   showEditLayer: false,
   selectedElement: null,
   editingElementId: null,

@@ -1,25 +1,82 @@
 @import "tailwindcss";
 
 :root {
-  --color-white: #FFFFFF;
-  --color-black: #0A0A0A;
-  --color-accent: #4A6FA5;
-  --color-accent-light: #6B8DB8;
-  --color-accent-dark: #3A5A8A;
+  /* Colors - Y2K Style inspired */
+  --background: #FFFFFF;
+  --foreground: #333333;
 
+  /* Primary (メインカラー - スカイブルー/Y2Kブルー) */
+  --primary: #00a0e9;
+  --primary-light: #1e90ff;
+  --primary-dark: #0077b6;
+
+  /* Secondary (サブカラー - ラベンダー) */
+  --secondary: #e6d5f5;
+  --secondary-light: #f0e6f8;
+  --secondary-dark: #c9b8d9;
+
+  /* Accent (強調色 - ゴールドイエロー/コールトゥアクション) */
+  --accent: #ffd700;
+  --accent-light: #ffe066;
+  --accent-dark: #e6c200;
+
+  /* Muted (薄い色 - 背景など) */
+  --muted: #f8d7e5;
+  --muted-foreground: #999999;
+
+  /* Additional Y2K colors */
+  --pink: #f8d7e5;
+  --lavender: #e6d5f5;
+
+  /* Border */
+  --border: #cccccc;
+  --border-dark: #333333;
   --border-width: 2px;
   --border-thick: 3px;
+
+  /* Header height - used for header, chat button size, nav padding */
+  --header-height: 64px;
+
+  /* Radius */
+  --radius: 0.5rem;
+  --radius-sm: 0.25rem;
+  --radius-lg: 0.75rem;
+  --radius-full: 9999px;
 }
 
 @theme inline {
-  --color-white: var(--color-white);
-  --color-black: var(--color-black);
-  --color-accent: var(--color-accent);
-  --color-accent-light: var(--color-accent-light);
-  --color-accent-dark: var(--color-accent-dark);
+  /* Colors */
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-primary: var(--primary);
+  --color-primary-light: var(--primary-light);
+  --color-primary-dark: var(--primary-dark);
+  --color-secondary: var(--secondary);
+  --color-secondary-light: var(--secondary-light);
+  --color-secondary-dark: var(--secondary-dark);
+  --color-accent: var(--accent);
+  --color-accent-light: var(--accent-light);
+  --color-accent-dark: var(--accent-dark);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
 
+  /* Additional Y2K colors */
+  --color-pink: var(--pink);
+  --color-lavender: var(--lavender);
+
+  /* Legacy aliases (for backward compatibility) */
+  --color-white: var(--background);
+  --color-black: var(--foreground);
+
+  /* Border */
+  --border-color: var(--border);
+
+  /* Fonts */
   --font-sans: var(--font-geist-sans), "Noto Sans JP", system-ui, sans-serif;
   --font-mono: var(--font-geist-mono), monospace;
+
+  /* Radius */
+  --radius: var(--radius);
 }
 
 * {
