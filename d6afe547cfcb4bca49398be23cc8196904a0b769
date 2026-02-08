@@ -1,0 +1,55 @@
+src/lib/ai/__tests__/base-provider.test.ts
+  9db3e1c644d162fc 7
+src/stores/edit-history-store.ts
+  9db3e1c644d162fc 10-11
+src/lib/ai/index.ts
+  9db3e1c644d162fc 5,87-88
+src/components/content-projection-layer/index.ts
+  9db3e1c644d162fc 5-6,11-12,17
+src/app/page.tsx
+  9db3e1c644d162fc 14,17-18
+src/hooks/UseImageReplacement.ts
+  9db3e1c644d162fc 10
+src/components/content-projection-layer/EditableImageWrapper.tsx
+  9db3e1c644d162fc 10,15-16
+src/components/content-projection-layer/EditableWrapper.tsx
+  9db3e1c644d162fc 12
+src/stores/preview-store.ts
+  9db3e1c644d162fc 11
+src/lib/ai/__tests__/providers.test.ts
+  9db3e1c644d162fc 10
+src/components/chat/ChatApp.tsx
+  9db3e1c644d162fc 18-24
+src/components/chat/index.ts
+  9db3e1c644d162fc 10-20
+src/lib/storage/AutoSave.ts
+  9db3e1c644d162fc 8
+src/components/build-confirmation/index.ts
+  9db3e1c644d162fc 7-10
+src/app/demo/page.tsx
+  9db3e1c644d162fc 15,18
+src/lib/ai/providers/openai.ts
+  9db3e1c644d162fc 6,8
+src/components/chat/MessageList.tsx
+  9db3e1c644d162fc 10
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.0.42",
+  "base_commit_sha": "d6afe547cfcb4bca49398be23cc8196904a0b769",
+  "prompts": {
+    "9db3e1c644d162fc": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "31cf7714-61b1-43dc-a8ac-097ddb40db35",
+        "model": "glm-4.7"
+      },
+      "human_author": "yuremono <5alviaofficinali50@gmail.com>",
+      "messages": [],
+      "total_additions": 49,
+      "total_deletions": 49,
+      "accepted_lines": 49,
+      "overriden_lines": 0
+    }
+  }
+}
