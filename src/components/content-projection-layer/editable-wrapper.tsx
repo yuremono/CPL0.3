@@ -83,9 +83,6 @@ export function EditableWrapper({
   const pendingPreview = usePendingPreview()
   const isPreviewing = pendingPreview?.elementId === element.id
 
-  // 短い参照IDを生成
-  const ref = useElementRef(element.id)
-
   // 編集モード開始時にテキストを抽出
   // ※早期リターンの前に配置することで、フックの順序を一定に保つ
   useEffect(() => {
@@ -105,6 +102,9 @@ export function EditableWrapper({
     // 属性は保持したまま、childrenのみ返す
     return <>{children}</>
   }
+
+  // 短い参照IDを生成（早期リターン後に使用）
+  const ref = useElementRef(element.id)
 
   const handleClick = (e: MouseEvent<HTMLDivElement>) => {
     // 編集中はクリックを無視
