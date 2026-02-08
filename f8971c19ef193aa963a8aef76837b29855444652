@@ -1,0 +1,23 @@
+src/components/chat/chat-sidebar.tsx
+  6e51447aff49fd15 59-63
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.0.42",
+  "base_commit_sha": "f8971c19ef193aa963a8aef76837b29855444652",
+  "prompts": {
+    "6e51447aff49fd15": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "1663bdb5-5a19-47e7-9966-37654acb0856",
+        "model": "glm-4.7"
+      },
+      "human_author": "yuremono <5alviaofficinali50@gmail.com>",
+      "messages": [],
+      "total_additions": 5,
+      "total_deletions": 5,
+      "accepted_lines": 5,
+      "overriden_lines": 0
+    }
+  }
+}
