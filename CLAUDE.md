@@ -4,10 +4,6 @@
 
 ---
 
-
-
----
-
 ## プロジェクト概要
 
 **Content Projection Layer（CPL）** は、AI主導の編集体験を実現する中間層です。

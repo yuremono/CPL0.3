@@ -7,6 +7,7 @@
 'use client'
 
 import { useState, useRef, type ReactElement } from 'react'
+import Image from 'next/image'
 import { useImageReplacement, fileToDataURL } from '@/hooks/use-image-replacement'
 import { usePreviewStore } from '@/stores/preview-store'
 import { usePendingPreview } from '@/stores/chat-store'
@@ -54,8 +55,8 @@ export function EditableImageWrapper({
   const pendingPreview = usePendingPreview()
   const isPreviewing = pendingPreview?.elementId === element.id
 
-  // 元のclassNameを取得（型アサーション）
-  const originalClassName = (children as any)?.props?.className || ''
+  // 元のclassNameを取得
+  const originalClassName = (children as ReactElement<{ className?: string }>)?.props?.className || ''
 
   // 短い参照IDを生成
   const ref = useElementRef(element.id)
@@ -164,14 +165,18 @@ export function EditableImageWrapper({
       onDrop={isEditMode && element.editable ? handleDrop : undefined}
       draggable={false}
     >
-      <img
+      <Image
         src={displaySrc}
         alt={element.content || alt}
+        width={0}
+        height={0}
+        sizes="100vw"
         className={cn(
-          'w-full h-full object-cover',
+          'w-full h-auto object-cover',
           state.dragOver && 'opacity-50',
           originalClassName
         )}
+        unoptimized
       />
 
       {/* プレビューインジケーター */}
@@ -209,10 +214,14 @@ export function EditableImageWrapper({
       {state.previewMode && state.previewUrl && (
         <div className="absolute inset-0 z-20">
           {/* プレビュー画像 */}
-          <img
+          <Image
             src={state.previewUrl}
             alt="プレビュー"
-            className="w-full h-full object-cover"
+            width={0}
+            height={0}
+            sizes="100vw"
+            className="w-full h-auto object-cover"
+            unoptimized
           />
 
           {/* プレビューモードの幕 */}

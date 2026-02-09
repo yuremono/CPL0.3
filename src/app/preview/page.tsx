@@ -21,7 +21,7 @@ function PreviewContent() {
             プレビュー機能は現在開発中です。
           </p>
           <a
-            href="/"
+            href="<Link/>"
             className="inline-block mt-6 px-6 py-3 bg-accent text-white font-semibold border-2 border-black rounded-lg hover:bg-accent/90 transition-colors"
           >
             ホームに戻る
