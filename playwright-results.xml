@@ -1,8 +1,0 @@
-<testsuites id="" name="" tests="2" failures="0" skipped="0" errors="0" time="4.183111">
-<testsuite name="source-locator.spec.ts" timestamp="2026-02-08T12:13:46.429Z" hostname="chromium" tests="2" failures="0" skipped="0" time="2.684" errors="0">
-<testcase name="Source Locator Plugin › dev環境でdata-l属性がJSX要素に注入されている" classname="source-locator.spec.ts" time="1.265">
-</testcase>
-<testcase name="Source Locator Plugin › data-l属性の値は一意である（重複なし）" classname="source-locator.spec.ts" time="1.419">
-</testcase>
-</testsuite>
-</testsuites>
