@@ -8,8 +8,8 @@
  */
 
 import { Suspense, useEffect, useState } from 'react'
-import { useSearchParams, useRouter } from 'next/navigation'
-import { PreviewProvider } from '@/components/content-projection-layer'
+import { useSearchParams } from 'next/navigation'
+import { PreviewProvider, EditLayerToggle } from '@/components/content-projection-layer'
 import { EditableWrapper } from '@/components/content-projection-layer'
 import { EditableImageWrapper } from '@/components/content-projection-layer'
 import { generateId } from '@/lib/content-projection/generate-id'
@@ -18,7 +18,6 @@ import { useEditHistoryStore } from '@/stores/edit-history-store'
 import { useAutoSave } from '@/hooks/use-auto-save'
 import {
   ChatSidebar,
-  ChatToggleButton,
   MessageList,
   MessageInput,
   ElementInfoCard,
@@ -30,26 +29,24 @@ import {
   type AIProvider,
   type ChatMessage,
 } from '@/components/chat'
+import { ChatBubbleLeftRightIcon, XMarkIcon } from '@heroicons/react/24/outline'
 
 function DemoContent() {
   const searchParams = useSearchParams()
-  const router = useRouter()
   const mode = searchParams.get('mode')
   const isPreviewMode = mode === 'preview'
-
-  // モード切り替えハンドラー（クライアントサイドで実行）
-  const handleModeToggle = () => {
-    const newMode = isPreviewMode ? '' : 'preview'
-    const url = newMode ? `/demo?mode=${newMode}` : '/demo'
-    router.push(url)
-  }
 
   // 状態管理統合: 選択機能
   const selectElement = usePreviewStore((state) => state.selectElement)
   const selectedElement = usePreviewStore((state) => state.selectedElement)
   const updateContent = usePreviewStore((state) => state.updateContent)
   const setMode = usePreviewStore((state) => state.setMode)
+  const setShowEditLayer = usePreviewStore((state) => state.setShowEditLayer)
   const edits = usePreviewStore((state) => state.edits)
+
+  // チャットストア初期化
+  const isChatOpen = useChatStore((state) => state.isOpen)
+  const setIsChatOpen = useChatStore((state) => state.setOpen)
 
   // 編集履歴統合
   const addOperation = useEditHistoryStore((state) => state.addOperation)
@@ -57,8 +54,7 @@ function DemoContent() {
   // 自動保存統合
   useAutoSave()
 
-  // チャットストア初期化（作業B統合）
-  const setIsChatOpen = useChatStore((state) => state.setOpen)
+  // チャットストア初期化
   const addMessage = useChatStore((state) => state.addMessage)
   const setSending = useChatStore((state) => state.setSending)
   const isSending = useChatStore((state) => state.isSending)
@@ -70,11 +66,12 @@ function DemoContent() {
     // preview-storeのモードを設定
     setMode(isPreviewMode ? 'preview' : 'edit')
 
-    // チャットUIの開閉を設定
+    // プレビューモード時、常時編集レイヤー表示とチャットUIを開く
     if (isPreviewMode) {
+      setShowEditLayer(true)
       setIsChatOpen(true)
     }
-  }, [isPreviewMode, setIsChatOpen, setMode])
+  }, [isPreviewMode, setShowEditLayer, setIsChatOpen, setMode])
 
   // AI連携統合: メッセージ送信でAI APIを呼び出し
   const handleSendMessage = async (message: string) => {
@@ -217,7 +214,7 @@ function DemoContent() {
   return (
     <PreviewProvider isPreviewMode={isPreviewMode}>
       <div className="min-h-screen bg-white relative">
-        {/* チャットUI（作業B統合） */}
+        {/* チャットUI */}
         <ChatSidebar>
           {/* プロバイダー選択 */}
           <ProviderSelector disabled={isSending} />
@@ -259,9 +256,6 @@ function DemoContent() {
           <EditHistoryPanel />
         </ChatSidebar>
 
-        {/* チャット開閉ボタン */}
-        <ChatToggleButton />
-
         {/* モード表示ヘッダー */}
         <div className="sticky top-0 z-50 border-b-2 border-black bg-white">
           <div className="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
@@ -272,28 +266,35 @@ function DemoContent() {
               </p>
             </div>
             <div className="flex gap-2">
-              <button
-                type="button"
-                onClick={handleModeToggle}
-                className={`px-4 py-2 text-sm font-semibold border-2 border-black ${
-                  isPreviewMode
-                    ? 'bg-accent text-white'
-                    : 'bg-white text-black hover:bg-gray-50'
-                }`}
-              >
-                {isPreviewMode ? 'プレビューモード' : 'プレビューに切り替え'}
-              </button>
-              <button
-                type="button"
-                onClick={handleModeToggle}
-                className={`px-4 py-2 text-sm font-semibold border-2 border-black ${
-                  !isPreviewMode
-                    ? 'bg-accent text-white'
-                    : 'bg-white text-black hover:bg-gray-50'
-                }`}
-              >
-                {!isPreviewMode ? '通常モード' : '通常に切り替え'}
-              </button>
+              {/* 編集レイヤートグルボタン */}
+              <EditLayerToggle />
+
+              {/* チャット開閉ボタン（プレビューモード時のみ表示） */}
+              {isPreviewMode && (
+                <button
+                  type="button"
+                  onClick={() => setIsChatOpen(!isChatOpen)}
+                  className={`px-4 py-2 text-sm font-semibold border-2 border-black flex items-center gap-2 ${
+                    isChatOpen
+                      ? 'bg-accent text-white'
+                      : 'bg-white text-black hover:bg-gray-50'
+                  }`}
+                  aria-label={isChatOpen ? 'チャットを閉じる' : 'チャットを開く'}
+                  aria-expanded={isChatOpen}
+                >
+                  {isChatOpen ? (
+                    <>
+                      <XMarkIcon className="w-5 h-5" aria-hidden="true" />
+                      <span>チャットを閉じる</span>
+                    </>
+                  ) : (
+                    <>
+                      <ChatBubbleLeftRightIcon className="w-5 h-5" aria-hidden="true" />
+                      <span>チャットを開く</span>
+                    </>
+                  )}
+                </button>
+              )}
             </div>
           </div>
         </div>

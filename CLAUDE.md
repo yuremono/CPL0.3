@@ -4,10 +4,6 @@
 
 ---
 
-
-
----
-
 ## プロジェクト概要
 
 **Content Projection Layer（CPL）** は、AI主導の編集体験を実現する中間層です。
@@ -43,6 +39,123 @@
 │ （元のコンテンツ、CMSなど）               │
 └─────────────────────────────────────────┘
 ```
+
+---
+
+## ファイル命名規則
+
+**重要**: このプロジェクトでは、コンポーネントと非コンポーネントで命名規則を明確に分けています。
+
+### アーキテクチャの分類
+
+| 分類 | ディレクトリ | 役割 | ブラウザ上の存在 |
+|------|-------------|------|----------------|
+| **コンポーネント** | `components/` | UI部品、DOMにレンダリングされる | ✅ あり |
+| **カスタムフック** | `hooks/` | Reactフック、状態管理ロジック | ❌ なし |
+| **ユーティリティ** | `lib/` | 関数・型定義・AIプロバイダー | ❌ なし |
+| **ストア** | `stores/` | Zustand状態管理 | ❌ なし |
+| **ページ/レイアウト** | `app/` | Next.jsルーティング | ✅ あり（規約固定） |
+
+### 命名規則
+
+```
+components/  → PascalCase (例: EditableWrapper.tsx)
+hooks/       → kebab-case (例: use-auto-save.ts)
+lib/         → kebab-case (例: generate-id.ts)
+stores/      → kebab-case (例: chat-store.ts)
+app/         → Next.js規約 (page.tsx, layout.tsx は固定名)
+```
+
+### 理由: data-l属性の視認性
+
+**コンポーネントのみパスカルケース**を採用する理由：
+
+1. **data-l属性での視認性**
+   - `data-l="EditableWrapper184"` ← 一目でコンポーネント由来とわかる
+   - `data-l="Page97"` ← ページ由来と区別がつく
+
+2. **ダブルクリック選択のしやすさ**
+   - `EditableWrapper184` ← ユーザーがダブルクリックで選択しやすい
+   - `use-auto-save-42` ← 選択されることはない（DOMに存在しない）
+
+3. **ブラウザ開発者ツールでの確認**
+   - 要素を検証 → `data-l` 属性を確認 → 即座にファイルと行番号が特定できる
+
+### 覚え方
+
+```
+DOMに見えるもの = PascalCase
+DOMに見えないもの = kebab-case
+```
+
+---
+
+## data-l属性: ソースロケーションシステム
+
+このプロジェクトでは、**開発環境でのみ**全JSX要素に `data-l` 属性を自動注入しています。
+
+### 技術実装
+
+**Babelカスタムプラグイン** (`babel-plugin-source-locator.js`) を使用：
+
+1. `.babelrc` で開発環境のみプラグイン有効化
+2. 全JSX要素のオープニングタグを検出
+3. 要素名（ファイル名から生成）+ 行番号を `data-l` 属性として注入
+4. 属性は他の属性よりも前に配置（要素名の直後）
+
+```javascript
+// babel-plugin-source-locator.js
+module.exports = function ({ types: t }) {
+  return {
+    visitor: {
+      JSXOpeningElement(path, state) {
+        const filename = state.file.opts.filename;
+        const loc = path.node.loc;
+
+        // ファイル名からコンポーネント名を生成
+        // editable-wrapper.tsx → EditableWrapper
+        const componentName = filename
+          .split('/')
+          .pop()
+          .replace(/\.(tsx?|jsx?)$/, '')
+          .split('-')
+          .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+          .join('');
+
+        // data-l="EditableWrapper184" を注入
+        const attr = t.jsxAttribute(
+          t.jsxIdentifier("data-l"),
+          t.stringLiteral(`${componentName}${loc.start.line}`)
+        );
+
+        path.node.attributes.unshift(attr);
+      }
+    }
+  };
+};
+```
+
+### data-l属性の形式
+
+```
+data-l="{コンポーネント名}{行番号}"
+```
+
+| 例 | ファイル | 行番号 |
+|----|---------|--------|
+| `EditableWrapper184` | `EditableWrapper.tsx` | 184 |
+| `Page463` | `page.tsx` | 463 |
+| `ChatSidebar60` | `ChatSidebar.tsx` | 60 |
+| `Layout95` | `layout.tsx` | 95 |
+
+### AIへの指示方法
+
+```
+「EditableWrapper184のボタンを削除して」
+「Page463の見出しを『新製品』に変更して」
+```
+
+data-l値を指定することで、即座にファイルと行番号が特定できます。
 
 ---
 
@@ -91,18 +204,18 @@
 
 ---
 
-## Git AIによる履歴追跡
+## エージェント履歴追跡
 
-このプロジェクトでは**git-aiによるAI vs Human属性の追跡**を採用しています。コードを編集した後は必ずコミットしてください。
+このプロジェクトでは**マルチエージェントによる並列作業を追跡**するため、コミットメッセージにエージェント名を明記します。
 
-### AI作業後の必須コミット
+### エージェント作業後の必須コミット
 
 ```bash
 # Git Aliasが設定済みの場合（推奨）
 git ai
 
 # または手動でコミット
-git add -A && git commit -m "ai: <変更内容の説明>"
+git add -A && git commit -m "<エージェント名>: <変更内容の説明>"
 ```
 
 ### コミットが不要な場合
@@ -115,8 +228,16 @@ git add -A && git commit -m "ai: <変更内容の説明>"
 - リファクタリングを行った場合
 
 ### コミットメッセージの形式
-- Conventional Commits形式: `feat:`, `fix:`, `refactor:`, `docs:`, `test:`
-- AI作業時はプレフィックス `ai:` を使用
+
+エージェント名をプレフィックスとして使用し、「誰が」作業を行ったかを明確にします。
+
+| エージェントタイプ | プレフィックス | 例 |
+|-----------------|---------------|-----|
+| 将軍システム | `shogun:`, `karo:`, `ashigaru:` | `ashigaru2: 画像置換機能実装` |
+| Agent Teams | `[name]:`  | `reviewer: コンポーネント実装` |
+| 人間 | 名前またはなし | `self: デザイン調整` |
+
+**重要**: エージェント名は、そのエージェントが作業を行ったことを明確にするためのものです。GitのAuthor情報は全て「Claude」になるため、コミットメッセージでの追跡が重要です。
 
 ---
 

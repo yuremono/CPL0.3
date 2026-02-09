@@ -6,9 +6,9 @@
  */
 
 import OpenAI from 'openai'
-import type { AIProvider } from '../base-provider'
+import type { AIProvider } from '../BaseProvider'
 import type { AIEditRequest, AIEditResponse } from '@/lib/content-projection/types'
-import { SYSTEM_PROMPT } from '../base-provider'
+import { SYSTEM_PROMPT } from '../BaseProvider'
 import {
   APIKeyMissingError,
   NetworkError,

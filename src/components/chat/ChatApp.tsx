@@ -15,12 +15,12 @@ import {
   type AIProvider,
   type ChatMessage,
 } from '@/stores/chat-store'
-import { ElementInfoCard } from './element-info-card'
-import { MessageList } from './message-list'
-import { MessageInput } from './message-input'
-import { LoadingIndicatorEnhanced } from './loading-indicator-enhanced'
-import { ProviderSelector } from './provider-selector'
-// import { EditHistoryPanel } from './edit-history-panel'
+import { ElementInfoCard } from './ElementInfoCard'
+import { MessageList } from './MessageList'
+import { MessageInput } from './MessageInput'
+import { LoadingIndicatorEnhanced } from './LoadingIndicatorEnhanced'
+import { ProviderSelector } from './ProviderSelector'
+// import { EditHistoryPanel } from './EditHistoryPanel'
 import { extractOrGenerateImageUrl } from '@/lib/ai/image-generation'
 
 /**

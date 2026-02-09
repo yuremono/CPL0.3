@@ -2,14 +2,16 @@
  * Content Projection Layer Components
  */
 
-export { PreviewProvider, usePreviewContext } from './preview-provider'
-export type { PreviewProviderProps, PreviewContextValue } from './preview-provider'
+export { PreviewProvider, usePreviewContext } from './PreviewProvider'
+export type { PreviewProviderProps, PreviewContextValue } from './PreviewProvider'
 
-export { EditableWrapper } from './editable-wrapper'
-export type { EditableWrapperProps } from './editable-wrapper'
+export { EditableWrapper } from './EditableWrapper'
+export type { EditableWrapperProps } from './EditableWrapper'
 
-export { HoverHighlight } from './hover-highlight'
-export type { HoverHighlightProps } from './hover-highlight'
+export { HoverHighlight } from './HoverHighlight'
+export type { HoverHighlightProps } from './HoverHighlight'
 
-export { EditableImageWrapper } from './editable-image-wrapper'
-export type { EditableImageWrapperProps } from './editable-image-wrapper'
+export { EditableImageWrapper } from './EditableImageWrapper'
+export type { EditableImageWrapperProps } from './EditableImageWrapper'
+
+export { EditLayerToggle } from './EditLayerToggle'

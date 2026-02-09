@@ -1,25 +1,89 @@
 @import "tailwindcss";
 
 :root {
-  --color-white: #FFFFFF;
-  --color-black: #0A0A0A;
-  --color-accent: #4A6FA5;
-  --color-accent-light: #6B8DB8;
-  --color-accent-dark: #3A5A8A;
+  /* Colors - Y2K Style inspired (Darker & Richer) */
+  --background: #FAFAFA;
+  --foreground: #1a1a1a;
 
+  /* Primary (メインカラー - リッチスカイブルー) */
+  --primary: #0088cc;
+  --primary-light: #0099e6;
+  --primary-dark: #006699;
+
+  /* Secondary (サブカラー - ディープラベンダー - 2段階濃く) */
+  --secondary: #b797d0;
+  --secondary-light: #c9a8e0;
+  --secondary-dark: #a588c0;
+
+  /* Accent (強調色 - ゴールドイエロー/コールトゥアクション) */
+  --accent: #e6b800;
+  --accent-light: #ffd700;
+  --accent-dark: #cc9900;
+
+  /* Muted (薄い色 - 背景など) */
+  --muted: #e8d0e0;
+  --muted-foreground: #666666;
+
+  /* Additional Y2K colors */
+  --pink: #e8c0d0;
+  --lavender: #b797d0;
+
+  /* Border */
+  --border: #a0a0a0;
+  --border-dark: #1a1a1a;
   --border-width: 2px;
   --border-thick: 3px;
+
+  /* Header height - used for header, chat button size, nav padding */
+  --header-height: 64px;
+
+  /* Radius */
+  --radius: 0.5rem;
+  --radius-sm: 0.25rem;
+  --radius-lg: 0.75rem;
+  --radius-full: 9999px;
 }
 
 @theme inline {
-  --color-white: var(--color-white);
-  --color-black: var(--color-black);
-  --color-accent: var(--color-accent);
-  --color-accent-light: var(--color-accent-light);
-  --color-accent-dark: var(--color-accent-dark);
+  /* Colors */
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-primary: var(--primary);
+  --color-primary-light: var(--primary-light);
+  --color-primary-dark: var(--primary-dark);
+  --color-secondary: var(--secondary);
+  --color-secondary-light: var(--secondary-light);
+  --color-secondary-dark: var(--secondary-dark);
+  --color-accent: var(--accent);
+  --color-accent-light: var(--accent-light);
+  --color-accent-dark: var(--accent-dark);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
 
-  --font-sans: var(--font-geist-sans), "Noto Sans JP", system-ui, sans-serif;
+  /* Additional Y2K colors */
+  --color-pink: var(--pink);
+  --color-lavender: var(--lavender);
+
+  /* Legacy aliases (for backward compatibility) */
+  --color-white: var(--background);
+  --color-black: var(--foreground);
+
+  /* Border */
+  --border-color: var(--border);
+
+  /* Fonts */
+  --font-sans: var(--font-orbitron), "Noto Sans JP", system-ui, sans-serif;
   --font-mono: var(--font-geist-mono), monospace;
+
+  /* Y2K Fonts */
+  --font-space-mono: var(--font-space-mono), monospace;
+  --font-press-start-2p: var(--font-press-start-2p), cursive;
+  --font-vt323: var(--font-vt323), monospace;
+  --font-orbitron: var(--font-orbitron), sans-serif;
+  --font-righteous: var(--font-righteous), cursive;
+
+  /* Radius */
+  --radius: var(--radius);
 }
 
 * {
@@ -29,7 +93,7 @@
 body {
   background: var(--color-white);
   color: var(--color-black);
-  font-family: var(--font-sans);
+  font-family: var(--font-orbitron), "Noto Sans JP", system-ui, sans-serif;
   line-height: 1.6;
 }
 
@@ -126,6 +190,27 @@ body {
 }
 
 /* Content Projection Layer - Highlight Styles */
+
+/* Y2K Font Classes */
+.font-mono {
+  font-family: var(--font-space-mono);
+}
+
+.font-pixel {
+  font-family: var(--font-press-start-2p);
+}
+
+.font-vt323 {
+  font-family: var(--font-vt323);
+}
+
+.font-orbitron {
+  font-family: var(--font-orbitron);
+}
+
+.font-righteous {
+  font-family: var(--font-righteous);
+}
 .hover-highlight {
   background-color: rgba(250, 204, 21, 0.3);
   outline: 2px dashed rgba(250, 204, 21, 0.6);

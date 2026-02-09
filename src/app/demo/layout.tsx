@@ -7,7 +7,7 @@ import type { ReactNode } from 'react'
  */
 
 export const metadata: Metadata = {
-  title: 'Demo - Content Projection Layer',
+  title: 'Content Projection Layer Demo',
   description: 'Content Projection Layerの機能をデモします。AI主導の編集体験をお試しいただけます。',
 }
 
